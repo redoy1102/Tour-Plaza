@@ -5,6 +5,7 @@ import StatsSection from "@/components/landingPage/Stats Section/StatsSection";
 import AboutSection from "@/components/landingPage/About Section/AboutSection";
 import AppSection from "@/components/MobileAppSection/AppSection";
 import WhyChooseSection from "@/components/landingPage/WhyChooseSection/WhyChooseSection";
+import FooterSection from "@/components/landingPage/FooterSection/FooterSection";
 
 const Home = () => {
     return (
@@ -17,6 +18,7 @@ const Home = () => {
             <WhyChooseSection />
             <AboutSection />
             <AppSection />
+            <FooterSection />
         </div>
     );
 };
