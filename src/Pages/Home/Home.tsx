@@ -4,6 +4,7 @@ import TopBar from "../../components/landingPage/Header/TopBar";
 import StatsSection from "@/components/landingPage/Stats Section/StatsSection";
 import AboutSection from "@/components/landingPage/About Section/AboutSection";
 import AppSection from "@/components/MobileAppSection/AppSection";
+import WhyChooseSection from "@/components/landingPage/WhyChooseSection/WhyChooseSection";
 
 const Home = () => {
     return (
@@ -13,6 +14,7 @@ const Home = () => {
             <MainNavbar />
             <HeroSection />
             <StatsSection />
+            <WhyChooseSection />
             <AboutSection />
             <AppSection />
         </div>
