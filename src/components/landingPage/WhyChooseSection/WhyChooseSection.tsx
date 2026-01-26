@@ -4,7 +4,7 @@ const WhyChooseSection = () => {
   return (
     <section className="container mx-auto px-4 pt-25 pb-10">
       {/* Section Title */}
-      <h2 className="mb-12 text-center text-4xl font-bold text-gray-900">
+      <h2 className="mb-12 text-center text-3xl font-bold text-gray-900">
         আমাদের <span className="text-primary">কোর্স</span> কেন বেছে নিবেন
       </h2>
 

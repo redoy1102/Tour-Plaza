@@ -28,7 +28,7 @@ const HeroContent = () => {
         গড়ুন।
       </p>
 
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:gap-4 gap-3">
         <CourseSeeBtn />
         <EnrollNowBtn />
       </div>

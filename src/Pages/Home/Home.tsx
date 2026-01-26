@@ -6,19 +6,21 @@ import AboutSection from "@/components/landingPage/About Section/AboutSection";
 import AppSection from "@/components/MobileAppSection/AppSection";
 import WhyChooseSection from "@/components/landingPage/WhyChooseSection/WhyChooseSection";
 import FooterSection from "@/components/landingPage/FooterSection/FooterSection";
+import Courses from "@/components/landingPage/CoursesSection/CoursesSection";
 
 const Home = () => {
     return (
         <div>
             {/* Header */}
-            <TopBar />
-            <MainNavbar />
+            {/* <TopBar /> */}
+            {/* <MainNavbar /> */}
             <HeroSection />
             <StatsSection />
+            <Courses />
             <WhyChooseSection />
-            <AboutSection />
-            <AppSection />
-            <FooterSection />
+            {/* <AboutSection /> */}
+            {/* <AppSection /> */}
+            {/* <FooterSection /> */}
         </div>
     );
 };

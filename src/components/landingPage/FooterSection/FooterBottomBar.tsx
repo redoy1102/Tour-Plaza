@@ -1,7 +1,6 @@
 const FooterBottomBar = () => {
   return (
     <>
-      {/* Bottom bar */}
       <div className="py-16 flex flex-col items-center justify-between gap-4 text-sm text-gray-500 md:flex-row">
         <p>© 2026 eManager IT Institute. সর্বস্বত্ব সংরক্ষিত</p>
 
