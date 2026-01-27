@@ -2,7 +2,7 @@ import { whyChooseUsData } from "@/data/landingPage/whyChooseData";
 
 const WhyChooseSection = () => {
   return (
-    <section className="container mx-auto px-4 pt-25 pb-10">
+    <section className="container mx-auto px-4 md:px-12 xl:px-4 pt-25 pb-10">
       {/* Section Title */}
       <h2 className="mb-12 text-center text-3xl font-bold text-gray-900">
         আমাদের <span className="text-primary">কোর্স</span> কেন বেছে নিবেন
@@ -10,7 +10,7 @@ const WhyChooseSection = () => {
 
       {/* Cards */}
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {whyChooseUsData.map((item, i:number) => {
+        {whyChooseUsData.map((item, i: number) => {
           const Icon = item.icon;
           return (
             <div

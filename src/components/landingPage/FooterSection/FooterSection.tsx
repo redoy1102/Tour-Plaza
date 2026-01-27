@@ -7,8 +7,8 @@ import Courses from "./Courses";
 const FooterSection = () => {
   return (
     <footer className="bg-linear-to-r from-[#f3f7fb] via-white to-[#fdecef]">
-      <div className="container mx-auto px-4 pt-16">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+      <div className="container mx-auto px-4 md:px-12 xl:px-4 pt-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
           <Logo />
           <QuickLinks />
           <Courses />

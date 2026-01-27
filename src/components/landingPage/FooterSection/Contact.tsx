@@ -2,7 +2,7 @@ import { contactData, socialIconsData } from "@/data/landingPage/footerData";
 
 const Contact = () => {
   return (
-    <div>
+    <div id="contact">
       <h4 className="mb-4 font-semibold text-gray-900">যোগাযোগ</h4>
       <ul className="space-y-3 text-sm text-gray-600">
         {contactData.map((item, i) => {
