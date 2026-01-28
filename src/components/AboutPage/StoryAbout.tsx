@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Trophy, Star, TrendingUp, Maximize, X } from "lucide-react";
+import { Trophy, Star, TrendingUp, Maximize } from "lucide-react";
+import ImageFullScreen from "../shared/ImageFullScreen";
 
 const StoryAbout = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -97,31 +98,11 @@ const StoryAbout = () => {
         </div>
       </div>
 
-      {/* Image Full Screen */}
-      {selectedImage && (
-        <div
-          className="fixed inset-0 z-200 flex items-center justify-center bg-black/95 p-4 md:p-12 animate-in fade-in zoom-in duration-300"
-          onClick={() => setSelectedImage(null)}
-        >
-          <button
-            className="absolute top-8 right-8 text-white hover:text-blue-400 transition-colors bg-white/10 p-3 rounded-full backdrop-blur-md border border-white/20"
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedImage(null);
-            }}
-          >
-            <X className="h-8 w-8" />
-          </button>
-          <div className="max-w-7xl max-h-[85vh] overflow-hidden rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10">
-            <img
-              src={selectedImage}
-              alt="Full success story"
-              className="w-full h-full object-contain"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        </div>
-      )}
+      {/* Full Screen Image Modal */}
+      <ImageFullScreen 
+        selectedImage={selectedImage}
+        setSelectedImage={setSelectedImage}
+      />
     </section>
   );
 };

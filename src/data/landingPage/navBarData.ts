@@ -23,7 +23,7 @@ export const navBarMenus = [
   },
   {
     label: "যোগাযোগ",
-    link: "#contact",
+    link: "/contact",
   },
   {
     label: "ডাউনলোড",

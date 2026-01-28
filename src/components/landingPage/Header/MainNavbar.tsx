@@ -65,6 +65,7 @@ const MainNavbar = () => {
                       <Link
                         to={navItem.link || "#"}
                         className="px-3 py-2 text-sm"
+                        onClick={() => window.scrollTo(0, 0)}
                       >
                         {navItem.label}
                       </Link>
