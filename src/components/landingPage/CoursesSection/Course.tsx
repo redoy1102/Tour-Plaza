@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 interface CourseProps {
   singleCourse: {
     imglink: string;
@@ -5,7 +7,8 @@ interface CourseProps {
     duration: number;
     totalVideos: number;
     price: number;
-    link: string;
+    link?: string;
+    id: number;
   };
   index: number;
 }
@@ -33,12 +36,12 @@ const Course = ({ singleCourse, index }: CourseProps) => {
 
         <p className="mb-4 font-semibold text-secondary">৳ {singleCourse.price}</p>
 
-        <a
-          href={singleCourse.link}
+        <Link
+          to={`/courses/${singleCourse.id}`}
           className="flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
         >
           বিস্তারিত দেখুন <span>→</span>
-        </a>
+        </Link>
       </div>
     </a>
   );

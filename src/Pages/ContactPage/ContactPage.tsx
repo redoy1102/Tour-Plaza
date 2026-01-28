@@ -1,9 +1,9 @@
-import Map from "@/components/contactPage/map";
 import { Phone, MessageCircle, Mail, Send, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import Map from "@/components/contactPage/Map";
 
 const ContactPage = () => {
   const [contactFormData, setContactFormData] = useState({
@@ -170,7 +170,7 @@ const ContactPage = () => {
             {/* Quick Message Form */}
             <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
               <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <Send className="h-6 w-6 text-blue-600" />
+                <Send className="h-6 w-6 text-secondary" />
                 দ্রুত বার্তা পাঠান
               </h3>
               <form className="space-y-4" onSubmit={handleSubmit}>
@@ -201,7 +201,7 @@ const ContactPage = () => {
                   className="w-full min-h-30 p-4 rounded-xl border border-input bg-transparent text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:border-blue-500 transition-colors"
                   onChange={handleInputChange}
                 ></textarea>
-                <Button className="w-full h-12 rounded-xl bg-[#1e3a5f] hover:bg-[#2d5078] text-white font-bold text-lg">
+                <Button className="w-full h-12 rounded-xl bg-primary hover:bg-[#2d5078] text-white font-bold text-lg cursor-pointer">
                   বার্তা পাঠান
                 </Button>
               </form>

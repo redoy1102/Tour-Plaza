@@ -1,4 +1,5 @@
 import { quickLinksData } from "@/data/landingPage/footerData";
+import { Link } from "react-router-dom";
 
 const QuickLinks = () => {
   return (
@@ -7,9 +8,13 @@ const QuickLinks = () => {
       <ul className="space-y-2 text-sm text-gray-600">
         {quickLinksData.map((item, i) => (
           <li key={i}>
-            <a href={item.url} className="hover:text-secondary transition">
+            <Link
+              to={item.url}
+              className="hover:text-secondary transition"
+              onClick={() => window.scrollTo(0, 0)}
+            >
               {item.title}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
