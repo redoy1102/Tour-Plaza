@@ -18,7 +18,11 @@ const MainNavbar = () => {
       <div className="mx-auto flex h-17 max-w-7xl items-center justify-between px-4">
         <div className="flex items-center gap-4">
           {/* Left: Logo */}
-          <Link to="/">
+          <Link
+            to="/"
+            className="w-32 md:w-40 lg:w-48"
+            onClick={() => window.scrollTo(0, 0)}
+          >
             <img
               src="/logo.webp"
               alt="eManager IT Logo"
@@ -58,7 +62,10 @@ const MainNavbar = () => {
                 ) : (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink asChild>
-                      <Link to={navItem.link || "#"} className="px-3 py-2 text-sm">
+                      <Link
+                        to={navItem.link || "#"}
+                        className="px-3 py-2 text-sm"
+                      >
                         {navItem.label}
                       </Link>
                     </NavigationMenuLink>
