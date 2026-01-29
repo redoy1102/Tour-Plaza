@@ -1,3 +1,4 @@
+import HeroCourseDetails from "@/components/CourseDetailsPage/HeroCourseDetails";
 import { useParams } from "react-router-dom";
 
 const CourseDetails = () => {
@@ -5,7 +6,7 @@ const CourseDetails = () => {
 
     return (
         <div>
-            <h1>Title: {courseId}</h1>
+            <HeroCourseDetails courseId={courseId} />
         </div>
     );
 };

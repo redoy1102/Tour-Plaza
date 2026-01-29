@@ -1,15 +1,8 @@
 import { Link } from "react-router-dom";
+import type { FeaturedCourse } from "@/types/featuredCourse.interface";
 
 interface CourseProps {
-  singleCourse: {
-    imglink: string;
-    title: string;
-    duration: number;
-    totalVideos: number;
-    price: number;
-    link?: string;
-    id: number;
-  };
+  singleCourse: FeaturedCourse;
   index: number;
 }
 
@@ -31,7 +24,7 @@ const Course = ({ singleCourse, index }: CourseProps) => {
         </h3>
 
         <p className="mb-2 text-xs text-gray-500">
-          {singleCourse.duration} মাস | {singleCourse.totalVideos} ভিডিও
+          {singleCourse.durationMonths} মাস | {singleCourse.totalVideos} ভিডিও
         </p>
 
         <p className="mb-4 font-semibold text-secondary">৳ {singleCourse.price}</p>

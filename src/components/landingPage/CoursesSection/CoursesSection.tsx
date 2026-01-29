@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
-import { courses, featuredCourses } from "@/data/landingPage/courses";
+import { courses } from "@/data/landingPage/courses";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CourseHeader from "./CourseHeader";
 import Course from "./Course";
+import { featuredCourses } from "@/data/landingPage/featuredCoursesData";
 
 const Courses = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
