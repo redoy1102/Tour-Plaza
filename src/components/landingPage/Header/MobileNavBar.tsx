@@ -5,11 +5,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import SearchBar from "./SearchBar";
 import { navBarMenus } from "@/data/landingPage/navBarData";
 import { Link } from "react-router-dom";
+import { AuthSheet } from "./Auth/AuthSection";
+import { Button } from "@/components/ui/button";
 
 const MobileNavbar = () => {
   return (
@@ -70,10 +71,11 @@ const MobileNavbar = () => {
         </nav>
 
         {/* CTA */}
-        <div className="mt-10">
+        <div className="mt-10 flex flex-col gap-3">
           <Button className="w-full rounded-full bg-primary py-6 text-lg">
             এনরোল করুন
           </Button>
+          <AuthSheet className="w-full py-6 text-lg" />
         </div>
       </SheetContent>
     </Sheet>

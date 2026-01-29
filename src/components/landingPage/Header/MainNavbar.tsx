@@ -6,11 +6,12 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import SearchBar from "./SearchBar";
 import { navBarMenus } from "@/data/landingPage/navBarData";
 import MobileNavbar from "./MobileNavBar";
 import { Link } from "react-router-dom";
+import { AuthSheet } from "./Auth/AuthSection";
 
 const MainNavbar = () => {
   return (
@@ -75,14 +76,18 @@ const MainNavbar = () => {
               })}
 
               {/* CTA */}
-              <NavigationMenuItem>
+              {/* <NavigationMenuItem>
                 <Button className="bg-primary text-white hover:bg-primary/90 rounded-full">
                   এনরোল করুন
                 </Button>
+              </NavigationMenuItem> */}
+              <NavigationMenuItem>
+                <AuthSheet />
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         </div>
+
         <div className="flex xl:hidden">
           <MobileNavbar />
         </div>

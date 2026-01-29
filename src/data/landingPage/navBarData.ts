@@ -1,7 +1,7 @@
 export const navBarMenus = [
   // আমাদের কোর্সসমূহ
   {
-    label: "আমাদের কোর্সসমূহ",
+    label: "কোর্সসমূহ",
     subMenus: [
       { label: "ওয়েব ডেভেলপমেন্ট", link: "/courses/web-development" },
       { label: "গ্রাফিক ডিজাইন", link: "/courses/graphic-design" },
