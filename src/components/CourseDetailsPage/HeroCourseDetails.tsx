@@ -182,7 +182,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                 <Users className="w-4 h-4 text-indigo-500" />
                 ভর্তি চলছে
               </p>
-              <p className="text-slate-900 font-extrabold text-xl font-bengali text-indigo-700">
+              <p className="text-slate-900 font-extrabold text-xl font-bengali text-slate-900">
                 {course.batch}
               </p>
             </div>
