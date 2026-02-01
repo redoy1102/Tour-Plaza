@@ -23,7 +23,8 @@ const StudentReview = ({ courseId }: StudentReviewProps) => {
           কোর্সটি নিয়ে আমাদের শিক্ষার্থীদের প্রতিক্রিয়া
         </h2>
         <p className="text-slate-600 max-w-2xl">
-          আমাদের কোর্সে যুক্ত হয়ে ছাত্ররা ক্যারিয়ারের নতুন দিগন্ত উন্মোচন করেছেন। তাদের মুখ থেকেই শুনুন তাদের অভিজ্ঞতার কথা।
+          আমাদের কোর্সে যুক্ত হয়ে ছাত্ররা ক্যারিয়ারের নতুন দিগন্ত উন্মোচন
+          করেছেন। তাদের মুখ থেকেই শুনুন তাদের অভিজ্ঞতার কথা।
         </p>
       </div>
 
@@ -56,7 +57,7 @@ const StudentReview = ({ courseId }: StudentReviewProps) => {
                 <span className="relative z-10">{review.comment}</span>
               </p>
             </div>
-            
+
             <div className="flex items-center gap-3 pt-4 border-t border-slate-50">
               <div className="w-10 h-10 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-lg">
                 {review.studentName.charAt(0)}
@@ -76,26 +77,35 @@ const StudentReview = ({ courseId }: StudentReviewProps) => {
       <div className="mt-12 p-8 bg-linear-to-r from-slate-900 to-slate-800 rounded-3xl text-white flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="flex items-center gap-6">
           <div className="text-center md:text-left">
-            <p className="text-slate-400 text-sm mb-1 uppercase tracking-wider font-semibold">এভারেজ রেটিং</p>
+            <p className="text-slate-400 text-sm mb-1 uppercase tracking-wider font-semibold">
+              এভারেজ রেটিং
+            </p>
             <div className="flex items-center gap-2">
               <span className="text-4xl font-black">{course.rating}</span>
               <div className="flex flex-col">
-                 <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                    ))}
-                 </div>
-                 <span className="text-xs text-slate-400">{course.reviews.length} জন রেটিং দিয়েছেন</span>
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-3 h-3 text-yellow-400 fill-yellow-400"
+                    />
+                  ))}
+                </div>
+                <span className="text-xs text-slate-400">
+                  {course.reviews.length} জন রেটিং দিয়েছেন
+                </span>
               </div>
             </div>
           </div>
           <div className="h-12 w-px bg-slate-700 hidden md:block"></div>
           <div className="text-center md:text-left">
-            <p className="text-slate-400 text-sm mb-1 uppercase tracking-wider font-semibold">সফল গ্রাজুয়েট</p>
+            <p className="text-slate-400 text-sm mb-1 uppercase tracking-wider font-semibold">
+              সফল গ্রাজুয়েট
+            </p>
             <p className="text-3xl font-black">৫০০+</p>
           </div>
         </div>
-        
+
         <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-xl font-bold transition-all transform hover:scale-105 shadow-lg shadow-emerald-500/20 active:scale-95">
           এখনই শুরু করুন
         </button>
