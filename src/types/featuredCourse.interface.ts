@@ -6,14 +6,15 @@ export interface FeaturedCourse {
   rating: number;
 
   durationMonths: number;
-  totalVideos: number;
+  totalLiveClasses: number;
+  totalPreRecordedVideos: number;
   price: number;
 
   link: string;
   imglink: string;
   heroVideoLink: string;
 
-  supports: string[];
+  supports: { icon: string; title: string }[];
 
   batchStartDate: string;
   liveClassTime: string;

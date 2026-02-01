@@ -1,4 +1,5 @@
 import type { FeaturedCourse } from "@/types/featuredCourse.interface";
+import { Users, Clock, ShieldCheck, Briefcase, LifeBuoy } from "lucide-react";
 
 export const featuredCourses: FeaturedCourse[] = [
   {
@@ -8,14 +9,18 @@ export const featuredCourses: FeaturedCourse[] = [
     description: "শূন্য থেকে ফুল-স্ট্যাক ওয়েব ডেভেলপার হওয়ার সম্পূর্ণ কোর্স।",
     rating: 4.8,
     durationMonths: 6,
-    totalVideos: 50,
-
+    totalLiveClasses: 50,
+    totalPreRecordedVideos: 1000,
     price: 5000,
     link: "/courses/web-development",
     imglink: "/landingPage/courses/js.webp",
     heroVideoLink: "/landingPage/HeroVideo.mp4",
 
-    supports: ["জব প্লেসমেন্ট সাপোর্ট", "লাইফটাইম এক্সেস", "সার্টিফিকেট"],
+    supports: [
+      { icon: "Users", title: "জব প্লেসমেন্ট সাপোর্ট" },
+      { icon: "Clock", title: "লাইফটাইম এক্সেস" },
+      { icon: "ShieldCheck", title: "সার্টিফিকেট" },
+    ],
     batchStartDate: "রবিবার ৮ ফেব্রুয়ারি",
     liveClassTime: "সকাল ১০টা – দুপুর ১টা",
     supportClassTime: "রাত ৮টা – ১০টা",
@@ -152,13 +157,18 @@ export const featuredCourses: FeaturedCourse[] = [
     description: "প্রফেশনাল গ্রাফিক ডিজাইন শেখার পূর্ণাঙ্গ কোর্স।",
     rating: 4.6,
     durationMonths: 4,
-    totalVideos: 40,
+    totalLiveClasses: 40,
+    totalPreRecordedVideos: 1000,
     price: 4000,
     link: "/courses/graphic-design",
     imglink: "/landingPage/courses/graphics.webp",
     heroVideoLink: "/landingPage/HeroVideo.mp4",
 
-    supports: ["লাইফটাইম এক্সেস", "ফ্রিল্যান্স গাইডলাইন", "সার্টিফিকেট"],
+    supports: [
+      { icon: "LifeBuoy", title: "লাইফটাইম এক্সেস" },
+      { icon: "Briefcase", title: "ফ্রিল্যান্স গাইডলাইন" },
+      { icon: "ShieldCheck", title: "সার্টিফিকেট" },
+    ],
     batchStartDate: "সোমবার ১২ ফেব্রুয়ারি",
     liveClassTime: "সন্ধ্যা ৭টা – ৯টা",
     supportClassTime: "রাত ৯টা",
@@ -276,13 +286,18 @@ export const featuredCourses: FeaturedCourse[] = [
       "SEO, Facebook Ads, Google Ads এবং কনটেন্ট মার্কেটিং শেখার পূর্ণাঙ্গ কোর্স।",
     rating: 4.7,
     durationMonths: 3,
-    totalVideos: 30,
+    totalLiveClasses: 30,
+    totalPreRecordedVideos: 2000,
     price: 3000,
     link: "/courses/digital-marketing",
     imglink: "/landingPage/courses/digital_marketing.webp",
     heroVideoLink: "/landingPage/HeroVideo.mp4",
 
-    supports: ["লাইভ ক্যাম্পেইন", "সার্টিফিকেট", "জব প্রিপারেশন"],
+    supports: [
+      { icon: "LifeBuoy", title: "লাইভ ক্যাম্পেইন" },
+      { icon: "ShieldCheck", title: "সার্টিফিকেট" },
+      { icon: "Briefcase", title: "জব প্রিপারেশন" },
+    ],
     batchStartDate: "বৃহস্পতিবার ১৫ ফেব্রুয়ারি",
     liveClassTime: "রাত ৮টা – ১০টা",
     supportClassTime: "প্রতিদিন রাত ৯টা",
@@ -420,14 +435,19 @@ export const featuredCourses: FeaturedCourse[] = [
       "Premiere Pro ও After Effects দিয়ে প্রফেশনাল ভিডিও এডিটিং শিখুন।",
     rating: 4.5,
     durationMonths: 2,
-    totalVideos: 20,
+    totalLiveClasses: 20,
+    totalPreRecordedVideos: 900,
     price: 2000,
     link: "/courses/video-editing",
     imglink: "/landingPage/courses/video_editing.webp",
     heroVideoLink: "/landingPage/HeroVideo.mp4",
 
-    supports: ["লাইফটাইম এক্সেস", "প্র্যাকটিক্যাল প্রজেক্ট", "সার্টিফিকেট"],
-    batchStartDate: "শনিবার ১০ ফেব্রুয়ারি",
+    supports: [
+      { icon: "Clock", title: "লাইফটাইম এক্সেস" },
+      { icon: "Briefcase", title: "প্র্যাকটিক্যাল প্রজেক্ট" },
+      { icon: "ShieldCheck", title: "সার্টিফিকেট" },
+    ],
+    batchStartDate: "শনিবার ১০ ফেব্রয়ারি",
     liveClassTime: "সন্ধ্যা ৬টা – ৮টা",
     supportClassTime: "রাত ৮টা",
     totalSeats: 30,
@@ -544,13 +564,18 @@ export const featuredCourses: FeaturedCourse[] = [
       "হার্ডওয়্যার, সফটওয়্যার ও নেটওয়ার্কিং-এর সম্পূর্ণ আইটি সাপোর্ট কোর্স।",
     rating: 4.4,
     durationMonths: 3,
-    totalVideos: 25,
+    totalLiveClasses: 25,
+    totalPreRecordedVideos: 500,
     price: 3500,
     link: "/courses/it-support",
     imglink: "/landingPage/courses/video_editing.webp",
     heroVideoLink: "/landingPage/HeroVideo.mp4",
 
-    supports: ["জব প্রিপারেশন", "সার্টিফিকেট", "লাইভ সাপোর্ট"],
+    supports: [
+      { icon: "Briefcase", title: "জব প্রিপারেশন" },
+      { icon: "ShieldCheck", title: "সার্টিফিকেট" },
+      { icon: "LifeBuoy", title: "লাইভ সাপোর্ট" },
+    ],
     batchStartDate: "রবিবার ১৮ ফেব্রুয়ারি",
     liveClassTime: "সকাল ৯টা – ১১টা",
     supportClassTime: "রাত ১০টা",
@@ -664,13 +689,18 @@ export const featuredCourses: FeaturedCourse[] = [
       "Flutter ও React Native দিয়ে Android ও iOS অ্যাপ ডেভেলপমেন্ট শিখুন।",
     rating: 4.8,
     durationMonths: 5,
-    totalVideos: 45,
+    totalLiveClasses: 45,
+    totalPreRecordedVideos: 600,
     price: 6000,
     link: "/courses/app-development",
     imglink: "/landingPage/courses/video_editing.webp",
     heroVideoLink: "/landingPage/HeroVideo.mp4",
-    
-    supports: ["লাইভ প্রজেক্ট", "সার্টিফিকেট", "জব গাইডলাইন"],
+
+    supports: [
+      { icon: "LifeBuoy", title: "লাইভ প্রজেক্ট" },
+      { icon: "ShieldCheck", title: "সার্টিফিকেট" },
+      { icon: "Briefcase", title: "জব গাইডলাইন" },
+    ],
     batchStartDate: "মঙ্গলবার ২০ ফেব্রুয়ারি",
     liveClassTime: "সন্ধ্যা ৭টা – ৯টা",
     supportClassTime: "রাত ৯টা",
@@ -772,3 +802,27 @@ export const featuredCourses: FeaturedCourse[] = [
     promoCodes: ["APPDEV2024", "FLUTTERPRO", "MOBILE10"],
   },
 ];
+
+export const getIcon = (iconString: string) => {
+  let IconComponent;
+  switch (iconString) {
+    case "Users":
+      IconComponent = Users;
+      break;
+    case "Clock":
+      IconComponent = Clock;
+      break;
+    case "ShieldCheck":
+      IconComponent = ShieldCheck;
+      break;
+    case "Briefcase":
+      IconComponent = Briefcase;
+      break;
+    case "LifeBuoy":
+      IconComponent = LifeBuoy;
+      break;
+    default:
+      IconComponent = Users;
+  }
+  return IconComponent;
+};

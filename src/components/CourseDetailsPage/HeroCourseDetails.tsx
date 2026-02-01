@@ -10,14 +10,19 @@ import {
   Tag,
   ArrowRight,
   Monitor,
+  Video,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getIcon } from "@/data/landingPage/featuredCoursesData";
+import CourseOutline from "../CourseDetailsPage/CourseOutline";
+import Instructors from "../CourseDetailsPage/Instructors";
 
 interface HeroCourseDetailsProps {
   courseId: string | undefined;
 }
 
 const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
+  console.log("Type of course id:", typeof courseId);
   const course = featuredCourses.find((c) => c.id === Number(courseId));
 
   if (!course) {
@@ -26,6 +31,62 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
   // Calculate a mock original price
   const originalPrice = course.price + 3400;
+
+  // Function to parse Bengali date
+  const parseBengaliDate = (dateStr: string): Date | null => {
+    const parts = dateStr.split(" ");
+    if (parts.length < 3) return null;
+    const datePart = parts[1];
+    const monthPart = parts[2];
+    // Convert Bengali numerals to English
+    const bengaliToEnglish: { [key: string]: string } = {
+      "০": "0",
+      "১": "1",
+      "২": "2",
+      "৩": "3",
+      "৪": "4",
+      "৫": "5",
+      "৬": "6",
+      "৭": "7",
+      "৮": "8",
+      "৯": "9",
+    };
+    let englishDate = "";
+    for (const char of datePart) {
+      englishDate += bengaliToEnglish[char] || char;
+    }
+    const dateNum = parseInt(englishDate, 10);
+    if (isNaN(dateNum)) return null;
+    const monthMap: { [key: string]: number } = {
+      জানুয়ারি: 1,
+      ফেব্রুয়ারি: 2,
+      মার্চ: 3,
+      এপ্রিল: 4,
+      মে: 5,
+      জুন: 6,
+      জুলাই: 7,
+      আগস্ট: 8,
+      সেপ্টেম্বর: 9,
+      অক্টোবর: 10,
+      নভেম্বর: 11,
+      ডিসেম্বর: 12,
+    };
+    const month = monthMap[monthPart];
+    if (month === undefined) return null;
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, month - 1, dateNum);
+    const now = new Date();
+    if (startDate < now) {
+      startDate.setFullYear(currentYear + 1);
+    }
+    return startDate;
+  };
+
+  const startDate = parseBengaliDate(course.batchStartDate);
+  const now = new Date();
+  const diffTime = startDate ? startDate.getTime() - now.getTime() : 0;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const remainingDays = Math.max(0, diffDays);
 
   return (
     <section className="bg-slate-50 py-10 md:py-16">
@@ -91,31 +152,36 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
             {/* Stat Badges */}
             <div className="flex flex-wrap gap-4">
-              <div className="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-xl text-sm text-slate-700 shadow-sm">
+              <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
                 <Radio className="w-4 h-4 text-emerald-600" />
-                <span>{course.totalVideos} টি লাইভ ক্লাস</span>
+                <span>{course.totalLiveClasses} টি লাইভ ক্লাস</span>
               </div>
-              <div className="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-xl text-sm text-slate-700 shadow-sm">
+              <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
+                <Video className="w-4 h-4 text-emerald-600" />
+                <span>
+                  {course.totalPreRecordedVideos} টি প্রি রেকর্ডেড ভিডিও
+                </span>
+              </div>
+              <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
                 <Calendar className="w-4 h-4 text-emerald-600" />
-                <span>১০ দিন বাকি</span>
+                <span>{remainingDays} দিন বাকি</span>
               </div>
             </div>
 
             {/* Extra Features */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-              {course.supports.slice(0, 2).map((support, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center gap-3 bg-white border border-emerald-100 px-5 py-3 rounded-2xl text-emerald-700 font-medium shadow-sm"
-                >
-                  {idx === 0 ? (
-                    <Users className="w-5 h-5" />
-                  ) : (
-                    <Clock className="w-5 h-5" />
-                  )}
-                  {support}
-                </div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+              {course.supports.map((support, idx) => {
+                const IconComponent = getIcon(support.icon);
+                return (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-3 bg-white border border-emerald-100 px-2 py-1 rounded-md text-emerald-700 font-medium shadow-sm text-sm"
+                  >
+                    <IconComponent className="w-5 h-5" />
+                    {support.title}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -141,7 +207,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
         </div>
 
         {/* Bottom Stats Bar */}
-        <div className="mt-16 bg-white rounded-4xl p-6 md:p-8 shadow-xl border border-slate-100">
+        <div className="mt-10 bg-white rounded-2xl p-3 md:p-4 shadow border border-slate-100">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 divide-x divide-slate-100">
             <div className="px-4 space-y-2">
               <p className="text-slate-400 text-sm font-medium">ব্যাচ শুরু</p>
@@ -188,6 +254,10 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
             </div>
           </div>
         </div>
+
+        <CourseOutline courseId={courseId} />
+
+        <Instructors courseId={courseId} />
       </div>
     </section>
   );
