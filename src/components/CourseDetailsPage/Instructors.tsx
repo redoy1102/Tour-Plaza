@@ -40,7 +40,7 @@ const Instructors = ({ courseId }: InstructorsProps) => {
                   <img
                     src={instructor.photo}
                     alt={instructor.name}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    className="w-full h-full object-cover  transition-all duration-500"
                   />
                 </div>
               </div>
@@ -48,7 +48,7 @@ const Instructors = ({ courseId }: InstructorsProps) => {
 
             {/* Role / Experience */}
             <div className="flex-1">
-              <p className="text-slate-700 text-[15px] leading-relaxed font-medium">
+              <p className="text-slate-700 text-[15px] leading-relaxed font-medium text-justify">
                 {instructor.role} at {instructor.runningCompanyName}. এটি একটি
                 সম্পূর্ণ গাইডলাইন যা আপনাকে শূন্য থেকে শুরু করে প্রফেশনাল
                 পর্যায়ে নিয়ে যাবে। পাইথন বর্তমানে AI এবং ডাটা সায়েন্সের প্রধান
@@ -57,7 +57,7 @@ const Instructors = ({ courseId }: InstructorsProps) => {
             </div>
 
             {/* Company Bar - Mocking the logo area */}
-            <div className="mt-8 bg-slate-50 -mx-6 -mb-6 px-6 py-4 flex items-center justify-between">
+            <div className="mt-4 bg-slate-50 -mx-6 -mb-6 px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <span className="text-lg font-black italic text-slate-400 opacity-50 tracking-tighter uppercase">
                   {instructor.runningCompanyName.split(" ")[0]}

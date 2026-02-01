@@ -16,6 +16,11 @@ import { Button } from "@/components/ui/button";
 import { getIcon } from "@/data/landingPage/featuredCoursesData";
 import CourseOutline from "../CourseDetailsPage/CourseOutline";
 import Instructors from "../CourseDetailsPage/Instructors";
+import Tools from "../CourseDetailsPage/Tools";
+import Prerequisites from "./Prerequisites";
+import SuccessStudents from "./SuccessStudents";
+import Faq from "./Faq";
+import StudentReview from "./StudentReview";
 
 interface HeroCourseDetailsProps {
   courseId: string | undefined;
@@ -258,6 +263,16 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
         <CourseOutline courseId={courseId} />
 
         <Instructors courseId={courseId} />
+
+        <Tools courseId={courseId} />
+
+        <Prerequisites  courseId={courseId} />
+
+        <SuccessStudents courseId={courseId} />
+
+        <Faq courseId={courseId} />
+
+        <StudentReview courseId={courseId}/>
       </div>
     </section>
   );

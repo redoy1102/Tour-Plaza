@@ -1,5 +1,14 @@
 import type { FeaturedCourse } from "@/types/featuredCourse.interface";
-import { Users, Clock, ShieldCheck, Briefcase, LifeBuoy } from "lucide-react";
+import {
+  Users,
+  Clock,
+  ShieldCheck,
+  Briefcase,
+  LifeBuoy,
+  Laptop,
+  Globe,
+  Wifi
+} from "lucide-react";
 
 export const featuredCourses: FeaturedCourse[] = [
   {
@@ -107,7 +116,7 @@ export const featuredCourses: FeaturedCourse[] = [
 
     toolsList: [
       {
-        imgLink: "/public/landingPage/courses/tools/vs_code.png",
+        imgLink: "/public/landingPage/courses/tools/vsCode.jpeg",
         name: "VS Code",
         purpose: "কোড লেখা",
       },
@@ -126,6 +135,8 @@ export const featuredCourses: FeaturedCourse[] = [
     prerequisites: [
       { icon: "Laptop", title: "Laptop/Desktop" },
       { icon: "Globe", title: "Basic English" },
+      { icon: "Wifi", title: "ইন্টারনেট ব্যবহারের জ্ঞান" },
+
     ],
 
     reviews: [
@@ -820,6 +831,15 @@ export const getIcon = (iconString: string) => {
       break;
     case "LifeBuoy":
       IconComponent = LifeBuoy;
+      break;
+    case "Laptop":
+      IconComponent = Laptop;
+      break;
+    case "Globe":
+      IconComponent = Globe;
+      break;
+      case "Wifi":
+      IconComponent = Wifi;
       break;
     default:
       IconComponent = Users;
