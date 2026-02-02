@@ -47,7 +47,7 @@ const Faq = ({ courseId }: FaqProps) => {
     <section className="pb-16">
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black text-slate-800 font-bengali inline-block relative px-4">
+          <h2 className="text-2xl md:text-3xl lg:text-5xl font-black text-slate-800 font-bengali inline-block relative px-4">
             প্রায়ই জিজ্ঞেস করা <span className="text-orange-400">প্রশ্ন</span>
             <div className="absolute -bottom-2 left-0 right-0 h-1.5 bg-orange-400 rounded-full" />
           </h2>
@@ -69,7 +69,7 @@ const Faq = ({ courseId }: FaqProps) => {
                 </div>
               </AccordionTrigger>
 
-              <AccordionContent className="pl-8 pb-2 text-slate-600 leading-relaxed text-[16px] md:text-lg border-t border-slate-50">
+              <AccordionContent className="pl-8 pr-3 pb-3 text-slate-600 leading-relaxed text-[16px] md:text-lg border-t border-slate-50">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

@@ -1,4 +1,4 @@
-import { featuredCourses } from "@/data/landingPage/featuredCoursesData";
+import {courses} from "@/data/landingPage/courses";
 import {
   Star,
   PlayCircle,
@@ -13,14 +13,7 @@ import {
   Video,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getIcon } from "@/data/landingPage/featuredCoursesData";
-import CourseOutline from "../CourseDetailsPage/CourseOutline";
-import Instructors from "../CourseDetailsPage/Instructors";
-import Tools from "../CourseDetailsPage/Tools";
-import Prerequisites from "./Prerequisites";
-import SuccessStudents from "./SuccessStudents";
-import Faq from "./Faq";
-import StudentReview from "./StudentReview";
+import { getIcon } from "@/data/landingPage/courses";
 
 interface HeroCourseDetailsProps {
   courseId: string | undefined;
@@ -28,7 +21,7 @@ interface HeroCourseDetailsProps {
 
 const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
   console.log("Type of course id:", typeof courseId);
-  const course = featuredCourses.find((c) => c.id === Number(courseId));
+  const course = courses.find((c) => c.id === Number(courseId));
 
   if (!course) {
     return <div className="py-20 text-center">কোর্স পাওয়া যায়নি।</div>;
@@ -94,9 +87,9 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
   const remainingDays = Math.max(0, diffDays);
 
   return (
-    <section className="bg-slate-50 py-10 md:py-16">
-      <div className="container mx-auto px-4 md:px-12 xl:px-4">
-        <div className="flex flex-col lg:flex-row gap-12 items-start">
+    <section>
+      <div>
+        <div className="flex flex-col lg:flex-row lg:gap-4 xl:gap-12 items-start">
           {/* Left Content */}
           <div className="w-full lg:w-3/5 space-y-2">
             <div className="flex items-center justify-between">
@@ -118,12 +111,12 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
             </div>
 
             {/* Title */}
-            <h1 className="text-xl md:text-xl lg:text-3xl font-bold text-slate-900 leading-tight">
+            <h1 className="text-2xl md:text-2xl lg:text-3xl font-bold text-slate-900 leading-tight">
               {course.title}
             </h1>
 
             {/* Description */}
-            <p className="text-slate-600 text-md leading-relaxed max-w-2xl">
+            <p className="text-slate-600 text-md md:text-sm leading-relaxed max-w-2xl">
               {course.description} এটি একটি সম্পূর্ণ গাইডলাইন যা আপনাকে শূন্য
               থেকে শুরু করে প্রফেশনাল পর্যায়ে নিয়ে যাবে। পাইথন বর্তমানে AI এবং
               ডাটা সায়েন্সের প্রধান ভাষা। তাই নিজেকে ভবিষ্যতের জন্য দক্ষ করতে
@@ -132,12 +125,12 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
             {/* Pricing and Action */}
             <div className="flex flex-wrap items-center gap-4 py-4">
-              <Button className="bg-[#FFC107] hover:bg-[#FFC107]/90 text-slate-900 font-bold px-8 py-6 rounded-lg text-lg flex items-center gap-2">
+              <Button className="bg-[#FFC107] hover:bg-[#FFC107]/90 text-slate-900 font-bold px-4 py-3 lg:px-6 lg:py-5 xl:px-8 xl:py-6 rounded-lg text-lg flex items-center gap-2">
                 ব্যাচে ভর্তি হোন <ArrowRight className="w-5 h-5" />
               </Button>
 
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-slate-900">
+                <span className="text-3xl md:text-2xl font-black text-slate-900">
                   ৳{course.price.toLocaleString()}
                 </span>
                 <span className="text-lg text-slate-400 line-through">
@@ -156,7 +149,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
             </div>
 
             {/* Stat Badges */}
-            <div className="flex flex-wrap gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
               <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
                 <Radio className="w-4 h-4 text-emerald-600" />
                 <span>{course.totalLiveClasses} টি লাইভ ক্লাস</span>
@@ -174,7 +167,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
             </div>
 
             {/* Extra Features */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 pt-4">
               {course.supports.map((support, idx) => {
                 const IconComponent = getIcon(support.icon);
                 return (
@@ -191,7 +184,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
           </div>
 
           {/* Right Video Preview */}
-          <div className="w-full lg:w-2/5 flex flex-col items-center">
+          <div className="w-full lg:w-2/5 flex flex-col items-center mt-4">
             <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl group cursor-pointer border-4 border-white">
               <img
                 src={course.imglink}
@@ -213,10 +206,10 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
         {/* Bottom Stats Bar */}
         <div className="mt-10 bg-white rounded-2xl p-3 md:p-4 shadow border border-slate-100">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 divide-x divide-slate-100">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 divide-x divide-slate-100">
             <div className="px-4 space-y-2">
               <p className="text-slate-400 text-sm font-medium">ব্যাচ শুরু</p>
-              <p className="text-slate-900 font-bold flex items-center gap-2">
+              <p className="text-slate-900 md:text-sm font-bold flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-orange-500" />
                 {course.batchStartDate}
               </p>
@@ -226,7 +219,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                 <Monitor className="w-4 h-4 text-blue-500" />
                 লাইভ ক্লাস
               </p>
-              <p className="text-slate-900 font-bold text-sm leading-tight">
+              <p className="text-slate-900 md:text-sm font-bold leading-tight">
                 {course.liveClassTime} (রবি,মঙ্গল,বৃহ)
               </p>
             </div>
@@ -235,7 +228,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                 <Clock className="w-4 h-4 text-emerald-500" />
                 সাপোর্ট ক্লাস
               </p>
-              <p className="text-slate-900 font-bold text-sm leading-tight">
+              <p className="text-slate-900 md:text-sm font-bold leading-tight">
                 প্রতিদিন রাত {course.supportClassTime}
               </p>
             </div>
@@ -244,7 +237,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                 <Tag className="w-4 h-4 text-rose-500" />
                 সিট বাকি
               </p>
-              <p className="text-slate-900 font-bold text-xl">
+              <p className="text-slate-900 md:text-sm font-bold text-xl">
                 {course.seatsLeft} টি
               </p>
             </div>
@@ -253,26 +246,12 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                 <Users className="w-4 h-4 text-indigo-500" />
                 ভর্তি চলছে
               </p>
-              <p className="text-slate-900 font-extrabold text-xl font-bengali text-slate-900">
+              <p className="text-slate-900 md:text-sm font-extrabold text-xl font-bengali text-slate-900">
                 {course.batch}
               </p>
             </div>
           </div>
         </div>
-
-        <CourseOutline courseId={courseId} />
-
-        <Instructors courseId={courseId} />
-
-        <Tools courseId={courseId} />
-
-        <Prerequisites  courseId={courseId} />
-
-        <SuccessStudents courseId={courseId} />
-
-        <Faq courseId={courseId} />
-
-        <StudentReview courseId={courseId}/>
       </div>
     </section>
   );

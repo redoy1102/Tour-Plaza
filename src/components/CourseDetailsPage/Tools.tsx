@@ -1,4 +1,4 @@
-import { featuredCourses } from "@/data/landingPage/featuredCoursesData";
+import { featuredCourses } from "@/data/landingPage/courses";
 
 interface ToolsProps {
   courseId: string | undefined;
@@ -8,7 +8,7 @@ const Tools = ({ courseId }: ToolsProps) => {
   const course = featuredCourses.find((c) => c.id === Number(courseId));
 
   if (!course || !course.toolsList || course.toolsList.length === 0) {
-    return <h1>Loading...</h1>
+    return <h1>Loading...</h1>;
   }
 
   // Duplicate the tools array to create a seamless loop

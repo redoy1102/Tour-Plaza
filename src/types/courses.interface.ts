@@ -1,15 +1,13 @@
-export interface FeaturedCourse {
+export interface Course {
   id: number;
   category: string;
   title: string;
   description: string;
   rating: number;
-
   durationMonths: number;
   totalLiveClasses: number;
   totalPreRecordedVideos: number;
   price: number;
-
   link: string;
   imglink: string;
   heroVideoLink: string;
@@ -23,6 +21,7 @@ export interface FeaturedCourse {
   totalSeats: number;
   seatsLeft: number;
   batch: string;
+  isFeatured: boolean;
 
   instructors: Instructor[];
   supportTeamMembers: SupportTeamMember[];

@@ -1,12 +1,15 @@
 import { useRef, useState } from "react";
-import { courses } from "@/data/landingPage/courses";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CourseHeader from "./CourseHeader";
-import Course from "./Course";
-import { featuredCourses } from "@/data/landingPage/featuredCoursesData";
+// import Course from "./Course";
+import { courses } from "@/data/landingPage/courses";
+import { coursePaths } from "@/data/landingPage/coursePaths";
+import CourseCard from "./CourseCard";
 
 const Courses = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
+  const featuredCourses = courses.filter((course) => course.isFeatured);
+
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   // Scroll handler
@@ -22,9 +25,7 @@ const Courses = () => {
 
   // Filtered courses
   const filteredCourses = activeCategory
-    ? featuredCourses.filter(
-        (course) => course.category === activeCategory
-      )
+    ? featuredCourses.filter((course) => course.category === activeCategory)
     : featuredCourses;
 
   return (
@@ -59,7 +60,7 @@ const Courses = () => {
             All Courses
           </button>
 
-          {courses.map((item) => (
+          {coursePaths.map((item) => (
             <button
               key={item.category}
               onClick={() => setActiveCategory(item.category)}
@@ -86,7 +87,7 @@ const Courses = () => {
       {/* Course Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {filteredCourses.map((singleCourse, index) => (
-          <Course key={index} singleCourse={singleCourse} index={index} />
+          <CourseCard key={index} singleCourse={singleCourse} index={index} />
         ))}
       </div>
     </section>

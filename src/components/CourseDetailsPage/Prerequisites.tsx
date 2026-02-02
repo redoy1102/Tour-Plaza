@@ -1,7 +1,4 @@
-import {
-  featuredCourses,
-  getIcon,
-} from "@/data/landingPage/featuredCoursesData";
+import { featuredCourses, getIcon } from "@/data/landingPage/courses";
 import { CheckCircle2 } from "lucide-react";
 
 interface PrerequisitesProps {

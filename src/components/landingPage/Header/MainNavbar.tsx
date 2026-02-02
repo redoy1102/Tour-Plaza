@@ -6,7 +6,6 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-// import { Button } from "@/components/ui/button";
 import SearchBar from "./SearchBar";
 import { navBarMenus } from "@/data/landingPage/navBarData";
 import MobileNavbar from "./MobileNavBar";

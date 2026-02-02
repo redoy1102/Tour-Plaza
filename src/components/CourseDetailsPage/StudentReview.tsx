@@ -1,4 +1,4 @@
-import { featuredCourses } from "@/data/landingPage/featuredCoursesData";
+import { featuredCourses } from "@/data/landingPage/courses";
 import { Star, MessageSquareQuote } from "lucide-react";
 
 interface StudentReviewProps {
@@ -51,7 +51,7 @@ const StudentReview = ({ courseId }: StudentReviewProps) => {
                 </span>
               </div>
               <p className="text-slate-600 italic leading-relaxed mb-6 relative">
-                <span className="text-4xl text-emerald-100 absolute -top-4 -left-2 -z-0 font-serif leading-none">
+                <span className="text-4xl text-emerald-100 absolute -top-4 -left-2 z-0 font-serif leading-none">
                   "
                 </span>
                 <span className="relative z-10">{review.comment}</span>
@@ -75,13 +75,15 @@ const StudentReview = ({ courseId }: StudentReviewProps) => {
 
       {/* Summary Stat */}
       <div className="mt-12 p-8 bg-linear-to-r from-slate-900 to-slate-800 rounded-3xl text-white flex flex-col md:flex-row items-center justify-between gap-8">
-        <div className="flex items-center gap-6">
+        <div className="flex gap-6">
           <div className="text-center md:text-left">
             <p className="text-slate-400 text-sm mb-1 uppercase tracking-wider font-semibold">
               এভারেজ রেটিং
             </p>
-            <div className="flex items-center gap-2">
-              <span className="text-4xl font-black">{course.rating}</span>
+            <div className="flex flex-col md:flex-row items-center gap-2">
+              <span className="text-2xl md:text-4xl font-black">
+                {course.rating}
+              </span>
               <div className="flex flex-col">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
@@ -97,7 +99,7 @@ const StudentReview = ({ courseId }: StudentReviewProps) => {
               </div>
             </div>
           </div>
-          <div className="h-12 w-px bg-slate-700 hidden md:block"></div>
+          {/* <div className="h-12 w-px bg-slate-700 hidden md:block"></div> */}
           <div className="text-center md:text-left">
             <p className="text-slate-400 text-sm mb-1 uppercase tracking-wider font-semibold">
               সফল গ্রাজুয়েট

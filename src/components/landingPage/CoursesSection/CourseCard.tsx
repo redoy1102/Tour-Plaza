@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import type { FeaturedCourse } from "@/types/featuredCourse.interface";
+import type { Course } from "@/types/courses.interface";
 
-interface CourseProps {
-  singleCourse: FeaturedCourse;
+interface CourseCardProps {
+  singleCourse: Course;
   index: number;
 }
 
-const Course = ({ singleCourse, index }: CourseProps) => {
+const CourseCard = ({ singleCourse, index }: CourseCardProps) => {
   return (
     <a
       key={index}
@@ -24,14 +24,16 @@ const Course = ({ singleCourse, index }: CourseProps) => {
         </h3>
 
         <p className="mb-2 text-xs text-gray-500">
-          {singleCourse.durationMonths} মাস | {singleCourse.totalVideos} ভিডিও
+          {singleCourse.durationMonths} মাস | {singleCourse.totalPreRecordedVideos} ভিডিও
         </p>
 
-        <p className="mb-4 font-semibold text-secondary">৳ {singleCourse.price}</p>
+        <p className="mb-4 font-semibold text-secondary">
+          ৳ {singleCourse.price}
+        </p>
 
         <Link
           to={`/courses/${singleCourse.id}`}
-          onClick={() => window.scroll(0,0)}
+          onClick={() => window.scroll(0, 0)}
           className="flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
         >
           বিস্তারিত দেখুন <span>→</span>
@@ -41,4 +43,4 @@ const Course = ({ singleCourse, index }: CourseProps) => {
   );
 };
 
-export default Course;
+export default CourseCard;

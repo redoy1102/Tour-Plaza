@@ -1,4 +1,4 @@
-import { featuredCourses } from "@/data/landingPage/featuredCoursesData";
+import { featuredCourses } from "@/data/landingPage/courses";
 
 interface SuccessStudentsProps {
   courseId: string | undefined;
@@ -42,6 +42,7 @@ const SuccessStudents = ({ courseId }: SuccessStudentsProps) => {
   return (
     <section className="pb-16 bg-slate-50/50 rounded-3xl px-4">
       <div className="container mx-auto">
+        {/* Header */}
         <div className="text-center mb-12 space-y-4">
           <h2 className="text-3xl md:text-5xl font-black text-orange-400 font-bengali uppercase">
             সফল শিক্ষার্থী
@@ -52,7 +53,7 @@ const SuccessStudents = ({ courseId }: SuccessStudentsProps) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {students.map((student, index) => (
             <div
               key={index}

@@ -1,5 +1,5 @@
 import { BadgeCheck } from "lucide-react";
-import { featuredCourses } from "@/data/landingPage/featuredCoursesData";
+import { featuredCourses } from "@/data/landingPage/courses";
 
 export interface InstructorsProps {
   courseId: string | undefined;
@@ -27,11 +27,11 @@ const Instructors = ({ courseId }: InstructorsProps) => {
             {/* Top Row: Badge and Photo */}
             <div className="flex justify-between items-start mb-6">
               <div className="flex-1 pr-4">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border-2 border-dashed border-purple-200 bg-white text-purple-600 text-[11px] font-bold uppercase tracking-wider mb-4">
+                <div className="inline-flex items-center gap-1.5 px-1 py-1 md:px-3 md:py-1 rounded-md border-2 border-dashed border-purple-200 bg-white text-purple-600 text-[8px] md:text-[11px] font-bold uppercase tracking-wider mb-4">
                   <BadgeCheck className="w-4 h-4" />
                   Lead Instructor
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
+                <h3 className="text-lg md:text-2xl font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
                   {instructor.name}
                 </h3>
               </div>
@@ -58,11 +58,11 @@ const Instructors = ({ courseId }: InstructorsProps) => {
 
             {/* Company Bar - Mocking the logo area */}
             <div className="mt-4 bg-slate-50 -mx-6 -mb-6 px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <span className="text-lg font-black italic text-slate-400 opacity-50 tracking-tighter uppercase">
+              <div className="flex justify-between items-center gap-4">
+                <span className="text-lg font-black italic text-slate-400 opacity-50 tracking-tighter uppercase ">
                   {instructor.runningCompanyName.split(" ")[0]}
                 </span>
-                <div className="h-6 w-px bg-slate-200" />
+                {/* <div className="h-6 w-px bg-slate-200" /> */}
                 <span className="text-sm font-bold text-slate-900">
                   {instructor.runningCompanyName}
                 </span>
