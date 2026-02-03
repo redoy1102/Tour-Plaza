@@ -3,6 +3,7 @@ export const navBarMenus = [
   {
     label: "কোর্সসমূহ",
     subMenus: [
+      { label: "সব কোর্স", link: "/allCourses" },
       { label: "ওয়েব ডেভেলপমেন্ট", link: "/courses/web-development" },
       { label: "গ্রাফিক ডিজাইন", link: "/courses/graphic-design" },
       { label: "ডিজিটাল মার্কেটিং", link: "/courses/digital-marketing" },

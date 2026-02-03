@@ -8,6 +8,7 @@ export interface Course {
   totalLiveClasses: number;
   totalPreRecordedVideos: number;
   price: number;
+  discount?: number;
   link: string;
   imglink: string;
   heroVideoLink: string;
@@ -34,7 +35,10 @@ export interface Course {
 
   reviews: Review[];
 
-  promoCodes: string[];
+  promoCodes: {
+    label: string;
+    value: number;
+  }[];
 }
 
 export interface Instructor {

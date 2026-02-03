@@ -1,11 +1,11 @@
-import { featuredCourses } from "@/data/landingPage/courses";
+import { courses } from "@/data/landingPage/courses";
 
 interface ToolsProps {
   courseId: string | undefined;
 }
 
 const Tools = ({ courseId }: ToolsProps) => {
-  const course = featuredCourses.find((c) => c.id === Number(courseId));
+  const course = courses.find((c) => c.id === Number(courseId));
 
   if (!course || !course.toolsList || course.toolsList.length === 0) {
     return <h1>Loading...</h1>;

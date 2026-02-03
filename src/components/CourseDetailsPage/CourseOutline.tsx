@@ -1,4 +1,4 @@
-import { featuredCourses } from "@/data/landingPage/courses";
+import { courses } from "@/data/landingPage/courses";
 import {
   Accordion,
   AccordionContent,
@@ -12,7 +12,7 @@ interface CourseOutlineProps {
 }
 
 const CourseOutline = ({ courseId }: CourseOutlineProps) => {
-  const course = featuredCourses.find((c) => c.id === Number(courseId));
+  const course = courses.find((c) => c.id === Number(courseId));
 
   if (!course || !course.courseOutline) {
     return null;

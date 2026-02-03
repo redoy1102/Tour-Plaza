@@ -1,4 +1,4 @@
-import { featuredCourses } from "@/data/landingPage/courses";
+import { courses } from "@/data/landingPage/courses";
 
 interface SuccessStudentsProps {
   courseId: string | undefined;
@@ -33,7 +33,7 @@ const students = [
 ];
 
 const SuccessStudents = ({ courseId }: SuccessStudentsProps) => {
-  const course = featuredCourses.find((c) => c.id === Number(courseId));
+  const course = courses.find((c) => c.id === Number(courseId));
 
   if (!course) {
     return null;

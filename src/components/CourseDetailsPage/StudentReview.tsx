@@ -1,4 +1,4 @@
-import { featuredCourses } from "@/data/landingPage/courses";
+import { courses } from "@/data/landingPage/courses";
 import { Star, MessageSquareQuote } from "lucide-react";
 
 interface StudentReviewProps {
@@ -6,7 +6,7 @@ interface StudentReviewProps {
 }
 
 const StudentReview = ({ courseId }: StudentReviewProps) => {
-  const course = featuredCourses.find((c) => c.id === Number(courseId));
+  const course = courses.find((c) => c.id === Number(courseId));
 
   if (!course || !course.reviews || course.reviews.length === 0) {
     return null;

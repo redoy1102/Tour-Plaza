@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import CourseHeader from "./CourseHeader";
+import { ChevronLeft, ChevronRight, MonitorPlay } from "lucide-react";
+import Header from "@/components/shared/Header";
 // import Course from "./Course";
 import { courses } from "@/data/landingPage/courses";
 import { coursePaths } from "@/data/landingPage/coursePaths";
@@ -31,7 +31,7 @@ const Courses = () => {
   return (
     <section className="container mx-auto px-4 md:px-12 xl:px-4 py-16">
       {/* Header */}
-      <CourseHeader />
+      <Header icon={MonitorPlay} normalText="রেকর্ডেড লাইভ" colorText="ক্লাস" description="যে কোনো সময়, যে কোনো জায়গা থেকে আমাদের রেকর্ডেড লাইভ ক্লাস দেখুন এবং পুনরায় শিখুন আপনার সুবিধামতো।" />
 
       {/* Categories */}
       <div className="mb-10 flex items-center gap-3">

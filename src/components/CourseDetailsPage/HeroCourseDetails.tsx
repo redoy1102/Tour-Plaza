@@ -1,4 +1,4 @@
-import {courses} from "@/data/landingPage/courses";
+import { courses } from "@/data/landingPage/courses";
 import {
   Star,
   PlayCircle,
@@ -11,9 +11,20 @@ import {
   ArrowRight,
   Monitor,
   Video,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getIcon } from "@/data/landingPage/courses";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
 
 interface HeroCourseDetailsProps {
   courseId: string | undefined;
@@ -22,13 +33,20 @@ interface HeroCourseDetailsProps {
 const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
   console.log("Type of course id:", typeof courseId);
   const course = courses.find((c) => c.id === Number(courseId));
+  const [selectedPromoCode, setSelectedPromoCode] = useState<string>("");
+  console.log("Selected Promo Code:", selectedPromoCode);
 
   if (!course) {
     return <div className="py-20 text-center">কোর্স পাওয়া যায়নি।</div>;
   }
 
-  // Calculate a mock original price
-  const originalPrice = course.price + 3400;
+  const priceAfterDiscount = course.price - (course.discount ?? 0);
+
+  const promoNumber = selectedPromoCode ? parseInt(selectedPromoCode, 10) : 0;
+
+  const finalPrice =
+    priceAfterDiscount - (priceAfterDiscount * promoNumber) / 100;
+  console.log("Final price:", finalPrice);
 
   // Function to parse Bengali date
   const parseBengaliDate = (dateStr: string): Date | null => {
@@ -131,21 +149,49 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
               <div className="flex items-baseline gap-2">
                 <span className="text-3xl md:text-2xl font-black text-slate-900">
-                  ৳{course.price.toLocaleString()}
+                  ৳{finalPrice}
                 </span>
-                <span className="text-lg text-slate-400 line-through">
-                  ৳{originalPrice.toLocaleString()}
-                </span>
+                {finalPrice < course.price && (
+                  <span className="text-lg text-slate-400 line-through">
+                    ৳{course.price}
+                  </span>
+                )}
               </div>
 
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1 text-emerald-600 text-sm font-semibold">
-                  <CheckCircle className="w-4 h-4" /> প্রোমো অ্যাপ্লাইড
-                </span>
-                <span className="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-md text-sm font-bold border border-emerald-100 uppercase">
-                  {course.promoCodes[0]}
-                </span>
-              </div>
+              {selectedPromoCode && (
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 text-emerald-600 text-sm font-semibold">
+                    <CheckCircle className="w-4 h-4" /> প্রোমো অ্যাপ্লাইড
+                  </span>
+                  <Button size="sm" className="bg-emerald-100 hover:bg-emerald-200 text-emerald-600 cursor-pointer" onClick={() => setSelectedPromoCode("")}>
+                    <X />Promo
+                  </Button>
+                </div>
+              )}
+              {/* Promo Code Selector */}
+              {selectedPromoCode === "" && (
+                <Select
+                  value={selectedPromoCode}
+                  onValueChange={setSelectedPromoCode}
+                >
+                  <SelectTrigger className="w-full max-w-48">
+                    <SelectValue placeholder="প্রমো কোড" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {/* <SelectLabel>প্রমো কোড</SelectLabel> */}
+                      {course.promoCodes.map((item) => (
+                        <SelectItem
+                          key={item.value}
+                          value={item.value.toString()}
+                        >
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              )}
             </div>
 
             {/* Stat Badges */}

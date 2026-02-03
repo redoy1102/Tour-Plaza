@@ -1,4 +1,4 @@
-import { featuredCourses, getIcon } from "@/data/landingPage/courses";
+import { courses, getIcon } from "@/data/landingPage/courses";
 import { CheckCircle2 } from "lucide-react";
 
 interface PrerequisitesProps {
@@ -6,7 +6,7 @@ interface PrerequisitesProps {
 }
 
 const Prerequisites = ({ courseId }: PrerequisitesProps) => {
-  const course = featuredCourses.find((c) => c.id === Number(courseId));
+  const course = courses.find((c) => c.id === Number(courseId));
 
   if (!course || !course.prerequisites || course.prerequisites.length === 0) {
     return null;

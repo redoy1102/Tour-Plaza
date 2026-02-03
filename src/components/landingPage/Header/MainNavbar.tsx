@@ -16,8 +16,8 @@ const MainNavbar = () => {
   return (
     <header className="w-full bg-white sticky top-0 z-50 shadow-sm">
       <div className="mx-auto flex h-17 max-w-7xl items-center justify-between px-4">
+        {/* Left: Logo */}
         <div className="flex items-center gap-4">
-          {/* Left: Logo */}
           <Link
             to="/"
             className="w-32 md:w-40 lg:w-48"
@@ -44,15 +44,19 @@ const MainNavbar = () => {
                     <NavigationMenuTrigger>
                       {navItem.label}
                     </NavigationMenuTrigger>
+
                     <NavigationMenuContent>
                       <ul className="grid w-40 gap-2 p-4">
                         {navItem.subMenus?.map((item, index) => (
                           <li key={index}>
-                            <NavigationMenuLink
-                              href={item.link}
-                              className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
-                            >
-                              {item.label}
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={item.link || "#"}
+                                className="block rounded-md px-3 py-2 text-sm hover:bg-muted"
+                                onClick={() => window.scrollTo(0, 0)}
+                              >
+                                {item.label}
+                              </Link>
                             </NavigationMenuLink>
                           </li>
                         ))}

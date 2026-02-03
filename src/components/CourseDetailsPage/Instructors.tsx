@@ -1,12 +1,12 @@
 import { BadgeCheck } from "lucide-react";
-import { featuredCourses } from "@/data/landingPage/courses";
+import { courses } from "@/data/landingPage/courses";
 
 export interface InstructorsProps {
   courseId: string | undefined;
 }
 
 const Instructors = ({ courseId }: InstructorsProps) => {
-  const course = featuredCourses.find((c) => c.id === Number(courseId));
+  const course = courses.find((c) => c.id === Number(courseId));
 
   if (!course || !course.instructors) {
     return null;
