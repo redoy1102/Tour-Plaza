@@ -7,7 +7,6 @@ import { User } from "lucide-react";
 import Header from "./Header";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import {
   Form,
   FormControl,
@@ -16,14 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-const authSchema = z.object({
-  name: z.string().min(2, "নাম কমপক্ষে ২ অক্ষরের হতে হবে").or(z.literal("")),
-  email: z.string().email("সঠিক ইমেইল দিন"),
-  password: z.string().min(6, "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে"),
-});
-
-type AuthFormValues = z.infer<typeof authSchema>;
+import { authSchema, type AuthFormValues } from "@/schemas/auth";
 
 export function AuthSheet({ className }: { className?: string }) {
   const [isLogin, setIsLogin] = useState(true);

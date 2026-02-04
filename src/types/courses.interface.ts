@@ -39,6 +39,8 @@ export interface Course {
     label: string;
     value: number;
   }[];
+
+  seo: string[];
 }
 
 export interface Instructor {
