@@ -171,6 +171,166 @@ export const courses: Course[] = [
     ],
   },
 
+  {
+    id: 2,
+    category: "webDevelopment",
+    title: "ওয়েব ডেভেলপমেন্ট - [Python & Django]",
+    description: "শূন্য থেকে ফুল-স্ট্যাক ওয়েব ডেভেলপার হওয়ার সম্পূর্ণ কোর্স।",
+    rating: 4.8,
+    durationMonths: 6,
+    totalLiveClasses: 50,
+    totalPreRecordedVideos: 1000,
+    price: 5000,
+    discount: 500,
+    link: "/courses/web-development",
+    imglink: "/landingPage/courses/js.webp",
+    heroVideoLink: "/landingPage/HeroVideo.mp4",
+
+    supports: [
+      { icon: "Users", title: "জব প্লেসমেন্ট সাপোর্ট" },
+      { icon: "Clock", title: "লাইফটাইম এক্সেস" },
+      { icon: "ShieldCheck", title: "সার্টিফিকেট" },
+    ],
+    batchStartDate: "রবিবার ৮ ফেব্রুয়ারি",
+    liveClassTime: "সকাল ১০টা – দুপুর ১টা",
+    supportClassTime: "রাত ৮টা – ১০টা",
+    totalSeats: 50,
+    seatsLeft: 20,
+    batch: "৬ষ্ঠ ব্যাচে",
+
+    isFeatured: true,
+
+    instructors: [
+      {
+        name: "জন ডো",
+        role: "ফুল-স্ট্যাক ডেভেলপার",
+        photo: "/public/landingPage/courses/instructorImages/instructor1.webp",
+        runningCompanyName: "Tech Solutions",
+      },
+      {
+        name: "জেন স্মিথ",
+        role: "ফ্রন্টএন্ড এক্সপার্ট",
+        photo: "/public/landingPage/courses/instructorImages/instructor2.webp",
+        runningCompanyName: "Creative Inc",
+      },
+      {
+        name: "রাহাত ইসলাম",
+        role: "ব্যাকএন্ড ডেভেলপার",
+        photo: "/public/landingPage/courses/instructorImages/instructor3.webp",
+        runningCompanyName: "Backend Hub",
+      },
+      {
+        name: "তাসনিম রহমান",
+        role: "DevOps ইঞ্জিনিয়ার",
+        photo: "/public/landingPage/courses/instructorImages/instructor4.webp",
+        runningCompanyName: "CloudWorks",
+      },
+    ],
+
+    supportTeamMembers: [
+      {
+        name: "আলিফ রহমান",
+        role: "টেক সাপোর্ট",
+        photo: "/public/landingPage/courses/teamMemberImages/teamMember1.webp",
+        runningCompanyName: "Support Ltd",
+      },
+      {
+        name: "সাবিনা আক্তার",
+        role: "কোর্স কনসালটেন্ট",
+        photo: "/public/landingPage/courses/teamMemberImages/teamMember2.webp",
+        runningCompanyName: "EduCare",
+      },
+    ],
+
+    courseOutline: {
+      week1: [
+        {
+          classNo: 1,
+          title: "HTML পরিচিতি",
+          topics: ["HTML Structure", "Tags"],
+        },
+        { classNo: 2, title: "CSS বেসিক", topics: ["Selectors", "Box Model"] },
+      ],
+      week2: [
+        {
+          classNo: 3,
+          title: "JavaScript বেসিক",
+          topics: ["Variables", "Functions"],
+        },
+        { classNo: 4, title: "DOM", topics: ["Events", "Manipulation"] },
+      ],
+      week3: [
+        { classNo: 5, title: "React বেসিক", topics: ["Components", "Props"] },
+        {
+          classNo: 6,
+          title: "State & Hooks",
+          topics: ["useState", "useEffect"],
+        },
+      ],
+      week4: [
+        {
+          classNo: 7,
+          title: "Backend পরিচিতি",
+          topics: ["Node.js", "Express"],
+        },
+        { classNo: 8, title: "MongoDB", topics: ["CRUD", "Schema"] },
+      ],
+    },
+
+    toolsList: [
+      {
+        imgLink: "/public/landingPage/courses/tools/vsCode.jpeg",
+        name: "VS Code",
+        purpose: "কোড লেখা",
+      },
+      {
+        imgLink: "/public/landingPage/courses/tools/github.png",
+        name: "GitHub",
+        purpose: "ভার্সন কন্ট্রোল",
+      },
+      {
+        imgLink: "/public/landingPage/courses/tools/api.png",
+        name: "API",
+        purpose: "API টেস্টিং",
+      },
+    ],
+
+    prerequisites: [
+      { icon: "Laptop", title: "Laptop/Desktop" },
+      { icon: "Globe", title: "Basic English" },
+      { icon: "Wifi", title: "ইন্টারনেট ব্যবহারের জ্ঞান" },
+    ],
+
+    reviews: [
+      { studentName: "রাহুল ইসলাম", rating: 5, comment: "অসাধারণ কোর্স!" },
+      {
+        studentName: "সুমনা আক্তার",
+        rating: 4.7,
+        comment: "খুব ভালো শেখানো হয়েছে।",
+      },
+      {
+        studentName: "তানভীর হোসেন",
+        rating: 4.8,
+        comment: "লাইভ ক্লাস খুব উপকারী।",
+      },
+      {
+        studentName: "মাহমুদুল হাসান",
+        rating: 5,
+        comment: "Highly recommended!",
+      },
+    ],
+
+    promoCodes: [
+      { label: "EarlyBird20", value: 20 },
+      {
+        label: "WEB26",
+        value: 26,
+      },
+      { label: "CODEPRO15", value: 15 },
+      { label: "DEVSTART5", value: 5 },
+    ],
+  },
+
   // {
   //   id: 2,
   //   category: "graphicDesign",

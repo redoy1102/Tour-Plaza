@@ -5,25 +5,15 @@ import {
   FaYoutube,
   FaTwitter,
 } from "react-icons/fa";
+import { navBarMenus } from "./navBarData";
 
-export const quickLinksData = [
-  {
-    title: "হোম",
-    url: "/",
-  },
-  {
-    title: "কোর্সসমূহ",
-    url: "/courses",
-  },
-  {
-    title: "আমাদের সম্পর্কে",
-    url: "/about",
-  },
-  {
-    title: "যোগাযোগ",
-    url: "/contact",
-  },
-];
+export const quickLinksData = navBarMenus.map((item) => {
+  if (item.label === "আমাদের সম্পর্কে" || item.label === "যোগাযোগ") {
+    return item;
+  } else if (item.label === "কোর্সসমূহ") {
+    return { label: "সব কোর্স", link: "/courses" };
+  }
+});
 
 export const contactData = [
   {
