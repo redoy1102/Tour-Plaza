@@ -24,16 +24,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface HeroCourseDetailsProps {
   courseId: string | undefined;
 }
 
 const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
-  console.log("Type of course id:", typeof courseId);
+  const navigate = useNavigate();
   const course = courses.find((c) => c.id === Number(courseId));
   const [selectedPromoCode, setSelectedPromoCode] = useState<string>("");
-  console.log("Selected Promo Code:", selectedPromoCode);
+
+  const handleEnroll = () => {
+    const promoQuery = selectedPromoCode ? `?promo=${selectedPromoCode}` : "";
+    navigate(`/purchase/${courseId}${promoQuery}`);
+  };
 
   if (!course) {
     return <div className="py-20 text-center">কোর্স পাওয়া যায়নি।</div>;
@@ -45,7 +50,6 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
   const finalPrice =
     priceAfterDiscount - (priceAfterDiscount * promoNumber) / 100;
-  console.log("Final price:", finalPrice);
 
   // Function to parse Bengali date
   const parseBengaliDate = (dateStr: string): Date | null => {
@@ -142,7 +146,10 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
             {/* Pricing and Action */}
             <div className="flex flex-wrap items-center gap-4 py-4">
-              <Button className="bg-[#FFC107] hover:bg-[#FFC107]/90 text-slate-900 font-bold px-4 py-3 lg:px-6 lg:py-5 xl:px-8 xl:py-6 rounded-lg text-lg flex items-center gap-2">
+              <Button 
+                onClick={handleEnroll}
+                className="bg-[#FFC107] hover:bg-[#FFC107]/90 text-slate-900 font-bold px-4 py-3 lg:px-6 lg:py-5 xl:px-8 xl:py-6 rounded-lg text-lg flex items-center gap-2"
+              >
                 ব্যাচে ভর্তি হোন <ArrowRight className="w-5 h-5" />
               </Button>
 

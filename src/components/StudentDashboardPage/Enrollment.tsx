@@ -1,0 +1,93 @@
+import { BookOpen, Calendar, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const Enrollment = () => {
+  const enrolledCourses = [
+    {
+      id: 1,
+      title: "ফুল স্ট্যাক ওয়েব ডেভেলপমেন্ট উইথ পাইথন ও রিয়্যাক্ট",
+      batch: "ব্যাচ ১০",
+      startDate: "১০ জানুয়ারি, ২০২৪",
+      status: "Running",
+      image: "/landingPage/courses/js.webp",
+    },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-white tracking-tight">
+          আমার কোর্সসমূহ
+        </h1>
+        <div className="flex items-center gap-2 text-sm text-slate-400">
+          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          ১টি কোর্স রানিং
+        </div>
+      </div>
+
+      <div className="grid gap-6">
+        {enrolledCourses.map((course) => (
+          <div
+            key={course.id}
+            className="bg-[#0a0f1c] border border-slate-800/50 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row gap-6 hover:border-slate-700/50 transition-colors group"
+          >
+            <div className="w-full md:w-48 h-32 rounded-xl overflow-hidden bg-slate-800 flex-shrink-0">
+              <img
+                src={course.image}
+                alt={course.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+
+            <div className="flex-1 space-y-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 text-[10px] font-bold rounded uppercase tracking-wider border border-emerald-500/20">
+                    {course.status}
+                  </span>
+                  <span className="text-slate-500 text-xs flex items-center gap-1">
+                    <Clock className="w-3 h-3" /> সময় ৮ মাস
+                  </span>
+                </div>
+                <h2 className="text-xl font-bold text-white leading-tight">
+                  {course.title}
+                </h2>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-6 text-sm text-slate-400">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-sky-500" />
+                  <span>{course.batch}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-sky-500" />
+                  <span>শুরু: {course.startDate}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center">
+              <Button className="w-full md:w-auto bg-sky-600 hover:bg-sky-500 text-white font-bold px-8">
+                কোর্স শুরু করুন
+              </Button>
+            </div>
+          </div>
+        ))}
+
+        {enrolledCourses.length === 0 && (
+          <div className="p-20 text-center bg-[#0a0f1c] rounded-3xl border border-dashed border-slate-800">
+            <BookOpen className="w-12 h-12 text-slate-700 mx-auto mb-4" />
+            <h3 className="text-slate-400 font-medium">
+              আপনি এখনও কোন কোর্সে এনরোল করেননি।
+            </h3>
+            <Button className="mt-4 bg-transparent border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800">
+              সব কোর্স দেখুন
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Enrollment;
