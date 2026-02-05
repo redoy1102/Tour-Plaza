@@ -16,11 +16,11 @@ const Enrollment = () => {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white tracking-tight">
+        <h1 className="text-2xl font-bold  tracking-tight">
           আমার কোর্সসমূহ
         </h1>
-        <div className="flex items-center gap-2 text-sm text-slate-400">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+        <div className="flex items-center gap-2 text-sm ">
+          <div className="w-4 h-4 rounded-full bg-emerald-600 animate-pulse" />
           ১টি কোর্স রানিং
         </div>
       </div>

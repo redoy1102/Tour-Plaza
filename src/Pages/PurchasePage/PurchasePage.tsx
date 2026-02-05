@@ -152,7 +152,6 @@ const PurchasePage = () => {
                             alt="bkash"
                             className="h-10 object-contain"
                           />
-                          
                         </div>
                       )}
 

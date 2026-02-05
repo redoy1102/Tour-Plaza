@@ -1,5 +1,6 @@
-import { Button } from "../../ui/button";
 import { FaGooglePlay, FaApple } from "react-icons/fa";
+import {Button} from "@/components/ui/button";
+
 
 const AppDownloadButtons = () => {
   return (

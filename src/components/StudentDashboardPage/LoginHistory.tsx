@@ -1,4 +1,4 @@
-import { AlertCircle, Smartphone, Trash2 } from "lucide-react";
+import { AlertCircle, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const LoginHistory = () => {
@@ -26,7 +26,7 @@ const LoginHistory = () => {
         <div className="p-2 bg-sky-500/10 rounded-lg">
           <AlertCircle className="w-6 h-6 text-sky-400" />
         </div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">
+        <h1 className="text-2xl font-bold  tracking-tight">
           ডিভাইস লগইন হিস্ট্রি
         </h1>
       </div>

@@ -146,7 +146,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
             {/* Pricing and Action */}
             <div className="flex flex-wrap items-center gap-4 py-4">
-              <Button 
+              <Button
                 onClick={handleEnroll}
                 className="bg-[#FFC107] hover:bg-[#FFC107]/90 text-slate-900 font-bold px-4 py-3 lg:px-6 lg:py-5 xl:px-8 xl:py-6 rounded-lg text-lg flex items-center gap-2"
               >
@@ -169,8 +169,13 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                   <span className="inline-flex items-center gap-1 text-emerald-600 text-sm font-semibold">
                     <CheckCircle className="w-4 h-4" /> প্রোমো অ্যাপ্লাইড
                   </span>
-                  <Button size="sm" className="bg-emerald-100 hover:bg-emerald-200 text-emerald-600 cursor-pointer" onClick={() => setSelectedPromoCode("")}>
-                    <X />Promo
+                  <Button
+                    size="sm"
+                    className="bg-emerald-100 hover:bg-emerald-200 text-emerald-600 cursor-pointer"
+                    onClick={() => setSelectedPromoCode("")}
+                  >
+                    <X />
+                    Promo
                   </Button>
                 </div>
               )}
