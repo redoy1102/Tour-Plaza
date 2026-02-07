@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import MainNavbar from "../landingPage/Header/MainNavbar";
+// import MainNavbar from "../landingPage/Header/MainNavbar";
 
 const StudentLayout = () => {
   return (
     <div>
-      <MainNavbar />
+      {/* <MainNavbar /> */}
       <Outlet />
     </div>
   );

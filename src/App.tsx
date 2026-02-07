@@ -10,6 +10,7 @@ import CourseDetails from "@/Pages/CourseDetails/CourseDetails";
 import AllCoursesPage from "@/Pages/AllCoursesPage/AllCoursesPage";
 import PurchasePage from "@/Pages/PurchasePage/PurchasePage";
 import StudentDashboardPage from "@/Pages/StudentDashboardPage";
+import VideoClass from "@/Pages/VideoClass";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
 
           <Route path="/student" element={<StudentLayout />}>
             <Route index element={<StudentDashboardPage />} />
+            <Route path="video-class" element={<VideoClass />} />
           </Route>
         </Routes>
       </Router>
