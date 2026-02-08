@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
-  ChevronLeft,
-  ChevronRight,
+  // ChevronLeft,
+  // ChevronRight,
   // Maximize2,
   //   Search,
   CheckCircle2,
@@ -15,8 +15,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
+import NoClassRecords from "../NoClassRecords";
 // import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface Lesson {
   classNo: number;
@@ -24,6 +26,7 @@ interface Lesson {
   videoUrl: string;
   duration: string;
   completed: boolean;
+  quizzes: Quiz[];
 }
 
 interface SelectedVideo {
@@ -31,10 +34,17 @@ interface SelectedVideo {
   url: string;
 }
 
+export interface Quiz {
+  question: string;
+  options: string[];
+  answer: string;
+}
+
 type ClassRecords = Record<string, Lesson[]>;
 
 const VideoClass = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const classRecords: ClassRecords | undefined = location.state?.classRecords;
   console.log("Received class records:", classRecords);
 
@@ -42,6 +52,15 @@ const VideoClass = () => {
   const firstWeekKey = Object.keys(classRecords || {})[0];
 
   const firstLesson = classRecords?.[firstWeekKey]?.[0];
+  console.log("First lesson:", firstLesson);
+
+  const [selectedQuiz, setSelectedQuiz] = useState<Quiz[] | null>(
+    firstLesson?.quizzes && firstLesson.quizzes.length > 0
+      ? firstLesson.quizzes
+      : null
+  );
+  console.log("Initial selected quiz:", selectedQuiz);
+
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>(
     firstLesson
       ? {
@@ -70,8 +89,10 @@ const VideoClass = () => {
   };
 
   if (!classRecords) {
-  return <div>No class records available</div>;
-}
+    return (
+      <NoClassRecords backToMyCourses={() => navigate("/student/my-courses")} />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#020817] text-white flex flex-col lg:flex-row overflow-hidden pt-10">
@@ -88,7 +109,7 @@ const VideoClass = () => {
             />
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+          {/* <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
             <Button
               variant="outline"
               className="bg-[#007cc2] hover:bg-[#006bb0] text-white border-none gap-2 px-8 h-12 rounded-xl transition-all active:scale-95"
@@ -104,12 +125,22 @@ const VideoClass = () => {
               পরের লেসন
               <ChevronRight className="w-5 h-5" />
             </Button>
-          </div>
+          </div> */}
         </div>
+        {selectedQuiz && (
+          <Button
+            className="bg-[#007cc2] hover:bg-[#006bb0] text-white border-none gap-2 px-8 h-12 rounded-xl transition-all active:scale-95 cursor-pointer my-4"
+            onClick={() =>
+              navigate("/quiz", { state: { quizzes: selectedQuiz } })
+            }
+          >
+            Start Quiz
+          </Button>
+        )}
       </div>
 
       {/* Sidebar - Course Content */}
-      <div className="w-full lg:w-[450px] border-l border-slate-800 bg-[#0a0f1c]/90 backdrop-blur-xl flex flex-col shrink-0 overflow-hidden">
+      <div className="w-full lg:w-112.5 border-l border-slate-800 bg-[#0a0f1c]/90 backdrop-blur-xl flex flex-col shrink-0 overflow-hidden">
         {/* Search Header */}
         {/* <div className="p-6 border-b border-slate-800/50">
           <div className="relative group">
@@ -129,7 +160,7 @@ const VideoClass = () => {
             defaultValue={firstWeekKey}
             className="w-full"
           >
-            {Object.entries(classRecords).map(([weekKey, lessons]) => (
+            {Object.entries(classRecords).map(([weekKey, classes]) => (
               <AccordionItem
                 key={weekKey}
                 value={weekKey}
@@ -142,22 +173,23 @@ const VideoClass = () => {
                     </p>
                     <p className="text-[11px] font-medium text-slate-500 flex items-center gap-2">
                       <Clock className="w-3 h-3" />
-                      {lessons.length}টি লেসন • ৪ ঘন্টা ২০ মিনিট
+                      {classes.length}টি লেসন • ৪ ঘন্টা ২০ মিনিট
                     </p>
                   </div>
                 </AccordionTrigger>
 
                 <AccordionContent className="p-0 pt-1 pb-4">
                   <div className="space-y-1">
-                    {lessons.map((lesson: Lesson) => (
+                    {classes.map((lesson: Lesson) => (
                       <button
                         key={lesson.classNo}
-                        onClick={() =>
+                        onClick={() => {
                           setSelectedVideo({
                             title: lesson.title,
                             url: lesson.videoUrl,
-                          })
-                        }
+                          });
+                          setSelectedQuiz(lesson.quizzes);
+                        }}
                         className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item ${
                           selectedVideo.title === lesson.title
                             ? "bg-[#007cc2] text-white shadow-lg shadow-sky-500/20"

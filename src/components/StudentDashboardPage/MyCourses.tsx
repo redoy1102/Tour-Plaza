@@ -20,6 +20,32 @@ const MyCourses = () => {
             videoUrl: "/public/student/classRecords/week_1Class_1.mp4",
             duration: "49:13 minute",
             completed: true,
+            quizzes: [
+              {
+                question: "HTML এর পূর্ণরূপ কি?",
+                options: [
+                  "Hyper Text Markup Language",
+                  "Home Tool Markup Language",
+                  "Hyperlinks and Text Markup Language",
+                ],
+                answer: "Hyper Text Markup Language",
+              },
+              {
+                question: "HTML এ কোন ট্যাগ দিয়ে প্যারাগ্রাফ তৈরি করা হয়?",
+                options: ["<p>", "<h1>", "<div>"],
+                answer: "<p>",
+              },
+              {
+                question: "HTML এ কোন ট্যাগ দিয়ে লিস্ট তৈরি করা হয়?",
+                options: ["<ul>", "<ol>", "<li>"],
+                answer: "<ul> এবং <ol>",
+              },
+              {
+                question: "HTML এ কোন ট্যাগ দিয়ে লিস্ট তৈরি করা হয়?",
+                options: ["<ul>", "<ol>", "<li>"],
+                answer: "<ul> এবং <ol>",
+              },
+            ],
           },
           {
             classNo: 2,
@@ -27,6 +53,28 @@ const MyCourses = () => {
             videoUrl: "/public/student/classRecords/week_1Class_2.mp4",
             duration: "49:13 minute",
             completed: true,
+            quizzes: [
+              {
+                question: "CSS এর পূর্ণরূপ কি?",
+                options: [
+                  "Cascading Style Sheets",
+                  "Creative Style System",
+                  "Computer Style Sheets",
+                ],
+                answer: "Cascading Style Sheets",
+              },
+              {
+                question: "CSS এ কোন প্রপার্টি দিয়ে ফন্ট সাইজ নির্ধারণ করা হয়?",
+                options: ["font-size", "text-size", "font-style"],
+                answer: "font-size",
+              },
+              {
+                question:
+                  "CSS এ কোন প্রপার্টি দিয়ে ব্যাকগ্রাউন্ড কালার নির্ধারণ করা হয়?",
+                options: ["background-color", "bg-color", "color"],
+                answer: "background-color",
+              },
+            ],
           },
         ],
         week2: [
@@ -143,7 +191,7 @@ const MyCourses = () => {
             <div className="flex items-center">
               <Button
                 onClick={() =>
-                  navigate("/student/video-class", {
+                  navigate("/video-player", {
                     state: { classRecords: course.classRecords },
                   })
                 }
