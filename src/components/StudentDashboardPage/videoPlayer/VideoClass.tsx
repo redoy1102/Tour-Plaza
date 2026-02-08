@@ -37,7 +37,7 @@ interface SelectedVideo {
 export interface Quiz {
   question: string;
   options: string[];
-  answer: string;
+  answer: string[];
 }
 
 type ClassRecords = Record<string, Lesson[]>;
