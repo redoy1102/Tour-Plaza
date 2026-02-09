@@ -1,8 +1,8 @@
-import Profile from "@/components/StudentDashboardPage/Profile";
-import PasswordUpdate from "@/components/StudentDashboardPage/PasswordUpdate";
-import MyCourses from "@/components/StudentDashboardPage/MyCourses";
-import LoginHistory from "@/components/StudentDashboardPage/LoginHistory";
-import Dashboard from "@/components/StudentDashboardPage/Dashboard";
+import Profile from "@/components/StudentDashboardPage/sideNav/settings/Profile";
+import PasswordUpdate from "@/components/StudentDashboardPage/sideNav/settings/PasswordUpdate";
+import MyCourses from "@/components/StudentDashboardPage/sideNav/MyCourses";
+import LoginHistory from "@/components/StudentDashboardPage/sideNav/settings/LoginHistory";
+import Dashboard from "@/components/StudentDashboardPage/sideNav/Dashboard";
 import { User, Lock, BookOpen, MonitorSmartphone, LogOut } from "lucide-react";
 
 export const menuItems = [

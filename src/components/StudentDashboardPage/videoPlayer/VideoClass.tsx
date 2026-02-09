@@ -40,6 +40,13 @@ export interface Quiz {
   answer: string[];
 }
 
+export interface Assignment {
+  title: string;
+  description: string;
+  dueDate: string;
+  maxMarks: number;
+}
+
 type ClassRecords = Record<string, Lesson[]>;
 
 const VideoClass = () => {

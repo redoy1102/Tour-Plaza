@@ -46,6 +46,13 @@ const MyCourses = () => {
                 answer: ["<ul>", "<ol>"],
               },
             ],
+            assignment: {
+              title: "HTML বেসিক অ্যাসাইনমেন্ট",
+              description:
+                "একটি ওয়েবপেজ তৈরি করুন যেখানে HTML এর বেসিক ট্যাগগুলো ব্যবহার করা হয়েছে।",
+              dueDate: "2024-01-20",
+              maxMarks: 100,
+            }
           },
           {
             classNo: 2,
