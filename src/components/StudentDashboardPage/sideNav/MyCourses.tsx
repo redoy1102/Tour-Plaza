@@ -14,12 +14,31 @@ const MyCourses = () => {
       image: "/landingPage/courses/js.webp",
       classRecords: {
         week1: [
+          // Class - 1
           {
             classNo: 1,
             title: "HTML পরিচিতি",
             videoUrl: "/public/student/classRecords/week_1Class_1.mp4",
             duration: "49:13 minute",
             completed: true,
+            // assignment: {
+            //   title: "HTML বেসিক অ্যাসাইনমেন্ট",
+            //   description:
+            //     "একটি ওয়েবপেজ তৈরি করুন যেখানে HTML এর বেসিক ট্যাগগুলো ব্যবহার করা হয়েছে।",
+            //   dueDate: "2024-01-20",
+            //   maxMarks: 100,
+            // },
+          },
+          // Class - 2
+          {
+            classNo: 2,
+            title: "CSS বেসিক",
+            videoUrl: "/public/student/classRecords/week_1Class_2.mp4",
+            duration: "49:13 minute",
+            completed: true,
+          },
+          // Quizzes for Week 1
+          {
             quizzes: [
               {
                 question: "HTML এর পূর্ণরূপ কি?",
@@ -46,43 +65,7 @@ const MyCourses = () => {
                 answer: ["<ul>", "<ol>"],
               },
             ],
-            assignment: {
-              title: "HTML বেসিক অ্যাসাইনমেন্ট",
-              description:
-                "একটি ওয়েবপেজ তৈরি করুন যেখানে HTML এর বেসিক ট্যাগগুলো ব্যবহার করা হয়েছে।",
-              dueDate: "2024-01-20",
-              maxMarks: 100,
-            }
-          },
-          {
-            classNo: 2,
-            title: "CSS বেসিক",
-            videoUrl: "/public/student/classRecords/week_1Class_2.mp4",
-            duration: "49:13 minute",
-            completed: true,
-            quizzes: [
-              {
-                question: "CSS এর পূর্ণরূপ কি?",
-                options: [
-                  "Cascading Style Sheets",
-                  "Creative Style System",
-                  "Computer Style Sheets",
-                ],
-                answer: ["Cascading Style Sheets"],
-              },
-              {
-                question: "CSS এ কোন প্রপার্টি দিয়ে ফন্ট সাইজ নির্ধারণ করা হয়?",
-                options: ["font-size", "text-size", "font-style"],
-                answer: ["font-size"],
-              },
-              {
-                question:
-                  "CSS এ কোন প্রপার্টি দিয়ে ব্যাকগ্রাউন্ড কালার নির্ধারণ করা হয়?",
-                options: ["background-color", "bg-color", "color"],
-                answer: ["background-color"],
-              },
-            ],
-          },
+          }
         ],
         week2: [
           {
@@ -143,6 +126,8 @@ const MyCourses = () => {
       image: "/landingPage/courses/js.webp",
     },
   ];
+
+  console.log("Enrolled courses:", enrolledCourses[0].classRecords);
 
   return (
     <div className="space-y-8">
