@@ -21,13 +21,6 @@ const MyCourses = () => {
             videoUrl: "/public/student/classRecords/week_1Class_1.mp4",
             duration: "49:13 minute",
             completed: true,
-            // assignment: {
-            //   title: "HTML বেসিক অ্যাসাইনমেন্ট",
-            //   description:
-            //     "একটি ওয়েবপেজ তৈরি করুন যেখানে HTML এর বেসিক ট্যাগগুলো ব্যবহার করা হয়েছে।",
-            //   dueDate: "2024-01-20",
-            //   maxMarks: 100,
-            // },
           },
           // Class - 2
           {
@@ -65,6 +58,20 @@ const MyCourses = () => {
                 answer: ["<ul>", "<ol>"],
               },
             ],
+          },
+          // Assignment for Week 1
+          {
+            assignment: {
+              title: "HTML বেসিক অ্যাসাইনমেন্ট",
+              description:
+                "একটি ওয়েবপেজ তৈরি করুন যেখানে HTML এর বেসিক ট্যাগগুলো ব্যবহার করা হয়েছে।",
+              instructions: [
+                "আপনার ওয়েবপেজে একটি হেডার, একটি প্যারাগ্রাফ, এবং একটি লিস্ট অন্তর্ভুক্ত করুন।",
+                "আপনার কোড GitHub এ আপলোড করুন এবং লিঙ্কটি এখানে শেয়ার করুন।",
+              ],
+              dueDate: "2026-02-20",
+              maxMarks: 100,
+            },
           },
         ],
         week2: [
@@ -127,8 +134,6 @@ const MyCourses = () => {
     },
   ];
 
-  console.log("Enrolled courses:", enrolledCourses[0].classRecords);
-
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -184,11 +189,11 @@ const MyCourses = () => {
 
             <div className="flex items-center">
               <Button
-                onClick={() =>
+                onClick={() => {
                   navigate("/video-player", {
                     state: { classRecords: course.classRecords },
-                  })
-                }
+                  });
+                }}
                 className="w-full md:w-auto bg-primary hover:bg-red-500 text-white font-bold px-8 cursor-pointer"
               >
                 কোর্স শুরু করুন

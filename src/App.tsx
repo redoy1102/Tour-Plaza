@@ -17,6 +17,7 @@ import LoginHistory from "@/components/StudentDashboardPage/sideNav/settings/Log
 import VideoClass from "@/components/StudentDashboardPage/videoPlayer/VideoClass";
 import NotFound from "@/components/NotFound";
 import Quizzes from "./components/StudentDashboardPage/videoPlayer/Quizzes";
+import Assignment from "./components/StudentDashboardPage/videoPlayer/Assignment";
 
 function App() {
   return (
@@ -39,9 +40,11 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="password" element={<PasswordUpdate />} />
             <Route path="login-history" element={<LoginHistory />} />
+            <Route path="assignment" element={<Assignment />} />
           </Route>
           <Route path="video-player" element={<VideoClass />} />
           <Route path="quiz" element={<Quizzes />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

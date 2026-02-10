@@ -33,17 +33,26 @@ export interface Quiz {
 export interface Assignment {
   title: string;
   description: string;
+  instructions: string[];
   dueDate: string;
   maxMarks: number;
 }
 
-type ClassRecords = Record<string, (Lesson | { quizzes: Quiz[] })[]>;
+type ClassRecords = Record<
+  string,
+  (Lesson | { quizzes: Quiz[] } | { assignment: Assignment })[]
+>;
 
 const VideoClass = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const classRecords: ClassRecords | undefined = location.state?.classRecords;
   console.log("Received class records:", classRecords);
+  console.log("Week1 from VideoClass:", classRecords?.week1);
+  console.log("Week1 length from VideoClass:", classRecords?.week1?.length);
+  classRecords?.week1?.forEach((item, index) => {
+    console.log(`Week1[${index}]:`, item);
+  });
 
   // Set initial selected video to the first lesson of the first week
   const firstWeekKey = Object.keys(classRecords || {})[0];
@@ -133,98 +142,128 @@ const VideoClass = () => {
 
                   <AccordionContent className="p-0 pt-1 pb-4">
                     <div className="space-y-1">
-                      {classes.map((lesson: Lesson | { quizzes: Quiz[] }) => {
-                        if ("quizzes" in lesson) {
-                          return (
-                            <button
-                              key={lesson.quizzes[0].question}
-                              onClick={() => {
-                                navigate("/quiz", {
-                                  state: { quizzes: lesson.quizzes },
-                                });
-                              }}
-                              className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item hover:bg-gray-100 text-gray-600 hover:text-gray-800 cursor-pointer`}
-                            >
-                              <div
-                                className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-transform duration-300 group-hover/item:scale-110 bg-gray-200 border border-gray-300 group-hover/item:border-gray-400`}
+                      {classes.map(
+                        (
+                          lesson:
+                            | Lesson
+                            | { quizzes: Quiz[] }
+                            | { assignment: Assignment }
+                        ) => {
+                          if ("quizzes" in lesson) {
+                            return (
+                              <button
+                                key={lesson.quizzes[0].question}
+                                onClick={() => {
+                                  navigate("/quiz", {
+                                    state: { quizzes: lesson.quizzes },
+                                  });
+                                }}
+                                className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item hover:bg-gray-100 text-gray-600 hover:text-gray-800 cursor-pointer`}
                               >
-                                <Link className={`w-5 h-5 `} />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-[13px] font-bold leading-tight mb-1">
-                                  Quiz - {lesson.quizzes.length} Questions
-                                </p>
-                              </div>
-                            </button>
-                          );
-                        } else {
-                          return (
-                            <button
-                              key={lesson.classNo}
-                              onClick={() => {
-                                setSelectedVideo({
-                                  title: lesson.title,
-                                  url: lesson.videoUrl,
-                                });
-                              }}
-                              className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item ${
-                                selectedVideo.title === lesson.title
-                                  ? "bg-[#007cc2] text-white shadow-lg shadow-sky-500/20"
-                                  : "hover:bg-gray-100 text-gray-600 hover:text-gray-800"
-                              }`}
-                            >
-                              <div
-                                className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-transform duration-300 group-hover/item:scale-110 ${
+                                <div
+                                  className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-transform duration-300 group-hover/item:scale-110 bg-gray-200 border border-gray-300 group-hover/item:border-gray-400`}
+                                >
+                                  <Link className={`w-5 h-5 `} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[13px] font-bold leading-tight mb-1">
+                                    Quiz - {lesson.quizzes.length} Questions
+                                  </p>
+                                </div>
+                              </button>
+                            );
+                          } else if ("assignment" in lesson) {
+                            return (
+                              <button
+                                key={lesson.assignment.title}
+                                onClick={() => {
+                                  navigate("/student/assignment", {
+                                    state: { assignment: lesson.assignment },
+                                  });
+                                }}
+                                className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item hover:bg-gray-100 text-gray-600 hover:text-gray-800 cursor-pointer`}
+                              >
+                                <div
+                                  className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-transform duration-300 group-hover/item:scale-110 bg-gray-200 border border-gray-300 group-hover/item:border-gray-400`}
+                                >
+                                  <Link className={`w-5 h-5 `} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[13px] font-bold leading-tight mb-1">
+                                    Assignment - {lesson.assignment.title}
+                                  </p>
+                                </div>
+                              </button>
+                            );
+                          } else {
+                            return (
+                              <button
+                                key={lesson.classNo}
+                                onClick={() => {
+                                  setSelectedVideo({
+                                    title: lesson.title,
+                                    url: lesson.videoUrl,
+                                  });
+                                }}
+                                className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item ${
                                   selectedVideo.title === lesson.title
-                                    ? "bg-white/20"
-                                    : "bg-gray-200 border border-gray-300 group-hover/item:border-gray-400"
+                                    ? "bg-[#007cc2] text-white shadow-lg shadow-sky-500/20"
+                                    : "hover:bg-gray-100 text-gray-600 hover:text-gray-800"
                                 }`}
                               >
-                                <PlayCircle
-                                  className={`w-5 h-5 ${
-                                    selectedVideo.title === lesson.title
-                                      ? "text-white"
-                                      : "text-sky-500"
-                                  }`}
-                                />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-[13px] font-bold leading-tight mb-1">
-                                  {lesson.classNo}. {lesson.title}
-                                </p>
-                                <div className="flex items-center gap-3">
-                                  <span
-                                    className={`text-[11px] font-medium ${
-                                      selectedVideo.title === lesson.title
-                                        ? "text-white/80"
-                                        : "text-slate-500"
-                                    }`}
-                                  >
-                                    {lesson.duration}
-                                  </span>
-                                </div>
-                              </div>
-                              {lesson.completed && (
                                 <div
-                                  className={`p-1.5 rounded-lg ${
+                                  className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-transform duration-300 group-hover/item:scale-110 ${
                                     selectedVideo.title === lesson.title
                                       ? "bg-white/20"
-                                      : "bg-emerald-500/10"
+                                      : "bg-gray-200 border border-gray-300 group-hover/item:border-gray-400"
                                   }`}
                                 >
-                                  <CheckCircle2
-                                    className={`w-4 h-4 shrink-0 ${
+                                  <PlayCircle
+                                    className={`w-5 h-5 ${
                                       selectedVideo.title === lesson.title
                                         ? "text-white"
-                                        : "text-emerald-500"
+                                        : "text-sky-500"
                                     }`}
                                   />
                                 </div>
-                              )}
-                            </button>
-                          );
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[13px] font-bold leading-tight mb-1">
+                                    {lesson.classNo}. {lesson.title}
+                                  </p>
+                                  <div className="flex items-center gap-3">
+                                    <span
+                                      className={`text-[11px] font-medium ${
+                                        selectedVideo.title === lesson.title
+                                          ? "text-white/80"
+                                          : "text-slate-500"
+                                      }`}
+                                    >
+                                      {lesson.duration}
+                                    </span>
+                                  </div>
+                                </div>
+                                {lesson.completed && (
+                                  <div
+                                    className={`p-1.5 rounded-lg ${
+                                      selectedVideo.title === lesson.title
+                                        ? "bg-white/20"
+                                        : "bg-emerald-500/10"
+                                    }`}
+                                  >
+                                    <CheckCircle2
+                                      className={`w-4 h-4 shrink-0 ${
+                                        selectedVideo.title === lesson.title
+                                          ? "text-white"
+                                          : "text-emerald-500"
+                                      }`}
+                                    />
+                                  </div>
+                                )}
+                              </button>
+                            );
+                          }
                         }
-                      })}
+                      )}
                     </div>
                   </AccordionContent>
                 </AccordionItem>
