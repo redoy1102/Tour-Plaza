@@ -6,6 +6,7 @@ import { menuItems } from "@/data/student/StudentDashboardMenuData";
 
 const StudentLayout = () => {
   const location = useLocation();
+  // console.log("Current Path:", location.pathname);
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
@@ -34,13 +35,15 @@ const StudentLayout = () => {
     <div className="min-h-screen flex">
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-40 w-65 border-r border-slate-800/50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed lg:static inset-y-0 left-0 z-40 w-65 border-r border-gray-300 bg-white transform transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:-ml-72"
         }`}
       >
         {/* Dashboard Sidebar */}
-        <div className="p-6 flex items-center justify-between border-b border-slate-800/50">
-          <h2 className="text-xl font-bold tracking-tight">ড্যাশবোর্ড</h2>
+        <div className="p-6 flex items-center justify-between border-b border-gray-300">
+          <h2 className="text-xl font-bold tracking-tight text-gray-900">
+            ড্যাশবোর্ড
+          </h2>
           <Button
             variant="ghost"
             size="icon"
@@ -63,7 +66,7 @@ const StudentLayout = () => {
                     className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer ${
                       expandedMenu === item.id
                         ? "text-primary shadow-sm"
-                        : "hover:text-slate-700"
+                        : "hover:text-gray-800"
                     }`}
                   >
                     {item.icon}
@@ -87,8 +90,8 @@ const StudentLayout = () => {
                           }}
                           className={`w-full flex items-center gap-4 px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer text-sm ${
                             activeTab === subItem.id
-                              ? "text-primary bg-slate-400/50 shadow-sm"
-                              : "hover:text-slate-400 hover:bg-slate-900/30"
+                              ? "text-primary bg-gray-200 shadow-sm"
+                              : "hover:text-gray-600 hover:bg-gray-100"
                           }`}
                         >
                           {subItem.icon}
@@ -114,7 +117,7 @@ const StudentLayout = () => {
                   className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer ${
                     activeTab === item.id
                       ? "text-primary shadow-sm"
-                      : "hover:text-slate-600"
+                      : "hover:text-gray-800"
                   }`}
                 >
                   {item.icon}
@@ -132,16 +135,16 @@ const StudentLayout = () => {
       {/* Main Content */}
       <main className="flex-1 min-w-0">
         {/* Mobile Header */}
-        <div className="lg:hidden p-4 border-b border-slate-800/50 flex items-center ">
+        <div className="lg:hidden p-4 border-b border-gray-300 flex items-center ">
           <Button
             variant="ghost"
             size="icon"
-            className="text-slate-400"
+            className="text-gray-600"
             onClick={() => setIsSidebarOpen(true)}
           >
             <Menu className="w-6 h-6" />
           </Button>
-          <span className="ml-4 font-bold text-white">ড্যাশবোর্ড</span>
+          <span className="ml-4 font-bold text-black">ড্যাশবোর্ড</span>
         </div>
 
         {/* Component is rendering from here */}

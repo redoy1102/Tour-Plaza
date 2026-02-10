@@ -30,11 +30,11 @@ const PasswordUpdate = () => {
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold mb-8 tracking-tight">
+      <h1 className="text-2xl font-bold mb-8 tracking-tight text-black">
         পাসওয়ার্ড পরিবর্তন করুন
       </h1>
 
-      <div className="p-8 bg-[#0a0f1c] rounded-2xl border border-slate-800/50 shadow-xl space-y-6">
+      <div className="p-8 bg-white rounded-2xl border border-gray-300 shadow-xl space-y-6">
         <div className="space-y-4">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -43,14 +43,14 @@ const PasswordUpdate = () => {
                 name="currentPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white">
+                    <FormLabel className="text-black">
                       বর্তমান পাসওয়ার্ড
                     </FormLabel>
                     <FormControl>
                       <input
                         type="password"
                         {...field}
-                        className="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 outline-none focus:border-sky-500/50 transition-colors"
+                        className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-black/50 transition-colors"
                         placeholder="••••••••"
                       />
                     </FormControl>
@@ -63,12 +63,12 @@ const PasswordUpdate = () => {
                 name="newPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white">নতুন পাসওয়ার্ড</FormLabel>
+                    <FormLabel className="text-black">নতুন পাসওয়ার্ড</FormLabel>
                     <FormControl>
                       <input
                         type="password"
                         {...field}
-                        className="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 outline-none focus:border-sky-500/50 transition-colors"
+                        className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-black/50 transition-colors"
                         placeholder="••••••••"
                       />
                     </FormControl>
@@ -81,14 +81,14 @@ const PasswordUpdate = () => {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white">
+                    <FormLabel className="text-black">
                       পাসওয়ার্ড নিশ্চিতকরণ
                     </FormLabel>
                     <FormControl>
                       <input
                         type="password"
                         {...field}
-                        className="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 outline-none focus:border-sky-500/50 transition-colors"
+                        className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-black/50 transition-colors"
                         placeholder="••••••••"
                       />
                     </FormControl>
@@ -100,10 +100,10 @@ const PasswordUpdate = () => {
         </div>
 
         <div className="pt-4 flex items-center gap-4">
-          <Button className="bg-sky-600 hover:bg-sky-500 text-white px-8 h-12 rounded-xl">
+          <Button className="bg-primary hover:bg-red-500 text-white px-8 h-12 rounded-xl">
             পাসওয়ার্ড আপডেট করুন
           </Button>
-          <p className="text-xs text-slate-500 flex items-center gap-2 italic">
+          <p className="text-xs text-gray-500 flex items-center gap-2 italic">
             <Lock className="w-3 h-3" /> সিকিউরড কানেকশন
           </p>
         </div>

@@ -65,7 +65,7 @@ const MyCourses = () => {
                 answer: ["<ul>", "<ol>"],
               },
             ],
-          }
+          },
         ],
         week2: [
           {
@@ -132,7 +132,9 @@ const MyCourses = () => {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold  tracking-tight">আমার কোর্সসমূহ</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-black">
+          আমার কোর্সসমূহ
+        </h1>
         <div className="flex items-center gap-2 text-sm ">
           <div className="w-4 h-4 rounded-full bg-emerald-600 animate-pulse" />
           ১টি কোর্স রানিং
@@ -143,9 +145,9 @@ const MyCourses = () => {
         {enrolledCourses.map((course) => (
           <div
             key={course.id}
-            className="bg-[#0a0f1c] border border-slate-800/50 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row gap-6 hover:border-slate-700/50 transition-colors group"
+            className="bg-white border border-gray-300 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row gap-6 hover:border-gray-400 transition-colors group"
           >
-            <div className="w-full md:w-48 h-32 rounded-xl overflow-hidden bg-slate-800 shrink-0">
+            <div className="w-full md:w-48 h-32 rounded-xl overflow-hidden bg-gray-200 shrink-0">
               <img
                 src={course.image}
                 alt={course.title}
@@ -159,16 +161,16 @@ const MyCourses = () => {
                   <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 text-[10px] font-bold rounded uppercase tracking-wider border border-emerald-500/20">
                     {course.status}
                   </span>
-                  <span className="text-slate-500 text-xs flex items-center gap-1">
+                  <span className="text-gray-600 text-xs flex items-center gap-1">
                     <Clock className="w-3 h-3" /> সময় ৮ মাস
                   </span>
                 </div>
-                <h2 className="text-xl font-bold text-white leading-tight">
+                <h2 className="text-xl font-bold text-black leading-tight">
                   {course.title}
                 </h2>
               </div>
 
-              <div className="flex flex-wrap items-center gap-6 text-sm text-slate-400">
+              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-sky-500" />
                   <span>{course.batch}</span>
@@ -196,12 +198,12 @@ const MyCourses = () => {
         ))}
 
         {enrolledCourses.length === 0 && (
-          <div className="p-20 text-center bg-[#0a0f1c] rounded-3xl border border-dashed border-slate-800">
-            <BookOpen className="w-12 h-12 text-slate-700 mx-auto mb-4" />
-            <h3 className="text-slate-400 font-medium">
+          <div className="p-20 text-center bg-white rounded-3xl border border-dashed border-gray-300">
+            <BookOpen className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+            <h3 className="text-gray-600 font-medium">
               আপনি এখনও কোন কোর্সে এনরোল করেননি।
             </h3>
-            <Button className="mt-4 bg-transparent border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800">
+            <Button className="mt-4 bg-transparent border border-gray-300 text-gray-600 hover:text-black hover:bg-gray-100">
               সব কোর্স দেখুন
             </Button>
           </div>

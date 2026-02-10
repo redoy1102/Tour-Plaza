@@ -85,11 +85,11 @@ const VideoClass = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#020817] text-white flex flex-col lg:flex-row overflow-hidden pt-10">
+    <div className="min-h-screen bg-white text-black flex flex-col lg:flex-row overflow-hidden pt-10">
       {/* Main Content - Video Player */}
       <div className="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
         <div className="max-w-5xl mx-auto w-full">
-          <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-slate-800 group">
+          <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-300 group">
             <video
               key={selectedVideo.url}
               src={selectedVideo.url}
@@ -102,7 +102,7 @@ const VideoClass = () => {
       </div>
 
       {/* Sidebar - Course Content */}
-      <div className="w-full lg:w-112.5 border-l border-slate-800 bg-[#0a0f1c]/90 backdrop-blur-xl flex flex-col shrink-0 overflow-hidden">
+      <div className="w-full lg:w-112.5 border-l border-gray-300 bg-white flex flex-col shrink-0 overflow-hidden">
         {/* Module List */}
         <div className="flex-1 overflow-y-auto custom-scrollbar">
           <Accordion
@@ -117,14 +117,14 @@ const VideoClass = () => {
                 <AccordionItem
                   key={weekKey}
                   value={weekKey}
-                  className="border-slate-800/50 px-4"
+                  className="border-gray-300 px-4"
                 >
-                  <AccordionTrigger className="hover:no-underline py-5 px-2 rounded-xl hover:bg-slate-800/30 transition-all group">
+                  <AccordionTrigger className="hover:no-underline py-5 px-2 rounded-xl hover:bg-gray-100 transition-all group">
                     <div className="text-left space-y-1.5">
                       <p className="font-bold text-sm tracking-tight group-hover:text-sky-400 transition-colors">
                         {getWeekTitle(weekKey)}
                       </p>
-                      <p className="text-[11px] font-medium text-slate-500 flex items-center gap-2">
+                      <p className="text-[11px] font-medium text-gray-600 flex items-center gap-2">
                         <Clock className="w-3 h-3" />
                         {classes.length}টি লেসন • ৪ ঘন্টা ২০ মিনিট
                       </p>
@@ -143,10 +143,10 @@ const VideoClass = () => {
                                   state: { quizzes: lesson.quizzes },
                                 });
                               }}
-                              className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item hover:bg-slate-800/60 text-slate-400 hover:text-slate-200 cursor-pointer`}
+                              className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item hover:bg-gray-100 text-gray-600 hover:text-gray-800 cursor-pointer`}
                             >
                               <div
-                                className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-transform duration-300 group-hover/item:scale-110 bg-slate-900 border border-slate-800 group-hover/item:border-slate-700`}
+                                className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-transform duration-300 group-hover/item:scale-110 bg-gray-200 border border-gray-300 group-hover/item:border-gray-400`}
                               >
                                 <Link className={`w-5 h-5 `} />
                               </div>
@@ -170,14 +170,14 @@ const VideoClass = () => {
                               className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item ${
                                 selectedVideo.title === lesson.title
                                   ? "bg-[#007cc2] text-white shadow-lg shadow-sky-500/20"
-                                  : "hover:bg-slate-800/60 text-slate-400 hover:text-slate-200"
+                                  : "hover:bg-gray-100 text-gray-600 hover:text-gray-800"
                               }`}
                             >
                               <div
                                 className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-transform duration-300 group-hover/item:scale-110 ${
                                   selectedVideo.title === lesson.title
                                     ? "bg-white/20"
-                                    : "bg-slate-900 border border-slate-800 group-hover/item:border-slate-700"
+                                    : "bg-gray-200 border border-gray-300 group-hover/item:border-gray-400"
                                 }`}
                               >
                                 <PlayCircle

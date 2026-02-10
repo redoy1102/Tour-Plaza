@@ -45,7 +45,7 @@ const Quizzes = () => {
 
   if (!quizzes || quizzes.length === 0) {
     return (
-      <div className="min-h-screen bg-[#020817] text-white flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-white text-black flex flex-col items-center justify-center p-4">
         <h1 className="text-2xl font-bold mb-4">
           No quizzes available for this lesson.
         </h1>
@@ -84,42 +84,46 @@ const Quizzes = () => {
   if (showResults) {
     const score = calculateScore();
     return (
-      <div className="min-h-screen bg-[#020817] text-white p-4 md:p-8 flex flex-col items-center">
-        <div className="max-w-4xl w-full bg-[#0a0f1c] border border-slate-800 rounded-2xl p-6 md:p-10 shadow-2xl">
+      <div className="min-h-screen bg-white text-black p-4 md:p-8 flex flex-col items-center">
+        <div className="max-w-4xl w-full bg-white border border-gray-300 rounded-2xl p-6 md:p-10 shadow-2xl">
           <div className="text-center mb-10">
             <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-6" />
-            <h1 className="text-3xl font-bold mb-2">Quiz Completed!</h1>
-            <p className="text-slate-400 mb-8">
+            <h1 className="text-3xl font-bold mb-2 text-black">
+              Quiz Completed!
+            </h1>
+            <p className="text-gray-600 mb-8">
               You have successfully finished the quiz.
             </p>
 
             <div className="grid grid-cols-2 gap-4 max-w-md mx-auto mb-10">
-              <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-800">
-                <p className="text-sm text-slate-500 mb-1">Total Questions</p>
-                <p className="text-2xl font-bold">{quizzes.length}</p>
+              <div className="bg-gray-200 p-6 rounded-xl border border-gray-300">
+                <p className="text-sm text-gray-600 mb-1">Total Questions</p>
+                <p className="text-2xl font-bold text-black">
+                  {quizzes.length}
+                </p>
               </div>
-              <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-800">
-                <p className="text-sm text-slate-500 mb-1">Correct Answers</p>
+              <div className="bg-gray-200 p-6 rounded-xl border border-gray-300">
+                <p className="text-sm text-gray-600 mb-1">Correct Answers</p>
                 <p className="text-2xl font-bold text-emerald-500">{score}</p>
               </div>
             </div>
           </div>
 
           <div className="space-y-6 mb-12">
-            <h3 className="text-xl font-bold border-b border-slate-800 pb-4 flex items-center gap-2">
+            <h3 className="text-xl font-bold text-black border-b border-gray-300 pb-4 flex items-center gap-2">
               Detailed Results
             </h3>
             {quizzes.map((quiz, index) => (
               <div
                 key={index}
-                className="bg-slate-900/30 p-5 rounded-xl border border-slate-800/50"
+                className="bg-gray-100 p-5 rounded-xl border border-gray-300"
               >
-                <p className="font-semibold mb-4 text-lg">
+                <p className="font-semibold mb-4 text-lg text-black">
                   {index + 1}. {quiz.question}
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col">
-                    <span className="text-xs text-slate-500 uppercase tracking-wider mb-2 font-medium">
+                    <span className="text-xs text-gray-600 uppercase tracking-wider mb-2 font-medium">
                       Your Answer
                     </span>
                     <div
@@ -141,10 +145,10 @@ const Quizzes = () => {
                     </div>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-xs text-slate-500 uppercase tracking-wider mb-2 font-medium">
+                    <span className="text-xs text-gray-600 uppercase tracking-wider mb-2 font-medium">
                       Correct Answer
                     </span>
-                    <div className="p-3 rounded-lg text-sm bg-slate-800/80 text-slate-300 border border-slate-700">
+                    <div className="p-3 rounded-lg text-sm bg-gray-200 text-gray-700 border border-gray-300">
                       {(Array.isArray(quizzes[index].answer)
                         ? quizzes[index].answer
                         : [quizzes[index].answer]
@@ -170,25 +174,25 @@ const Quizzes = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#020817] text-white p-4 md:p-8">
+    <div className="min-h-screen bg-white text-black p-4 md:p-8">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back</span>
           </button>
-          <div className="text-sm font-medium text-slate-500">
-            Question <span className="text-white">{currentIndex + 1}</span> of{" "}
+          <div className="text-sm font-medium text-gray-600">
+            Question <span className="text-black">{currentIndex + 1}</span> of{" "}
             {quizzes.length}
           </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full h-2 bg-slate-800 rounded-full mb-12 overflow-hidden">
+        <div className="w-full h-2 bg-gray-300 rounded-full mb-12 overflow-hidden">
           <div
             className="h-full bg-[#007cc2] transition-all duration-300"
             style={{ width: `${((currentIndex + 1) / quizzes.length) * 100}%` }}
@@ -196,8 +200,8 @@ const Quizzes = () => {
         </div>
 
         {/* Question Card */}
-        <div className="bg-[#0a0f1c] border border-slate-800 rounded-2xl p-6 md:p-10 shadow-2xl">
-          <h2 className="text-xl md:text-2xl font-bold mb-8 leading-tight">
+        <div className="bg-white border border-gray-300 rounded-2xl p-6 md:p-10 shadow-2xl">
+          <h2 className="text-xl md:text-2xl font-bold mb-8 leading-tight text-black">
             {currentQuiz.question}
           </h2>
 
@@ -205,7 +209,7 @@ const Quizzes = () => {
             {currentQuiz.options.map((option, idx) => (
               <label
                 key={idx}
-                className="flex items-center space-x-3 p-5 rounded-xl border border-slate-800 hover:border-slate-700 hover:bg-slate-800/50 transition-all duration-200 cursor-pointer group"
+                className="flex items-center space-x-3 p-5 rounded-xl border border-gray-300 hover:border-gray-400 hover:bg-gray-100 transition-all duration-200 cursor-pointer group"
               >
                 <input
                   type="checkbox"
@@ -219,9 +223,9 @@ const Quizzes = () => {
                       );
                     }
                   }}
-                  className="w-5 h-5 text-[#007cc2] bg-slate-900 border-slate-700 rounded focus:ring-[#007cc2] focus:ring-2"
+                  className="w-5 h-5 text-[#007cc2] bg-gray-200 border-gray-300 rounded focus:ring-[#007cc2] focus:ring-2"
                 />
-                <span className="font-medium text-slate-300 group-hover:text-white">
+                <span className="font-medium text-gray-700 group-hover:text-black">
                   {option}
                 </span>
               </label>
@@ -234,7 +238,7 @@ const Quizzes = () => {
               disabled={selectedOption.length === 0}
               className={`h-12 px-8 rounded-xl font-bold transition-all gap-2 cursor-pointer ${
                 selectedOption.length === 0
-                  ? "bg-slate-800 text-slate-500 cursor-not-allowed"
+                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
                   : "bg-[#007cc2] hover:bg-[#006bb0] text-white active:scale-95 shadow-lg shadow-sky-500/20"
               }`}
             >
