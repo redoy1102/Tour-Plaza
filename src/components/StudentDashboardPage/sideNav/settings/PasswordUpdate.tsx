@@ -1,18 +1,14 @@
 import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   passwordUpdateSchema,
   type PasswordUpdateFormValues,
 } from "@/schemas/auth";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
+import PasswordField from "@/components/shared/PasswordField";
 
 const PasswordUpdate = () => {
   const form = useForm<PasswordUpdateFormValues>({
@@ -23,6 +19,10 @@ const PasswordUpdate = () => {
       confirmPassword: "",
     },
   });
+
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   function onSubmit(value: PasswordUpdateFormValues) {
     console.log("Submitted Data:", value);
@@ -38,62 +38,28 @@ const PasswordUpdate = () => {
         <div className="space-y-4">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
+              <PasswordField
+                form={form}
+                showPassword={showCurrentPassword}
+                setShowPassword={setShowCurrentPassword}
                 name="currentPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-black">
-                      বর্তমান পাসওয়ার্ড
-                    </FormLabel>
-                    <FormControl>
-                      <input
-                        type="password"
-                        {...field}
-                        className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-black/50 transition-colors"
-                        placeholder="••••••••"
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                label="বর্তমান পাসওয়ার্ড"
               />
 
-              <FormField
-                control={form.control}
+              <PasswordField
+                form={form}
+                showPassword={showNewPassword}
+                setShowPassword={setShowNewPassword}
                 name="newPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-black">নতুন পাসওয়ার্ড</FormLabel>
-                    <FormControl>
-                      <input
-                        type="password"
-                        {...field}
-                        className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-black/50 transition-colors"
-                        placeholder="••••••••"
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                label="নতুন পাসওয়ার্ড"
               />
 
-              <FormField
-                control={form.control}
+              <PasswordField
+                form={form}
+                showPassword={showConfirmPassword}
+                setShowPassword={setShowConfirmPassword}
                 name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-black">
-                      পাসওয়ার্ড নিশ্চিতকরণ
-                    </FormLabel>
-                    <FormControl>
-                      <input
-                        type="password"
-                        {...field}
-                        className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-black/50 transition-colors"
-                        placeholder="••••••••"
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                label="পাসওয়ার্ড নিশ্চিতকরণ"
               />
             </form>
           </Form>
