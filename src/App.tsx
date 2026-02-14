@@ -9,7 +9,7 @@ import ContactPage from "@/Pages/ContactPage/ContactPage";
 import CourseDetails from "@/Pages/CourseDetails/CourseDetails";
 import AllCoursesPage from "@/Pages/AllCoursesPage/AllCoursesPage";
 import PurchasePage from "@/Pages/PurchasePage/PurchasePage";
-import Dashboard from "@/components/StudentDashboardPage/sideNav/Dashboard";
+import Dashboard from "@/components/StudentDashboardPage/sideNav/dashboard/Dashboard";
 import MyCourses from "@/components/StudentDashboardPage/sideNav/MyCourses";
 import Profile from "@/components/StudentDashboardPage/sideNav/settings/Profile";
 import PasswordUpdate from "@/components/StudentDashboardPage/sideNav/settings/PasswordUpdate";
@@ -44,7 +44,7 @@ function App() {
           </Route>
           <Route path="video-player" element={<VideoClass />} />
           <Route path="quiz" element={<Quizzes />} />
-          
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
