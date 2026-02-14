@@ -19,6 +19,7 @@ const MyCourses = () => {
             classNo: 1,
             title: "HTML পরিচিতি",
             videoUrl: "/public/student/classRecords/week_1Class_1.mp4",
+            
             duration: "49:13 minute",
             completed: true,
           },
@@ -26,7 +27,8 @@ const MyCourses = () => {
           {
             classNo: 2,
             title: "CSS বেসিক",
-            videoUrl: "/public/student/classRecords/week_1Class_2.mp4",
+            // videoUrl: "/public/student/classRecords/week_1Class_2.mp4",
+            ytVideo: "https://youtu.be/Fzs9LTB1XCs?si=1F6cCqgmDWNgKm-A",
             duration: "49:13 minute",
             completed: true,
           },

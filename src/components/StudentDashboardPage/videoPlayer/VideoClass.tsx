@@ -14,14 +14,16 @@ import NoClassRecords from "../NoClassRecords";
 interface Lesson {
   classNo: number;
   title: string;
-  videoUrl: string;
+  videoUrl?: string;
+  ytVideo?: string;
   duration: string;
   completed: boolean;
 }
 
 interface SelectedVideo {
   title: string;
-  url: string;
+  url: string | undefined;
+  type: "local" | "youtube";
 }
 
 export interface Quiz {
@@ -61,14 +63,16 @@ const VideoClass = () => {
   console.log("First lesson:", firstLesson);
 
   const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>(
-    firstLesson && "videoUrl" in firstLesson
+    firstLesson && ("videoUrl" in firstLesson || "ytVideo" in firstLesson)
       ? {
           title: firstLesson.title,
-          url: firstLesson.videoUrl,
+          url: firstLesson.ytVideo || firstLesson.videoUrl,
+          type: firstLesson.ytVideo ? "youtube" : "local",
         }
       : {
           title: "",
           url: "",
+          type: "local",
         }
   );
 
@@ -87,6 +91,12 @@ const VideoClass = () => {
     }
   };
 
+  const getYouTubeEmbedUrl = (url: string | undefined) => {
+    if (!url) return "";
+    const videoId = url.split("/").pop()?.split("?")[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  };
+
   if (!classRecords) {
     return (
       <NoClassRecords backToMyCourses={() => navigate("/student/my-courses")} />
@@ -99,13 +109,23 @@ const VideoClass = () => {
       <div className="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
         <div className="max-w-5xl mx-auto w-full">
           <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-300 group">
-            <video
-              key={selectedVideo.url}
-              src={selectedVideo.url}
-              controls
-              className="w-full h-full"
-              poster="/landingPage/courses/js.webp"
-            />
+            {selectedVideo.type === "youtube" ? (
+              <iframe
+                src={getYouTubeEmbedUrl(selectedVideo.url)}
+                title={selectedVideo.title}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <video
+                key={selectedVideo.url}
+                src={selectedVideo.url}
+                controls
+                className="w-full h-full"
+                poster="/landingPage/courses/js.webp"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -202,7 +222,8 @@ const VideoClass = () => {
                                 onClick={() => {
                                   setSelectedVideo({
                                     title: lesson.title,
-                                    url: lesson.videoUrl,
+                                    url: lesson.ytVideo || lesson.videoUrl,
+                                    type: lesson.ytVideo ? "youtube" : "local",
                                   });
                                 }}
                                 className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item ${
