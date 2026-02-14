@@ -44,8 +44,8 @@ const MarksTable = ({ filteredData }: MarksTableProps) => {
           <tbody className="divide-y divide-gray-50">
             {filteredData.map((row, idx: number) => (
               <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
-                <td className="px-6 py-4">
-                  <span className="text-sm font-bold text-gray-900">
+                <td className="px-4 py-4">
+                  <span className="text-xs md:text-sm font-bold text-gray-900">
                     {row.week}
                   </span>
                 </td>

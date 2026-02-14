@@ -60,8 +60,7 @@ const StudentLayout = () => {
               {item.hasSubmenu ? (
                 <>
                   <button
-                    onClick={() =>
-                      setExpandedMenu(expandedMenu === item.id ? null : item.id)
+                    onClick={() => setExpandedMenu(expandedMenu === item.id ? null : item.id)
                     }
                     className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer ${
                       expandedMenu === item.id
@@ -86,6 +85,7 @@ const StudentLayout = () => {
                           onClick={() => {
                             if (subItem.path) {
                               navigate(subItem.path);
+                              setIsSidebarOpen(false);
                             }
                           }}
                           className={`w-full flex items-center gap-4 px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer text-sm ${
@@ -113,6 +113,7 @@ const StudentLayout = () => {
                       navigate(item.path);
                     }
                     setExpandedMenu(null);
+                    setIsSidebarOpen(false);
                   }}
                   className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer ${
                     activeTab === item.id
@@ -152,14 +153,6 @@ const StudentLayout = () => {
           <Outlet />
         </div>
       </main>
-
-      {/* Overlay for mobile */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
     </div>
   );
 };

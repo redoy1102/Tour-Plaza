@@ -20,15 +20,18 @@ const Charts = () => {
       {/* Performance Graph */}
       <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
         {/* Graph Header  */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
+        <div className="flex flex-col md:flex-row items-center md:justify-between mb-6">
+          {/* Title and description  */}
+          <div className="text-center md:text-start">
             <h3 className="text-lg font-bold text-gray-900">
               পারফরম্যান্স গ্রাফ
             </h3>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 my-3">
               আপনার কুইজ এবং অ্যাসাইনমেন্টের তুলনা
             </p>
           </div>
+
+          {/* Quiz and Assignment color indicators */}
           <div className="flex items-center gap-4 text-xs font-medium">
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded-full bg-blue-500" />
