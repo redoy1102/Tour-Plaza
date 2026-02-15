@@ -44,7 +44,10 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
     return <div className="py-20 text-center">কোর্স পাওয়া যায়নি।</div>;
   }
 
-  const priceAfterDiscount = course.price - (course.discount ?? 0);
+  const priceAfterDiscount = course?.price
+    ? course.price - (course.discount ?? 0)
+    : 0;
+  console.log("Price after discount:", priceAfterDiscount);
 
   const promoNumber = selectedPromoCode ? parseInt(selectedPromoCode, 10) : 0;
 
@@ -101,7 +104,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
     return startDate;
   };
 
-  const startDate = parseBengaliDate(course.batchStartDate);
+  const startDate = parseBengaliDate(course?.batchStartDate ?? "");
   const now = new Date();
   const diffTime = startDate ? startDate.getTime() - now.getTime() : 0;
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -115,11 +118,14 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
           <div className="w-full lg:w-3/5 space-y-2">
             <div className="flex items-center justify-between">
               {/* Live Course Badge */}
-              <div className="inline-flex items-center gap-2 bg-red-50 text-red-500 px-3 rounded-full text-sm font-semibold">
+              <div
+                className={`inline-flex items-center gap-2 p-1 bg-red-50 ${
+                  course?.isFreeCourse ? "text-green-500" : "text-red-500"
+                } px-3 rounded-full text-sm font-semibold`}
+              >
                 <Radio className="w-4 h-4" />
-                লাইভ কোর্স
+                {course?.isFreeCourse ? "ফ্রি কোর্স" : "লাইভ কোর্স"}
               </div>
-
               {/* Rating */}
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1 bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded text-sm font-bold">
@@ -153,16 +159,18 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                 ব্যাচে ভর্তি হোন <ArrowRight className="w-5 h-5" />
               </Button>
 
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl md:text-2xl font-black text-slate-900">
-                  ৳{finalPrice}
-                </span>
-                {finalPrice < course.price && (
-                  <span className="text-lg text-slate-400 line-through">
-                    ৳{course.price}
+              {course?.price && (
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl md:text-2xl font-black text-slate-900">
+                    ৳{finalPrice}
                   </span>
-                )}
-              </div>
+                  {finalPrice < course.price && (
+                    <span className="text-lg text-slate-400 line-through">
+                      ৳{course.price}
+                    </span>
+                  )}
+                </div>
+              )}
 
               {selectedPromoCode && (
                 <div className="flex items-center gap-2">
@@ -180,7 +188,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                 </div>
               )}
               {/* Promo Code Selector */}
-              {selectedPromoCode === "" && (
+              {course?.promoCodes && selectedPromoCode === "" && (
                 <Select
                   value={selectedPromoCode}
                   onValueChange={setSelectedPromoCode}
@@ -207,25 +215,30 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
             {/* Stat Badges */}
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
-              <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
-                <Radio className="w-4 h-4 text-emerald-600" />
-                <span>{course.totalLiveClasses} টি লাইভ ক্লাস</span>
-              </div>
+              {course?.totalLiveClasses && (
+                <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
+                  <Radio className="w-4 h-4 text-emerald-600" />
+                  <span>{course.totalLiveClasses} টি লাইভ ক্লাস</span>
+                </div>
+              )}
+
               <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
                 <Video className="w-4 h-4 text-emerald-600" />
                 <span>
                   {course.totalPreRecordedVideos} টি প্রি রেকর্ডেড ভিডিও
                 </span>
               </div>
-              <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
-                <Calendar className="w-4 h-4 text-emerald-600" />
-                <span>{remainingDays} দিন বাকি</span>
-              </div>
+              {!course?.isFreeCourse && (
+                <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
+                  <Calendar className="w-4 h-4 text-emerald-600" />
+                  <span>{remainingDays} দিন বাকি</span>
+                </div>
+              )}
             </div>
 
             {/* Extra Features */}
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 pt-4">
-              {course.supports.map((support, idx) => {
+              {course?.supports?.map((support, idx) => {
                 const IconComponent = getIcon(support.icon);
                 return (
                   <div
@@ -262,53 +275,55 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
         </div>
 
         {/* Bottom Stats Bar */}
-        <div className="mt-10 bg-white rounded-2xl p-3 md:p-4 shadow border border-slate-100">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 divide-x divide-slate-100">
-            <div className="px-4 space-y-2">
-              <p className="text-slate-400 text-sm font-medium">ব্যাচ শুরু</p>
-              <p className="text-slate-900 md:text-sm font-bold flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-orange-500" />
-                {course.batchStartDate}
-              </p>
-            </div>
-            <div className="px-4 space-y-2">
-              <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
-                <Monitor className="w-4 h-4 text-blue-500" />
-                লাইভ ক্লাস
-              </p>
-              <p className="text-slate-900 md:text-sm font-bold leading-tight">
-                {course.liveClassTime} (রবি,মঙ্গল,বৃহ)
-              </p>
-            </div>
-            <div className="px-4 space-y-2">
-              <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
-                <Clock className="w-4 h-4 text-emerald-500" />
-                সাপোর্ট ক্লাস
-              </p>
-              <p className="text-slate-900 md:text-sm font-bold leading-tight">
-                প্রতিদিন রাত {course.supportClassTime}
-              </p>
-            </div>
-            <div className="px-4 space-y-2 border-none lg:border-solid">
-              <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
-                <Tag className="w-4 h-4 text-rose-500" />
-                সিট বাকি
-              </p>
-              <p className="text-slate-900 md:text-sm font-bold text-xl">
-                {course.seatsLeft} টি
-              </p>
-            </div>
-            <div className="px-4 space-y-2 border-none lg:border-solid">
-              <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
-                <Users className="w-4 h-4 text-indigo-500" />
-                ভর্তি চলছে
-              </p>
-              <p className="text-slate-900 md:text-sm font-extrabold text-xl font-bengali text-slate-900">
-                {course.batch}
-              </p>
+        {!course.isFreeCourse && (
+          <div className="mt-10 bg-white rounded-2xl p-3 md:p-4 shadow border border-slate-100">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 divide-x divide-slate-100">
+              <div className="px-4 space-y-2">
+                <p className="text-slate-400 text-sm font-medium">ব্যাচ শুরু</p>
+                <p className="text-slate-900 md:text-sm font-bold flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-orange-500" />
+                  {course.batchStartDate}
+                </p>
+              </div>
+              <div className="px-4 space-y-2">
+                <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
+                  <Monitor className="w-4 h-4 text-blue-500" />
+                  লাইভ ক্লাস
+                </p>
+                <p className="text-slate-900 md:text-sm font-bold leading-tight">
+                  {course.liveClassTime} (রবি,মঙ্গল,বৃহ)
+                </p>
+              </div>
+              <div className="px-4 space-y-2">
+                <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-emerald-500" />
+                  সাপোর্ট ক্লাস
+                </p>
+                <p className="text-slate-900 md:text-sm font-bold leading-tight">
+                  প্রতিদিন রাত {course.supportClassTime}
+                </p>
+              </div>
+              <div className="px-4 space-y-2 border-none lg:border-solid">
+                <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
+                  <Tag className="w-4 h-4 text-rose-500" />
+                  সিট বাকি
+                </p>
+                <p className="text-slate-900 md:text-sm font-bold text-xl">
+                  {course.seatsLeft} টি
+                </p>
+              </div>
+              <div className="px-4 space-y-2 border-none lg:border-solid">
+                <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
+                  <Users className="w-4 h-4 text-indigo-500" />
+                  ভর্তি চলছে
+                </p>
+                <p className="text-slate-900 md:text-sm font-extrabold text-xl font-bengali text-slate-900">
+                  {course.batch}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

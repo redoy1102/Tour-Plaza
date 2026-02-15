@@ -4,28 +4,29 @@ export interface Course {
   title: string;
   description: string;
   rating: number;
-  durationMonths: number;
-  totalLiveClasses: number;
+  durationMonths?: number;
+  totalLiveClasses?: number;
   totalPreRecordedVideos: number;
-  price: number;
+  price?: number;
   discount?: number;
   link: string;
   imglink: string;
   heroVideoLink: string;
 
-  supports: { icon: string; title: string }[];
+  supports?: { icon: string; title: string }[];
 
-  batchStartDate: string;
-  liveClassTime: string;
-  supportClassTime: string;
+  batchStartDate?: string;
+  liveClassTime?: string;
+  supportClassTime?: string;
 
-  totalSeats: number;
-  seatsLeft: number;
-  batch: string;
+  totalSeats?: number;
+  seatsLeft?: number;
+  batch?: string;
   isFeatured: boolean;
+  isFreeCourse: boolean;
 
   instructors: Instructor[];
-  supportTeamMembers: SupportTeamMember[];
+  supportTeamMembers?: SupportTeamMember[];
 
   courseOutline: CourseOutline;
 
@@ -35,7 +36,7 @@ export interface Course {
 
   reviews: Review[];
 
-  promoCodes: {
+  promoCodes?: {
     label: string;
     value: number;
   }[];

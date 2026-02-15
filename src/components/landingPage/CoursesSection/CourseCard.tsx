@@ -29,16 +29,16 @@ const CourseCard = ({
         </h3>
 
         <p className="mb-2 text-xs text-gray-500">
-          {singleCourse.durationMonths} মাস |{" "}
-          {singleCourse.totalPreRecordedVideos} ভিডিও
+          {singleCourse?.durationMonths ? `${singleCourse.durationMonths} মাস | ` : ""}
+          {singleCourse?.totalPreRecordedVideos ? `${singleCourse.totalPreRecordedVideos} ভিডিও` : ""}
         </p>
 
         <p className="mb-4 font-semibold text-secondary">
-          ৳ {singleCourse.price}
+          {singleCourse?.price ? `৳ ${singleCourse.price}` : "ফ্রি কোর্স"}
         </p>
 
         <Link
-          to={`/courses/${singleCourse.id}`}
+          to={`/courses/${singleCourse?.id}`}
           onClick={() => {
             window.scroll(0, 0);
             closeSearchResultModal?.();

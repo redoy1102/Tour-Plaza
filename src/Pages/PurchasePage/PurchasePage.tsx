@@ -23,16 +23,16 @@ const PurchasePage = () => {
     );
   }
 
-  const priceAfterDiscount = course.price - (course.discount ?? 0);
+  const priceAfterDiscount = course?.price ? course.price - (course.discount ?? 0) : 0;
   const promoDiscountValue = Number(promoCode) || 0;
   const promoDiscount = promoCode
     ? (priceAfterDiscount * promoDiscountValue) / 100
     : 0;
   const finalPrice = priceAfterDiscount - promoDiscount;
 
-  const appliedPromo = course.promoCodes.find(
+  const appliedPromo = course?.promoCodes ? course.promoCodes.find(
     (p) => p.value === promoDiscountValue
-  );
+  ) : undefined;
   console.log("appliedPromo", appliedPromo);
 
   return (
@@ -68,17 +68,17 @@ const PurchasePage = () => {
                   <div className="flex justify-between items-center text-slate-600">
                     <span>কোর্সের মূল্য</span>
                     <span className="font-bold">
-                      ৳{course.price.toLocaleString()}
+                      {course?.price ? `৳ ${course.price.toLocaleString()}` : 0}
                     </span>
                   </div>
 
-                  {(course.discount || promoDiscount > 0) && (
+                  {(course?.discount || promoDiscount > 0) && (
                     <div className="flex justify-between items-center text-emerald-600">
                       <div className="flex items-center gap-2">
                         <div className="flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded text-xs font-bold border border-emerald-100 uppercase">
-                          {appliedPromo && course.discount! > 0
+                          {appliedPromo && (course?.discount || 0) > 0
                             ? `${appliedPromo.label} & Discount`
-                            : course.discount! > 0
+                            : (course?.discount || 0) > 0
                             ? "Discount"
                             : appliedPromo
                             ? "Promo Code"
@@ -89,7 +89,7 @@ const PurchasePage = () => {
                       <span className="font-bold">
                         - ৳
                         {(
-                          (course.discount || 0) + promoDiscount
+                          (course?.discount || 0) + promoDiscount
                         ).toLocaleString()}
                       </span>
                     </div>

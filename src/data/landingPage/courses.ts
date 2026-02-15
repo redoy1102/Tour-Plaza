@@ -39,6 +39,7 @@ export const courses: Course[] = [
     batch: "৬ষ্ঠ ব্যাচে",
 
     isFeatured: true,
+    isFreeCourse: false,
 
     instructors: [
       {
@@ -244,6 +245,7 @@ export const courses: Course[] = [
     batch: "৬ষ্ঠ ব্যাচে",
 
     isFeatured: true,
+    isFreeCourse: false,
 
     instructors: [
       {
@@ -454,6 +456,7 @@ export const courses: Course[] = [
     batch: "৬ষ্ঠ ব্যাচে",
 
     isFeatured: true,
+    isFreeCourse: false,
 
     instructors: [
       {
@@ -627,6 +630,425 @@ export const courses: Course[] = [
       "graphic design course in bangladesh",
       "learn graphic design online",
       "job ready graphic design course",
+    ],
+  },
+
+  {
+    id: 4,
+    category: "programming",
+    title: "C Programming",
+    description: "প্রফেশনাল C প্রোগ্রামিং শেখার পূর্ণাঙ্গ কোর্স।",
+    rating: 4.5,
+    // durationMonths: 3,
+    // totalLiveClasses: 60,
+    totalPreRecordedVideos: 90,
+    // price: 5000,
+    // discount: 500,
+    link: "/courses/graphic-design",
+    imglink: "/landingPage/courses/graphics.webp",
+    heroVideoLink: "/landingPage/HeroVideo.mp4",
+
+    // supports: [
+    //   { icon: "Users", title: "জব প্লেসমেন্ট সাপোর্ট" },
+    //   { icon: "Clock", title: "লাইফটাইম এক্সেস" },
+    //   { icon: "ShieldCheck", title: "সার্টিফিকেট" },
+    // ],
+    // batchStartDate: "রবিবার ৮ ফেব্রুয়ারি",
+    // liveClassTime: "সকাল ১০টা – দুপুর ১টা",
+    // supportClassTime: "রাত ৮টা – ১০টা",
+    // totalSeats: 50,
+    // seatsLeft: 20,
+    // batch: "৬ষ্ঠ ব্যাচে",
+
+    isFeatured: true,
+    isFreeCourse: true,
+
+    instructors: [
+      {
+        name: "জন ডো",
+        role: "ফুল-স্ট্যাক ডেভেলপার",
+        photo: "/public/landingPage/courses/instructorImages/instructor1.webp",
+        runningCompanyName: "Tech Solutions",
+      },
+      {
+        name: "জেন স্মিথ",
+        role: "ফ্রন্টএন্ড এক্সপার্ট",
+        photo: "/public/landingPage/courses/instructorImages/instructor2.webp",
+        runningCompanyName: "Creative Inc",
+      },
+      {
+        name: "রাহাত ইসলাম",
+        role: "ব্যাকএন্ড ডেভেলপার",
+        photo: "/public/landingPage/courses/instructorImages/instructor3.webp",
+        runningCompanyName: "Backend Hub",
+      },
+      {
+        name: "তাসনিম রহমান",
+        role: "DevOps ইঞ্জিনিয়ার",
+        photo: "/public/landingPage/courses/instructorImages/instructor4.webp",
+        runningCompanyName: "CloudWorks",
+      },
+    ],
+
+    // supportTeamMembers: [
+    //   {
+    //     name: "আলিফ রহমান",
+    //     role: "টেক সাপোর্ট",
+    //     photo: "/public/landingPage/courses/teamMemberImages/teamMember1.webp",
+    //     runningCompanyName: "Support Ltd",
+    //   },
+    //   {
+    //     name: "সাবিনা আক্তার",
+    //     role: "কোর্স কনসালটেন্ট",
+    //     photo: "/public/landingPage/courses/teamMemberImages/teamMember2.webp",
+    //     runningCompanyName: "EduCare",
+    //   },
+    // ],
+
+    courseOutline: {
+      week1: [
+        {
+          classNo: 1,
+          title: "HTML পরিচিতি",
+          topics: ["HTML Structure", "Tags"],
+        },
+        { classNo: 2, title: "CSS বেসিক", topics: ["Selectors", "Box Model"] },
+      ],
+      week2: [
+        {
+          classNo: 3,
+          title: "JavaScript বেসিক",
+          topics: ["Variables", "Functions"],
+        },
+        { classNo: 4, title: "DOM", topics: ["Events", "Manipulation"] },
+      ],
+      week3: [
+        { classNo: 5, title: "React বেসিক", topics: ["Components", "Props"] },
+        {
+          classNo: 6,
+          title: "State & Hooks",
+          topics: ["useState", "useEffect"],
+        },
+      ],
+      week4: [
+        {
+          classNo: 7,
+          title: "Backend পরিচিতি",
+          topics: ["Node.js", "Express"],
+        },
+        { classNo: 8, title: "MongoDB", topics: ["CRUD", "Schema"] },
+      ],
+    },
+
+    toolsList: [
+      {
+        imgLink: "/public/landingPage/courses/tools/vsCode.jpeg",
+        name: "VS Code",
+        purpose: "কোড লেখা",
+      },
+      {
+        imgLink: "/public/landingPage/courses/tools/github.png",
+        name: "GitHub",
+        purpose: "ভার্সন কন্ট্রোল",
+      },
+      {
+        imgLink: "/public/landingPage/courses/tools/api.png",
+        name: "API",
+        purpose: "API টেস্টিং",
+      },
+    ],
+
+    prerequisites: [
+      { icon: "Laptop", title: "Laptop/Desktop" },
+      { icon: "Globe", title: "Basic English" },
+      { icon: "Wifi", title: "ইন্টারনেট ব্যবহারের জ্ঞান" },
+    ],
+
+    reviews: [
+      { studentName: "রাহুল ইসলাম", rating: 5, comment: "অসাধারণ কোর্স!" },
+      {
+        studentName: "সুমনা আক্তার",
+        rating: 4.7,
+        comment: "খুব ভালো শেখানো হয়েছে।",
+      },
+      {
+        studentName: "তানভীর হোসেন",
+        rating: 4.8,
+        comment: "লাইভ ক্লাস খুব উপকারী।",
+      },
+      {
+        studentName: "মাহমুদুল হাসান",
+        rating: 5,
+        comment: "Highly recommended!",
+      },
+    ],
+
+    // promoCodes: [
+    //   { label: "EarlyBird20", value: 20 },
+    //   {
+    //     label: "WEB26",
+    //     value: 26,
+    //   },
+    //   { label: "CODEPRO15", value: 15 },
+    //   { label: "DEVSTART5", value: 5 },
+    // ],
+
+    seo: [
+      "c programming",
+      "c programming course",
+      "learn c programming",
+      "c language",
+      "c language course",
+      "c programming for beginners",
+      "advanced c programming",
+      "structured programming",
+      "procedural programming",
+      "programming fundamentals",
+      "basic programming",
+      "coding for beginners",
+      "computer programming",
+      "c syntax",
+      "variables in c",
+      "data types in c",
+      "operators in c",
+      "control statements",
+      "loops in c",
+      "if else in c",
+      "switch case in c",
+      "functions in c",
+      "recursion in c",
+      "arrays in c",
+      "strings in c",
+      "pointers in c",
+      "dynamic memory allocation",
+      "malloc free",
+      "structures in c",
+      "file handling in c",
+      "c projects",
+      "real world programming projects",
+      "problem solving",
+      "algorithm basics",
+      "competitive programming",
+      "data structures using c",
+      "object oriented concepts in c",
+      "debugging in c",
+      "gcc compiler",
+      "visual studio code for c",
+      "coding interview preparation",
+      "software development basics",
+      "computer science fundamentals",
+      "c programming course in bangladesh",
+      "online c programming course",
+      "job ready programming course",
+    ],
+  },
+  {
+    id: 5,
+    category: "programming",
+    title: "C++ Programming",
+    description: "প্রফেশনাল C++ প্রোগ্রামিং শেখার পূর্ণাঙ্গ কোর্স।",
+    rating: 4.1,
+    // durationMonths: 3,
+    // totalLiveClasses: 60,
+    totalPreRecordedVideos: 204,
+    // price: 5000,
+    // discount: 500,
+    link: "/courses/graphic-design",
+    imglink: "/landingPage/courses/graphics.webp",
+    heroVideoLink: "/landingPage/HeroVideo.mp4",
+
+    // supports: [
+    //   { icon: "Users", title: "জব প্লেসমেন্ট সাপোর্ট" },
+    //   { icon: "Clock", title: "লাইফটাইম এক্সেস" },
+    //   { icon: "ShieldCheck", title: "সার্টিফিকেট" },
+    // ],
+    // batchStartDate: "রবিবার ৮ ফেব্রুয়ারি",
+    // liveClassTime: "সকাল ১০টা – দুপুর ১টা",
+    // supportClassTime: "রাত ৮টা – ১০টা",
+    // totalSeats: 50,
+    // seatsLeft: 20,
+    // batch: "৬ষ্ঠ ব্যাচে",
+
+    isFeatured: true,
+    isFreeCourse: true,
+
+    instructors: [
+      {
+        name: "জন ডো",
+        role: "ফুল-স্ট্যাক ডেভেলপার",
+        photo: "/public/landingPage/courses/instructorImages/instructor1.webp",
+        runningCompanyName: "Tech Solutions",
+      },
+      {
+        name: "জেন স্মিথ",
+        role: "ফ্রন্টএন্ড এক্সপার্ট",
+        photo: "/public/landingPage/courses/instructorImages/instructor2.webp",
+        runningCompanyName: "Creative Inc",
+      },
+      {
+        name: "রাহাত ইসলাম",
+        role: "ব্যাকএন্ড ডেভেলপার",
+        photo: "/public/landingPage/courses/instructorImages/instructor3.webp",
+        runningCompanyName: "Backend Hub",
+      },
+      {
+        name: "তাসনিম রহমান",
+        role: "DevOps ইঞ্জিনিয়ার",
+        photo: "/public/landingPage/courses/instructorImages/instructor4.webp",
+        runningCompanyName: "CloudWorks",
+      },
+    ],
+
+    // supportTeamMembers: [
+    //   {
+    //     name: "আলিফ রহমান",
+    //     role: "টেক সাপোর্ট",
+    //     photo: "/public/landingPage/courses/teamMemberImages/teamMember1.webp",
+    //     runningCompanyName: "Support Ltd",
+    //   },
+    //   {
+    //     name: "সাবিনা আক্তার",
+    //     role: "কোর্স কনসালটেন্ট",
+    //     photo: "/public/landingPage/courses/teamMemberImages/teamMember2.webp",
+    //     runningCompanyName: "EduCare",
+    //   },
+    // ],
+
+    courseOutline: {
+      week1: [
+        {
+          classNo: 1,
+          title: "HTML পরিচিতি",
+          topics: ["HTML Structure", "Tags"],
+        },
+        { classNo: 2, title: "CSS বেসিক", topics: ["Selectors", "Box Model"] },
+      ],
+      week2: [
+        {
+          classNo: 3,
+          title: "JavaScript বেসিক",
+          topics: ["Variables", "Functions"],
+        },
+        { classNo: 4, title: "DOM", topics: ["Events", "Manipulation"] },
+      ],
+      week3: [
+        { classNo: 5, title: "React বেসিক", topics: ["Components", "Props"] },
+        {
+          classNo: 6,
+          title: "State & Hooks",
+          topics: ["useState", "useEffect"],
+        },
+      ],
+      week4: [
+        {
+          classNo: 7,
+          title: "Backend পরিচিতি",
+          topics: ["Node.js", "Express"],
+        },
+        { classNo: 8, title: "MongoDB", topics: ["CRUD", "Schema"] },
+      ],
+    },
+
+    toolsList: [
+      {
+        imgLink: "/public/landingPage/courses/tools/vsCode.jpeg",
+        name: "VS Code",
+        purpose: "কোড লেখা",
+      },
+      {
+        imgLink: "/public/landingPage/courses/tools/github.png",
+        name: "GitHub",
+        purpose: "ভার্সন কন্ট্রোল",
+      },
+      {
+        imgLink: "/public/landingPage/courses/tools/api.png",
+        name: "API",
+        purpose: "API টেস্টিং",
+      },
+    ],
+
+    prerequisites: [
+      { icon: "Laptop", title: "Laptop/Desktop" },
+      { icon: "Globe", title: "Basic English" },
+      { icon: "Wifi", title: "ইন্টারনেট ব্যবহারের জ্ঞান" },
+    ],
+
+    reviews: [
+      { studentName: "রাহুল ইসলাম", rating: 5, comment: "অসাধারণ কোর্স!" },
+      {
+        studentName: "সুমনা আক্তার",
+        rating: 4.7,
+        comment: "খুব ভালো শেখানো হয়েছে।",
+      },
+      {
+        studentName: "তানভীর হোসেন",
+        rating: 4.8,
+        comment: "লাইভ ক্লাস খুব উপকারী।",
+      },
+      {
+        studentName: "মাহমুদুল হাসান",
+        rating: 5,
+        comment: "Highly recommended!",
+      },
+    ],
+
+    // promoCodes: [
+    //   { label: "EarlyBird20", value: 20 },
+    //   {
+    //     label: "WEB26",
+    //     value: 26,
+    //   },
+    //   { label: "CODEPRO15", value: 15 },
+    //   { label: "DEVSTART5", value: 5 },
+    // ],
+
+    seo: [
+      "c programming",
+      "c programming course",
+      "learn c programming",
+      "c language",
+      "c language course",
+      "c programming for beginners",
+      "advanced c programming",
+      "structured programming",
+      "procedural programming",
+      "programming fundamentals",
+      "basic programming",
+      "coding for beginners",
+      "computer programming",
+      "c syntax",
+      "variables in c",
+      "data types in c",
+      "operators in c",
+      "control statements",
+      "loops in c",
+      "if else in c",
+      "switch case in c",
+      "functions in c",
+      "recursion in c",
+      "arrays in c",
+      "strings in c",
+      "pointers in c",
+      "dynamic memory allocation",
+      "malloc free",
+      "structures in c",
+      "file handling in c",
+      "c projects",
+      "real world programming projects",
+      "problem solving",
+      "algorithm basics",
+      "competitive programming",
+      "data structures using c",
+      "object oriented concepts in c",
+      "debugging in c",
+      "gcc compiler",
+      "visual studio code for c",
+      "coding interview preparation",
+      "software development basics",
+      "computer science fundamentals",
+      "c programming course in bangladesh",
+      "online c programming course",
+      "job ready programming course",
     ],
   },
 

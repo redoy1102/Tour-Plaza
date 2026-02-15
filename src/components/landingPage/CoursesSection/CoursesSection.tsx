@@ -6,11 +6,19 @@ import { courses } from "@/data/landingPage/courses";
 import { coursePaths } from "@/data/landingPage/coursePaths";
 import CourseCard from "./CourseCard";
 
-const Courses = () => {
+interface CoursesProps {
+  isFeatured?: boolean;
+  isFreeCourses?: boolean;
+}
+
+const Courses = ({isFeatured, isFreeCourses}: CoursesProps) => {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const featuredCourses = courses.filter((course) => course.isFeatured);
+  const requestedCourses = isFeatured ? courses.filter(course => course.isFeatured) : isFreeCourses ? courses.filter(course => course.isFreeCourse) : "";
+  // const featuredCourses = courses.filter((course) => course.isFeatured);
 
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  if(!requestedCourses) return null;
 
   // Scroll handler
   const scroll = (direction: "left" | "right") => {
@@ -25,13 +33,13 @@ const Courses = () => {
 
   // Filtered courses
   const filteredCourses = activeCategory
-    ? featuredCourses.filter((course) => course.category === activeCategory)
-    : featuredCourses;
+    ? requestedCourses.filter((course) => course.category === activeCategory)
+    : requestedCourses;
 
   return (
     <section className="container mx-auto px-4 md:px-12 xl:px-4 py-16">
       {/* Header */}
-      <Header icon={MonitorPlay} normalText="রেকর্ডেড লাইভ" colorText="ক্লাস" description="যে কোনো সময়, যে কোনো জায়গা থেকে আমাদের রেকর্ডেড লাইভ ক্লাস দেখুন এবং পুনরায় শিখুন আপনার সুবিধামতো।" />
+      <Header icon={MonitorPlay} normalText={isFeatured ? "Featured" : "Free"} colorText="Courses" description={isFeatured ? "Explore our top-rated courses and enhance your skills." : "Discover our free courses and start learning today."} />
 
       {/* Categories */}
       <div className="mb-10 flex items-center gap-3">
@@ -83,7 +91,7 @@ const Courses = () => {
           <ChevronRight className="h-6 w-6 lg:h-4 lg:w-4" />
         </button>
       </div>
-
+          
       {/* Course Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {filteredCourses.map((singleCourse, index) => (

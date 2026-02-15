@@ -55,6 +55,12 @@ export const coursePaths: CoursePath[] = [
     label: "কৃত্রিম বুদ্ধিমত্তা",
     link: "/courses/artificial-intelligence",
   },
+  {
+    id: 10,
+    category: "programming",
+    label: "প্রোগ্রামিং",
+    link: "/courses/programming",
+  }
 ];
 
 // export const featuredCourses = [

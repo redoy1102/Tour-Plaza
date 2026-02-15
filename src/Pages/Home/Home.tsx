@@ -10,7 +10,8 @@ const Home = () => {
     <div>
       <HeroSection />
       <StatsSection />
-      <Courses />
+      <Courses isFeatured={true} />
+      <Courses isFreeCourses={true} />
       <WhyChooseSection />
       <AboutSection 
         beforeColorText="আমরা তৈরি করি"
