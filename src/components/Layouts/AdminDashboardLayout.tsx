@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import { X, Menu, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { menuItems } from "@/data/student/StudentDashboardMenuData";
+import { menuItems } from "@/data/admin/AdminDashboardMenuData";
 
-const StudentLayout = () => {
+const AdminDashboardLayout = () => {
   const location = useLocation();
   // console.log("Current Path:", location.pathname);
   const navigate = useNavigate();
@@ -165,4 +165,4 @@ const StudentLayout = () => {
   );
 };
 
-export default StudentLayout;
+export default AdminDashboardLayout;
