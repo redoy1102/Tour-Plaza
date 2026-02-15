@@ -49,7 +49,7 @@ const AdminDashboardLayout = () => {
         {/* Dashboard Sidebar */}
         <div className="p-6 flex items-center justify-between border-b border-gray-300">
           <h2 className="text-xl font-bold tracking-tight text-gray-900">
-            ড্যাশবোর্ড
+            Admin Dashboard
           </h2>
           <Button
             variant="ghost"
