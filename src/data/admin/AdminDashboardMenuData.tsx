@@ -36,15 +36,6 @@ export const menuItems = [
     path: "/admin-dashboard",
   },
 
-  //   enrollments
-  {
-    id: "enrollments",
-    label: "Enrollments",
-    icon: <GraduationCap className="w-5 h-5" />,
-    component: <Enrollments />,
-    path: "/admin-dashboard/enrollments",
-  },
-
   //   Courses
   {
     id: "courses",
@@ -52,6 +43,15 @@ export const menuItems = [
     icon: <BookOpen className="w-5 h-5" />,
     component: <Courses />,
     path: "/admin-dashboard/courses",
+  },
+
+  //   enrollments
+  {
+    id: "enrollments",
+    label: "Enrollments",
+    icon: <GraduationCap className="w-5 h-5" />,
+    component: <Enrollments />,
+    path: "/admin-dashboard/enrollments",
   },
 
   //   Students
