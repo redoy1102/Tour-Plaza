@@ -30,7 +30,7 @@ export const menuItems = [
   // dashboard
   {
     id: "dashboard",
-    label: "ড্যাশবোর্ড",
+    label: "Dashboard",
     icon: <LayoutDashboard className="w-5 h-5" />,
     component: <AdminDashboard />,
     path: "/admin-dashboard",

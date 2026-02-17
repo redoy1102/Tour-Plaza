@@ -17,25 +17,46 @@ const CourseCard = ({
       key={index}
       className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:shadow-md"
     >
-      <img
-        src={singleCourse.imglink}
-        alt={singleCourse.title}
-        className="h-44 w-full object-cover"
-      />
+      <Link
+        to={`/courses/${singleCourse?.id}`}
+        onClick={() => {
+          window.scroll(0, 0);
+          closeSearchResultModal?.();
+        }}
+      >
+        <img
+          src={singleCourse.imglink}
+          alt={singleCourse.title}
+          className="h-44 w-full object-cover"
+        />
+      </Link>
 
       <div className="p-3">
-        <h3 className="mb-2 text-base font-semibold text-gray-900 h-12">
-          {singleCourse.title} কোর্স
-        </h3>
+        <div className="h-25">
+          <Link
+            to={`/courses/${singleCourse?.id}`}
+            onClick={() => {
+              window.scroll(0, 0);
+              closeSearchResultModal?.();
+            }}
+            className="mb-2 text-base font-semibold text-gray-900 h-12"
+          >
+            {singleCourse.title} কোর্স
+          </Link>
 
-        <p className="mb-2 text-xs text-gray-500">
-          {singleCourse?.durationMonths ? `${singleCourse.durationMonths} মাস | ` : ""}
-          {singleCourse?.totalPreRecordedVideos ? `${singleCourse.totalPreRecordedVideos} ভিডিও` : ""}
-        </p>
+          <p className="mb-2 text-xs text-gray-500">
+            {singleCourse?.durationMonths
+              ? `${singleCourse.durationMonths} মাস | `
+              : ""}
+            {singleCourse?.totalPreRecordedVideos
+              ? `${singleCourse.totalPreRecordedVideos} ভিডিও`
+              : ""}
+          </p>
 
-        <p className="mb-4 font-semibold text-secondary">
-          {singleCourse?.price ? `৳ ${singleCourse.price}` : "ফ্রি কোর্স"}
-        </p>
+          <p className="mb-4 font-semibold text-secondary">
+            {singleCourse?.price ? `৳ ${singleCourse.price}` : "ফ্রি কোর্স"}
+          </p>
+        </div>
 
         <Link
           to={`/courses/${singleCourse?.id}`}
