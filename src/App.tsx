@@ -30,6 +30,7 @@ import Instructors from "./components/AdminDashboardPage/sideNav/team_members/in
 import SupportStaff from "./components/AdminDashboardPage/sideNav/team_members/support_staff/SupportStaff";
 import PromoCodes from "./components/AdminDashboardPage/sideNav/settings/promo_codes/PromoCodes";
 import RolesPermissions from "./components/AdminDashboardPage/sideNav/settings/roles_permissions/RolesPermissions";
+import CourseCategory from "@/components/AdminDashboardPage/sideNav/course_category/CourseCategory";
 
 
 function App() {
@@ -63,7 +64,8 @@ function App() {
           <Route path="/admin-dashboard" element={<AdminDashboardLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="enrollments" element={<Enrollments />} />
-            <Route path="courses" element={<Courses />} />
+            <Route path="courses/allCourses" element={<Courses />} />
+            <Route path="courses/courseCategory" element={<CourseCategory />} />
             <Route path="students" element={<Students />} />
             <Route path="supports-tickets" element={<SupportsTickets />} />
             <Route path="announcements" element={<Announcements />} />

@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   BadgePercent,
   LogOut,
+  Tag,
 } from "lucide-react";
 import Announcements from "@/components/AdminDashboardPage/sideNav/announcements/Announcements";
 import SupportsTickets from "@/components/AdminDashboardPage/sideNav/supports_tickets/SupportsTickets";
@@ -25,6 +26,7 @@ import Instructors from "@/components/AdminDashboardPage/sideNav/team_members/in
 import SupportStaff from "@/components/AdminDashboardPage/sideNav/team_members/support_staff/SupportStaff";
 import RolesPermissions from "@/components/AdminDashboardPage/sideNav/settings/roles_permissions/RolesPermissions";
 import PromoCodes from "@/components/AdminDashboardPage/sideNav/settings/promo_codes/PromoCodes";
+import CourseCategory from "@/components/AdminDashboardPage/sideNav/course_category/CourseCategory";
 
 export const menuItems = [
   // dashboard
@@ -41,8 +43,23 @@ export const menuItems = [
     id: "courses",
     label: "Courses",
     icon: <BookOpen className="w-5 h-5" />,
-    component: <Courses />,
-    path: "/admin-dashboard/courses",
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "allCourses",
+        label: "All Courses",
+        icon: <BookOpen className="w-5 h-5" />,
+        component: <Courses />,
+        path: "/admin-dashboard/courses/allCourses",
+      },
+      {
+        id: "courseCategory",
+        label: "Course Category",
+        icon: <Tag className="w-5 h-5" />,
+        component: <CourseCategory />,
+        path: "/admin-dashboard/courses/courseCategory",
+      },
+    ],
   },
 
   //   enrollments
