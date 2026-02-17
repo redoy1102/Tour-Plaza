@@ -158,3 +158,10 @@ export const menuItems = [
     icon: <LogOut className="w-5 h-5" />,
   },
 ];
+
+export const announcementTableHeader = [
+  { id: "title", label: "Title" },
+  { id: "description", label: "Description" },
+  { id: "type", label: "Type" },
+  { id: "actions", label: "Actions", align: "right" },
+];
