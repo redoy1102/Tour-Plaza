@@ -1,5 +1,5 @@
 import PageHeader from "../shared/PageHeader";
-import type { AnnouncementFormValue } from "@/schemas/admin/announcementsSchema";
+import type { AnnouncementFormValue } from "@/schemas/admin/adminSchema";
 import { useState } from "react";
 import AnnouncementForm from "./AnnouncementForm";
 import AnnouncementsList from "./AnnouncementsList";
@@ -10,20 +10,22 @@ export default function Announcements() {
   const [announcements, setAnnouncements] = useState<AnnouncementFormValue[]>(
     []
   );
+  console.log("All announcements:", announcements);
+
   const [editAnnouncement, setEditAnnouncement] =
-    useState<AnnouncementFormValue | null>(null);
+    useState<number | null>(null);
+  console.log("Editing announcement:", editAnnouncement);
+
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleEditAnnouncement = (
-    announcement: AnnouncementFormValue | null
+    announcement: number | null
   ) => {
     setEditAnnouncement(announcement);
-    if (announcement) {
+    if (announcement !== null) {
       setDialogOpen(true);
     }
   };
-
-  console.log("All announcements:", announcements);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
@@ -46,6 +48,7 @@ export default function Announcements() {
           </DialogTrigger>
           <DialogContent>
             <AnnouncementForm
+              announcements={announcements}
               setAnnouncements={setAnnouncements}
               editAnnouncement={editAnnouncement}
               handleEditAnnouncement={handleEditAnnouncement}

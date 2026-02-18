@@ -1,5 +1,3 @@
-import type { AnnouncementFormValue } from "@/schemas/admin/adminSchema";
-
 import {
   Table,
   TableBody,
@@ -8,33 +6,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import TextModal from "../shared/TextModal";
 import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
-import { announcementTableHeader } from "@/data/admin/AdminDashboardMenuData";
+import { courseCategoryTableHeader } from "@/data/admin/AdminDashboardMenuData";
+import type { CategoryFormValue } from "@/schemas/admin/adminSchema";
 
-interface AnnouncementsListProps {
-  announcements: AnnouncementFormValue[];
-  setAnnouncements: React.Dispatch<
-    React.SetStateAction<AnnouncementFormValue[]>
+interface CourseCategoryListProps {
+  categories: CategoryFormValue[];
+  setCategories: React.Dispatch<
+    React.SetStateAction<CategoryFormValue[]>
   >;
-  handleEditAnnouncement: (announcement: number | null) => void;
+  handleEditCategory: (categoryId: number | null) => void;
 }
 
-const AnnouncementsList = ({
-  announcements,
-  setAnnouncements,
-  handleEditAnnouncement,
-}: AnnouncementsListProps) => {
+const CourseCategoryList = ({
+  categories,
+  setCategories,
+  handleEditCategory,
+}: CourseCategoryListProps) => {
   const handleDelete = (index: number) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
-        <p>Are you sure you want to delete this announcement?</p>
+        <p>Are you sure you want to delete this course category?</p>
         <div className="flex gap-2">
           <button
             onClick={() => {
-              setAnnouncements((prev) => prev.filter((_, i) => i !== index));
-              toast.success("Announcement deleted successfully!");
+              setCategories((prev) => prev.filter((_, i) => i !== index));
+              toast.success("Course category deleted successfully!");
               toast.dismiss(t.id);
             }}
             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
@@ -53,14 +51,14 @@ const AnnouncementsList = ({
   };
   return (
     <div className=" border-gray-200">
-      {announcements.length === 0 ? (
-        <p className="text-gray-600">No announcements posted yet.</p>
+      {categories.length === 0 ? (
+        <p className="text-gray-600">No course categories added yet.</p>
       ) : (
         <div className="space-y-4">
           <Table>
             <TableHeader>
               <TableRow>
-                {announcementTableHeader.map((header) => (
+                {courseCategoryTableHeader.map((header) => (
                   <TableHead
                     key={header.id}
                     className={header.align === "right" ? "text-right" : ""}
@@ -71,30 +69,16 @@ const AnnouncementsList = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {announcements.map((announcement, index:number) => (
+              {categories.map((category, index: number) => (
                 <TableRow key={index}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell className="font-medium">
-                    {announcement.title}
+                    {category.name}
                   </TableCell>
-                  {announcement.description.length > 50 ? (
-                    <TableCell className="">
-                      <TextModal
-                        btnLabel="View Description"
-                        title={announcement.title}
-                        description={announcement.description}
-                      />
-                    </TableCell>
-                  ) : (
-                    <TableCell className="">
-                      {announcement.description}
-                    </TableCell>
-                  )}
 
-                  <TableCell>{announcement.type}</TableCell>
                   <TableCell className="text-right flex items-center justify-end gap-2">
                     <button
-                      onClick={() => handleEditAnnouncement(index)}
+                      onClick={() => handleEditCategory(index)}
                       className="cursor-pointer"
                     >
                       <SquarePen />
@@ -116,4 +100,4 @@ const AnnouncementsList = ({
   );
 };
 
-export default AnnouncementsList;
+export default CourseCategoryList;

@@ -160,8 +160,15 @@ export const menuItems = [
 ];
 
 export const announcementTableHeader = [
+  { id: "index", label: "#" },
   { id: "title", label: "Title" },
   { id: "description", label: "Description" },
   { id: "type", label: "Type" },
+  { id: "actions", label: "Actions", align: "right" },
+];
+
+export const courseCategoryTableHeader = [
+  { id: "index", label: "#" },
+  { id: "name", label: "Name" },
   { id: "actions", label: "Actions", align: "right" },
 ];

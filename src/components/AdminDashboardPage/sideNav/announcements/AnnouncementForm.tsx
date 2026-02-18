@@ -17,23 +17,24 @@ import {
 } from "@/components/ui/select";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { AnnouncementFormValue } from "@/schemas/admin/announcementsSchema";
-import { announcementSchema } from "@/schemas/admin/announcementsSchema";
+import type { AnnouncementFormValue } from "@/schemas/admin/adminSchema";
+import { announcementSchema } from "@/schemas/admin/adminSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 interface AnnouncementFormProps {
+  announcements: AnnouncementFormValue[];
   setAnnouncements: React.Dispatch<
     React.SetStateAction<AnnouncementFormValue[]>
   >;
-  editAnnouncement?: AnnouncementFormValue | null;
-  handleEditAnnouncement: (announcement: AnnouncementFormValue | null) => void;
+  editAnnouncement?: number | null;
+  handleEditAnnouncement: (announcement: number | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AnnouncementForm = ({
+  announcements,
   setAnnouncements,
   editAnnouncement,
   handleEditAnnouncement,
@@ -42,31 +43,18 @@ const AnnouncementForm = ({
   const form = useForm<AnnouncementFormValue>({
     resolver: zodResolver(announcementSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      type: "general",
+      title: editAnnouncement !== null ? announcements[editAnnouncement!].title : "",
+      description: editAnnouncement !== null ? announcements[editAnnouncement!].description : "",
+      type: editAnnouncement !== null ? announcements[editAnnouncement!].type : "general",
     },
   });
 
-  useEffect(() => {
-    if (editAnnouncement) {
-      form.reset(editAnnouncement);
-    } else {
-      form.reset({
-        title: "",
-        description: "",
-        type: "general",
-      });
-    }
-  }, [editAnnouncement, form]);
-
   const onSubmit = (data: AnnouncementFormValue) => {
-    if (editAnnouncement) {
+    if (editAnnouncement !== null) {
       // Update existing announcement
       setAnnouncements((prev) =>
-        prev.map((ann) =>
-          ann.title === editAnnouncement.title &&
-          ann.description === editAnnouncement.description
+        prev.map((ann, index) =>
+          index === editAnnouncement
             ? data
             : ann
         )
@@ -128,10 +116,7 @@ const AnnouncementForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Announcement Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select type" />
