@@ -172,3 +172,11 @@ export const courseCategoryTableHeader = [
   { id: "name", label: "Name" },
   { id: "actions", label: "Actions", align: "right" },
 ];
+
+export const promoCodesTableHeader = [
+  { id: "index", label: "#" },
+  { id: "code", label: "Code" },
+  { id: "discountPercentage", label: "Discount" },
+  { id: "validity", label: "Validity" },
+  { id: "actions", label: "Actions", align: "right" },
+]

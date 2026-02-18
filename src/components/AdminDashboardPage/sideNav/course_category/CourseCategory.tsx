@@ -1,10 +1,10 @@
 import type { CategoryFormValue } from "@/schemas/admin/adminSchema";
 import { useState } from "react";
 import PageHeader from "../shared/PageHeader";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import CourseCategoryForm from "./CourseCategoryForm";
 import CourseCategoryList from "./CourseCategoryList";
+import CreateButton from "../shared/CreateButton";
 
 const CourseCategory = () => {
   const [categories, setCategories] = useState<CategoryFormValue[]>([]);
@@ -32,12 +32,7 @@ const CourseCategory = () => {
           }}
         >
           <DialogTrigger>
-            <Button
-              size="sm"
-              className="bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
-            >
-              Create
-            </Button>
+            <CreateButton />
           </DialogTrigger>
           <DialogContent>
             <CourseCategoryForm

@@ -1,0 +1,110 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { SquarePen, Trash } from "lucide-react";
+import toast from "react-hot-toast";
+import { promoCodesTableHeader } from "@/data/admin/AdminDashboardMenuData";
+import type { PromoCodeFormValue } from "@/schemas/admin/adminSchema";
+import { formatDateShort } from "@/lib/utils";
+
+interface PromoCodesListProps {
+  promoCodes: PromoCodeFormValue[];
+  setPromoCodes: React.Dispatch<React.SetStateAction<PromoCodeFormValue[]>>;
+  handleEditPromoCode: (promoCodeId: number | null) => void;
+}
+
+const PromoCodesList = ({
+  promoCodes,
+  setPromoCodes,
+  handleEditPromoCode,
+}: PromoCodesListProps) => {
+  const handleDelete = (index: number) => {
+    toast((t) => (
+      <div className="flex flex-col items-start gap-4">
+        <p>Are you sure you want to delete this promo code?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              setPromoCodes((prev) => prev.filter((_, i) => i !== index));
+              toast.success("Promo code deleted successfully!");
+              toast.dismiss(t.id);
+            }}
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+          >
+            Yes, Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ));
+  };
+  return (
+    <div className=" border-gray-200">
+      {promoCodes.length === 0 ? (
+        <p className="text-gray-600">No promo codes added yet.</p>
+      ) : (
+        <div className="space-y-4">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {promoCodesTableHeader.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className={header.align === "right" ? "text-right" : ""}
+                  >
+                    {header.label}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {promoCodes.map((promoCode, index: number) => (
+                <TableRow key={index}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell className="font-medium">
+                    {promoCode.code}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {promoCode.discountPercentage}%
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {promoCode.validity
+                      ? formatDateShort(promoCode.validity)
+                      : ""}
+                  </TableCell>
+
+                  <TableCell className="text-right flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => handleEditPromoCode(index)}
+                      className="cursor-pointer"
+                    >
+                      <SquarePen />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(index)}
+                      className="text-red-500 hover:text-red-700 cursor-pointer"
+                    >
+                      <Trash />
+                    </button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default PromoCodesList;

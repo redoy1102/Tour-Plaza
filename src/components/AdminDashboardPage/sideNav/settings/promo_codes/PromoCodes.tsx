@@ -1,9 +1,60 @@
+import type { PromoCodeFormValue } from "@/schemas/admin/adminSchema";
+import { useState } from "react";
+// import PageHeader from "../shared/PageHeader";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import PromoCodesForm from "./PromoCodesForm";
+import PageHeader from "../../shared/PageHeader";
+import CreateButton from "../../shared/CreateButton";
+import PromoCodesList from "./PromoCodesList";
+
+
 const PromoCodes = () => {
-    return (
-        <div>
-            <h1>Promo Codes</h1>
-        </div>
-    );
+  const [promoCodes, setPromoCodes] = useState<PromoCodeFormValue[]>([]);
+  console.log("All promo codes:", promoCodes);
+
+  const [editPromoCodeId, setEditPromoCodeId] = useState<number | null>(null);
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleEditPromoCode = (promoCodeId: number | null) => {
+    setEditPromoCodeId(promoCodeId);
+    if (promoCodeId !== null) {
+      setDialogOpen(true);
+    }
+  };
+  return (
+    <div className="space-y-6 animate-in fade-in duration-700">
+      <div className="flex items-center justify-between gap-2">
+        <PageHeader>Promo Codes</PageHeader>
+        <Dialog
+          open={dialogOpen}
+          onOpenChange={(open) => {
+            setDialogOpen(open);
+            if (!open) setEditPromoCodeId(null);
+          }}
+        >
+          <DialogTrigger>
+            <CreateButton />
+          </DialogTrigger>
+          <DialogContent>
+            <PromoCodesForm
+              promoCodes={promoCodes}
+              setPromoCodes={setPromoCodes}
+              editPromoCodeId={editPromoCodeId}
+              handleEditPromoCode={handleEditPromoCode}
+              setDialogOpen={setDialogOpen}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <PromoCodesList
+        promoCodes={promoCodes}
+        setPromoCodes={setPromoCodes}
+        handleEditPromoCode={handleEditPromoCode}
+      />
+    </div>
+  );
 };
 
 export default PromoCodes;
