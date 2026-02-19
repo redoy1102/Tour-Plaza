@@ -198,3 +198,10 @@ export const supportStaffTableHeader = [
   { id: "runningCompanyName", label: "Company" },
   { id: "actions", label: "Actions", align: "right" },
 ];
+
+export const paymentMethodsTableHeader = [
+  { id: "index", label: "#" },
+  { id: "img", label: "Image" },
+  { id: "name", label: "Name" },
+  { id: "actions", label: "Actions", align: "right" },
+];
