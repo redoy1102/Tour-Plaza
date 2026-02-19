@@ -73,7 +73,7 @@ const InstructorsList = ({
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     <ImagePreviewHolder
-                      instructorImage={instructor.imageFile}
+                      imageSrc={instructor.imageFile}
                       altText={instructor.name}
                     />
                   </TableCell>

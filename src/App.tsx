@@ -31,7 +31,7 @@ import SupportStaff from "./components/AdminDashboardPage/sideNav/team_members/s
 import PromoCodes from "./components/AdminDashboardPage/sideNav/settings/promo_codes/PromoCodes";
 import RolesPermissions from "./components/AdminDashboardPage/sideNav/settings/roles_permissions/RolesPermissions";
 import CourseCategory from "@/components/AdminDashboardPage/sideNav/course_category/CourseCategory";
-
+import Tools from "@/components/AdminDashboardPage/sideNav/settings/tools/Tools";
 
 function App() {
   return (
@@ -70,10 +70,21 @@ function App() {
             <Route path="supports-tickets" element={<SupportsTickets />} />
             <Route path="announcements" element={<Announcements />} />
             <Route path="team-members/instructors" element={<Instructors />} />
-            <Route path="team-members/support-staff" element={<SupportStaff />} />
-            <Route path="settings/roles-permissions" element={<RolesPermissions />} />
+            <Route
+              path="team-members/support-staff"
+              element={<SupportStaff />}
+            />
+            {/* Settings */}
+            <Route
+              path="settings/roles-permissions"
+              element={<RolesPermissions />}
+            />
             <Route path="settings/promo-codes" element={<PromoCodes />} />
-            <Route path="settings/payment-methods" element={<PaymentMethods />} />
+            <Route
+              path="settings/payment-methods"
+              element={<PaymentMethods />}
+            />
+            <Route path="settings/tools" element={<Tools />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

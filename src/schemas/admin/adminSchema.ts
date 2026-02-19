@@ -8,7 +8,6 @@ export const announcementSchema = z.object({
 });
 export type AnnouncementFormValue = z.infer<typeof announcementSchema>;
 
-
 // ----------- Category Schema ---------
 export const categorySchema = z.object({
   name: z
@@ -17,7 +16,6 @@ export const categorySchema = z.object({
     .max(50),
 });
 export type CategoryFormValue = z.infer<typeof categorySchema>;
-
 
 // ----------- Promo Code Schema ---------
 export const promoCodeSchema = z.object({
@@ -36,7 +34,6 @@ export const promoCodeSchema = z.object({
     }, "Valid until date must be today or in the future"),
 });
 export type PromoCodeFormValue = z.infer<typeof promoCodeSchema>;
-
 
 // ----------- Instructor Schema -----------
 export const instructorSchema = z.object({
@@ -73,7 +70,6 @@ export const instructorSchema = z.object({
 });
 export type InstructorFormValue = z.infer<typeof instructorSchema>;
 
-
 // ----------- Support Team Member Schema -----------
 export const supportStuffSchema = z.object({
   name: z.string().min(3, " Name must be at least 3 characters").max(50),
@@ -106,7 +102,6 @@ export const supportStuffSchema = z.object({
 });
 export type SupportStuffFormValue = z.infer<typeof supportStuffSchema>;
 
-
 // ----------- Payment Method Schema -----------
 export const paymentMethodSchema = z.object({
   name: z.string().min(3, " Name must be at least 3 characters").max(50),
@@ -134,3 +129,32 @@ export const paymentMethodSchema = z.object({
     }, "Image size must not exceed 5MB"),
 });
 export type PaymentMethodFormValue = z.infer<typeof paymentMethodSchema>;
+
+// ----------- Tools Schema -----------
+export const toolsSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters").max(50),
+  description: z.string().max(15, "Description cannot exceed 15 characters"),
+  imageFile: z
+    .string()
+    .optional()
+    .refine((val) => {
+      if (!val) return true; // optional - nothing to validate
+
+      // Expect a data URL like: data:<mime>;base64,<data>
+      const parts = val.split(",");
+      if (parts.length !== 2) return false;
+      const base64 = parts[1];
+
+      // Basic sanity check
+      if (!base64 || typeof base64 !== "string") return false;
+
+      // Calculate byte length from base64 string
+      const padding = base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0;
+      const byteLength = (base64.length * 3) / 4 - padding;
+
+      // 5MB limit
+      const MAX_BYTES = 5 * 1024 * 1024;
+      return byteLength <= MAX_BYTES;
+    }, "Image size must not exceed 5MB"),
+});
+export type ToolsFormValue = z.infer<typeof toolsSchema>;

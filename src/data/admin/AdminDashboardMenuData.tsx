@@ -18,6 +18,7 @@ import {
   BadgePercent,
   LogOut,
   Tag,
+  VectorSquare,
 } from "lucide-react";
 import Announcements from "@/components/AdminDashboardPage/sideNav/announcements/Announcements";
 import SupportsTickets from "@/components/AdminDashboardPage/sideNav/supports_tickets/SupportsTickets";
@@ -27,6 +28,7 @@ import SupportStaff from "@/components/AdminDashboardPage/sideNav/team_members/s
 import RolesPermissions from "@/components/AdminDashboardPage/sideNav/settings/roles_permissions/RolesPermissions";
 import PromoCodes from "@/components/AdminDashboardPage/sideNav/settings/promo_codes/PromoCodes";
 import CourseCategory from "@/components/AdminDashboardPage/sideNav/course_category/CourseCategory";
+import Tools from "@/components/AdminDashboardPage/sideNav/settings/tools/Tools";
 
 export const menuItems = [
   // dashboard
@@ -121,7 +123,7 @@ export const menuItems = [
       },
     ],
   },
-
+  // Settings
   {
     id: "settings",
     label: "Settings",
@@ -148,6 +150,13 @@ export const menuItems = [
         icon: <CreditCard className="w-5 h-5" />,
         component: <PaymentMethods />,
         path: "/admin-dashboard/settings/payment-methods",
+      },
+      {
+        id: "tools",
+        label: "Tools",
+        icon: <VectorSquare className="w-5 h-5" />,
+        component: <Tools />,
+        path: "/admin-dashboard/settings/tools",
       },
     ],
   },
@@ -203,5 +212,13 @@ export const paymentMethodsTableHeader = [
   { id: "index", label: "#" },
   { id: "img", label: "Image" },
   { id: "name", label: "Name" },
+  { id: "actions", label: "Actions", align: "right" },
+];
+
+export const toolsTableHeader = [
+  { id: "index", label: "#" },
+  { id: "img", label: "Image" },
+  { id: "name", label: "Name" },
+  { id: "description", label: "Description" },
   { id: "actions", label: "Actions", align: "right" },
 ];

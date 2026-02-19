@@ -6,11 +6,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { promoCodesTableHeader } from "@/data/admin/AdminDashboardMenuData";
 import type { PromoCodeFormValue } from "@/schemas/admin/adminSchema";
 import { formatDateShort } from "@/lib/utils";
+import EditButton from "../../shared/EditButton";
+import DeleteButton from "../../shared/DeleteButton";
 
 interface PromoCodesListProps {
   promoCodes: PromoCodeFormValue[];
@@ -84,18 +85,8 @@ const PromoCodesList = ({
                   </TableCell>
 
                   <TableCell className="text-right flex items-center justify-end gap-2">
-                    <button
-                      onClick={() => handleEditPromoCode(index)}
-                      className="cursor-pointer"
-                    >
-                      <SquarePen />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(index)}
-                      className="text-red-500 hover:text-red-700 cursor-pointer"
-                    >
-                      <Trash />
-                    </button>
+                    <EditButton onEdit={handleEditPromoCode} index={index} />
+                    <DeleteButton onDelete={handleDelete} index={index} />
                   </TableCell>
                 </TableRow>
               ))}

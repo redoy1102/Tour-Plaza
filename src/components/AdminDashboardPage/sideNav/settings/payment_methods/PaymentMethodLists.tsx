@@ -75,7 +75,7 @@ const PaymentMethodLists = ({
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     <ImagePreviewHolder
-                      instructorImage={paymentMethod.imageFile}
+                      imageSrc={paymentMethod.imageFile}
                       altText={paymentMethod.name}
                       imgWidth={20}
                       imgHeight={10}
