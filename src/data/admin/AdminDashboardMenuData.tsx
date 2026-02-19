@@ -179,4 +179,13 @@ export const promoCodesTableHeader = [
   { id: "discountPercentage", label: "Discount" },
   { id: "validity", label: "Validity" },
   { id: "actions", label: "Actions", align: "right" },
-]
+];
+
+export const instructorsTableHeader = [
+  { id: "index", label: "#" },
+  { id: "img", label: "Image" },
+  { id: "name", label: "Name" },
+  { id: "role", label: "Role" },
+  { id: "runningCompanyName", label: "Company" },
+  { id: "actions", label: "Actions", align: "right" },
+];
