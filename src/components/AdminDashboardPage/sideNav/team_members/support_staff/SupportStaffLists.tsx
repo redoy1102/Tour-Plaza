@@ -8,30 +8,32 @@ import {
 } from "@/components/ui/table";
 import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
-import { instructorsTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import type { InstructorFormValue } from "@/schemas/admin/adminSchema";
+import { supportStaffTableHeader } from "@/data/admin/AdminDashboardMenuData";
+import type { SupportStuffFormValue } from "@/schemas/admin/adminSchema";
 import ImagePreviewHolder from "../../shared/ImagePreviewHolder";
 
-interface InstructorsListProps {
-  instructors: InstructorFormValue[];
-  setInstructors: React.Dispatch<React.SetStateAction<InstructorFormValue[]>>;
-  handleEditInstructor: (instructorId: number | null) => void;
+interface SupportStaffListsProps {
+  supportStaff: SupportStuffFormValue[];
+  setSupportStaff: React.Dispatch<
+    React.SetStateAction<SupportStuffFormValue[]>
+  >;
+  handleEditSupportStaff: (supportStaffId: number | null) => void;
 }
 
-const InstructorsList = ({
-  instructors,
-  setInstructors,
-  handleEditInstructor,
-}: InstructorsListProps) => {
+const SupportStaffLists = ({
+  supportStaff,
+  setSupportStaff,
+  handleEditSupportStaff,
+}: SupportStaffListsProps) => {
   const handleDelete = (index: number) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
-        <p>Are you sure you want to delete this instructor?</p>
+        <p>Are you sure you want to delete this support staff member?</p>
         <div className="flex gap-2">
           <button
             onClick={() => {
-              setInstructors((prev) => prev.filter((_, i) => i !== index));
-              toast.success("Instructor deleted successfully!");
+              setSupportStaff((prev) => prev.filter((_, i) => i !== index));
+              toast.success("Support staff member deleted successfully!");
               toast.dismiss(t.id);
             }}
             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
@@ -50,14 +52,14 @@ const InstructorsList = ({
   };
   return (
     <div className=" border-gray-200">
-      {instructors.length === 0 ? (
-        <p className="text-gray-600">No instructors added yet.</p>
+      {supportStaff.length === 0 ? (
+        <p className="text-gray-600">No support staff added yet.</p>
       ) : (
         <div className="space-y-4">
           <Table>
             <TableHeader>
               <TableRow>
-                {instructorsTableHeader.map((header) => (
+                {supportStaffTableHeader.map((header) => (
                   <TableHead
                     key={header.id}
                     className={header.align === "right" ? "text-right" : ""}
@@ -68,27 +70,23 @@ const InstructorsList = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {instructors.map((instructor, index: number) => (
+              {supportStaff.map((staff, index: number) => (
                 <TableRow key={index}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     <ImagePreviewHolder
-                      instructorImage={instructor.imageFile}
-                      altText={instructor.name}
+                      instructorImage={staff.imageFile}
+                      altText={staff.name}
                     />
                   </TableCell>
+                  <TableCell className="font-medium">{staff.name}</TableCell>
+                  <TableCell className="font-medium">{staff.role}</TableCell>
                   <TableCell className="font-medium">
-                    {instructor.name}
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {instructor.role}
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {instructor.runningCompanyName}
+                    {staff.runningCompanyName}
                   </TableCell>
                   <TableCell className="text-right flex items-center justify-end gap-2">
                     <button
-                      onClick={() => handleEditInstructor(index)}
+                      onClick={() => handleEditSupportStaff(index)}
                       className="cursor-pointer"
                     >
                       <SquarePen />
@@ -110,4 +108,4 @@ const InstructorsList = ({
   );
 };
 
-export default InstructorsList;
+export default SupportStaffLists;

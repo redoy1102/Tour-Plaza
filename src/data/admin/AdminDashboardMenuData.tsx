@@ -189,3 +189,12 @@ export const instructorsTableHeader = [
   { id: "runningCompanyName", label: "Company" },
   { id: "actions", label: "Actions", align: "right" },
 ];
+
+export const supportStaffTableHeader = [
+  { id: "index", label: "#" },
+  { id: "img", label: "Image" },
+  { id: "name", label: "Name" },
+  { id: "role", label: "Role" },
+  { id: "runningCompanyName", label: "Company" },
+  { id: "actions", label: "Actions", align: "right" },
+];

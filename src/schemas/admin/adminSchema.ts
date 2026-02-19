@@ -69,3 +69,37 @@ export const instructorSchema = z.object({
     .max(100, "Company name cannot exceed 100 characters"),
 });
 export type InstructorFormValue = z.infer<typeof instructorSchema>;
+
+// ----------- Support Team Member Schema -----------
+export const supportStuffSchema = z.object({
+  name: z.string().min(3, " Name must be at least 3 characters").max(50),
+  role: z.string().min(3, "Role must be at least 3 characters").max(50),
+  imageFile: z
+    .string()
+    .optional()
+    .refine((val) => {
+      if (!val) return true; // optional - nothing to validate
+
+      // Expect a data URL like: data:<mime>;base64,<data>
+      const parts = val.split(",");
+      if (parts.length !== 2) return false;
+      const base64 = parts[1];
+
+      // Basic sanity check
+      if (!base64 || typeof base64 !== "string") return false;
+
+      // Calculate byte length from base64 string
+      const padding = base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0;
+      const byteLength = (base64.length * 3) / 4 - padding;
+
+      // 5MB limit
+      const MAX_BYTES = 5 * 1024 * 1024;
+      return byteLength <= MAX_BYTES;
+    }, "Image size must not exceed 5MB"),
+  runningCompanyName: z
+    .string()
+    .max(100, "Company name cannot exceed 100 characters"),
+});
+export type SupportStuffFormValue = z.infer<
+  typeof supportStuffSchema
+>;
