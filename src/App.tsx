@@ -32,6 +32,7 @@ import PromoCodes from "./components/AdminDashboardPage/sideNav/settings/promo_c
 import RolesPermissions from "./components/AdminDashboardPage/sideNav/settings/roles_permissions/RolesPermissions";
 import CourseCategory from "@/components/AdminDashboardPage/sideNav/course_category/CourseCategory";
 import Tools from "@/components/AdminDashboardPage/sideNav/settings/tools/Tools";
+import Prerequisites from "@/components/AdminDashboardPage/sideNav/settings/prerequisites/Prerequisites";
 
 function App() {
   return (
@@ -85,6 +86,7 @@ function App() {
               element={<PaymentMethods />}
             />
             <Route path="settings/tools" element={<Tools />} />
+            <Route path="settings/prerequisites" element={<Prerequisites />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

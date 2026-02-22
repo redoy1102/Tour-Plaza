@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getIcon } from "@/data/landingPage/courses";
+import { getIcon } from "@/data/icons";
 import {
   Select,
   SelectContent,

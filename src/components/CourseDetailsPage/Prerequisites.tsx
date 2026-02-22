@@ -1,5 +1,6 @@
-import { courses, getIcon } from "@/data/landingPage/courses";
+import { courses } from "@/data/landingPage/courses";
 import { CheckCircle2 } from "lucide-react";
+import { getIcon } from "@/data/icons";
 
 interface PrerequisitesProps {
   courseId: string | undefined;

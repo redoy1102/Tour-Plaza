@@ -29,6 +29,7 @@ import RolesPermissions from "@/components/AdminDashboardPage/sideNav/settings/r
 import PromoCodes from "@/components/AdminDashboardPage/sideNav/settings/promo_codes/PromoCodes";
 import CourseCategory from "@/components/AdminDashboardPage/sideNav/course_category/CourseCategory";
 import Tools from "@/components/AdminDashboardPage/sideNav/settings/tools/Tools";
+import Prerequisites from "@/components/AdminDashboardPage/sideNav/settings/prerequisites/Prerequisites";
 
 export const menuItems = [
   // dashboard
@@ -158,6 +159,13 @@ export const menuItems = [
         component: <Tools />,
         path: "/admin-dashboard/settings/tools",
       },
+      {
+        id: "prerequisites",
+        label: "Prerequisites",
+        icon: <VectorSquare className="w-5 h-5" />,
+        component: <Prerequisites />,
+        path: "/admin-dashboard/settings/prerequisites",
+      },
     ],
   },
 
@@ -220,5 +228,12 @@ export const toolsTableHeader = [
   { id: "img", label: "Image" },
   { id: "name", label: "Name" },
   { id: "description", label: "Description" },
+  { id: "actions", label: "Actions", align: "right" },
+];
+
+export const prerequisitesTableHeader = [
+  { id: "index", label: "#" },
+  { id: "icon", label: "Icon" },
+  { id: "title", label: "Title" },
   { id: "actions", label: "Actions", align: "right" },
 ];
