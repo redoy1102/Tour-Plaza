@@ -159,13 +159,50 @@ export const toolsSchema = z.object({
 });
 export type ToolsFormValue = z.infer<typeof toolsSchema>;
 
+// ----------- Prerequisites Schema -----------
 export const prerequisitesSchema = z.object({
   title: z
     .string()
     .min(2, "Title must be at least 2 characters")
     .max(100, "Title cannot exceed 100 characters"),
-  icon: z
-    .string()
-    .nonempty("Please select an icon"),
+  icon: z.string().nonempty("Please select an icon"),
 });
 export type PrerequisitesFormValue = z.infer<typeof prerequisitesSchema>;
+
+// ----------- Add Course Schema -----------
+export const addCourseSchema = z.object({
+  bannerVideoLink: z.string().url("Please enter a valid URL").optional(),
+
+  title: z.string().min(5, "Title must be at least 5 characters").max(100),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  price: z
+    .number()
+    .min(0, "Price cannot be negative")
+    .max(10000, "Price cannot exceed 10000"),
+  totalLiveClasses: z
+    .number()
+    .min(1, "There must be at least 1 live class")
+    .max(1000, "Total live classes cannot exceed 1000"),
+  totalPreRecordedClasses: z
+    .number()
+    .min(0, "Total pre-recorded classes cannot be negative")
+    .max(1000, "Total pre-recorded classes cannot exceed 1000"),
+  startDate: z
+    .date()
+    .optional()
+    .refine((date) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set time to midnight
+      return !date || date >= today;
+    }, "Valid until date must be today or in the future"),
+  totalSeat: z
+    .number()
+    .min(1, "There must be at least 1 seat")
+    .max(10000, "Total seats cannot exceed 10000"),
+  batchNumber: z
+    .number()
+    .min(1, "Batch number must be at least 1")
+    .max(1000, "Batch number cannot exceed 1000"),
+  isLive: z.boolean(),
+});
+export type AddCourseFormValue = z.infer<typeof addCourseSchema>;
