@@ -1,14 +1,11 @@
-import type { InstructorFormValue } from "@/schemas/admin/adminSchema";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import InstructorAddForm from "./InstructorAddForm";
 import PageHeader from "../../shared/PageHeader";
-import CreateButton from "../../shared/CreateButton";
 import InstructorsList from "./InstructorsList";
+import { Button } from "@/components/ui/button";
 
 const Instructors = () => {
-  const [instructors, setInstructors] = useState<InstructorFormValue[]>([]);
-  console.log("All instructors:", instructors);
 
   const [editInstructorId, setEditInstructorId] = useState<number | null>(null);
 
@@ -32,12 +29,15 @@ const Instructors = () => {
           }}
         >
           <DialogTrigger>
-            <CreateButton />
+            <Button
+              size="sm"
+              className="bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
+            >
+              Create
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <InstructorAddForm
-              instructors={instructors}
-              setInstructors={setInstructors}
               editInstructorId={editInstructorId}
               handleEditInstructor={handleEditInstructor}
               setDialogOpen={setDialogOpen}
@@ -46,11 +46,7 @@ const Instructors = () => {
         </Dialog>
       </div>
 
-      <InstructorsList
-        instructors={instructors}
-        setInstructors={setInstructors}
-        handleEditInstructor={handleEditInstructor}
-      />
+      <InstructorsList handleEditInstructor={handleEditInstructor} />
     </div>
   );
 };

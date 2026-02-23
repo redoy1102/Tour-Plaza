@@ -16,22 +16,23 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import { updateTool, addTool } from "@/Redux/slices/toolsSlice";
 
 interface ToolAddFormProps {
-  tools: ToolsFormValue[];
-  setTools: React.Dispatch<React.SetStateAction<ToolsFormValue[]>>;
   editToolId?: number | null;
   handleEditTool: (toolId: number | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ToolAddForm = ({
-  tools,
-  setTools,
   editToolId,
   handleEditTool,
   setDialogOpen,
 }: ToolAddFormProps) => {
+  const dispatch = useAppDispatch();
+  const tools = useAppSelector((state) => state.tools.items);
+
   const defaultValues = useMemo(() => {
     if (editToolId != null && tools[editToolId]) {
       const tool = tools[editToolId];
@@ -88,15 +89,13 @@ const ToolAddForm = ({
 
   const onSubmit = async (data: ToolsFormValue) => {
     if (editToolId !== null) {
-      setTools((prev) =>
-        prev.map((tool, index) => (index === editToolId ? data : tool))
-      );
+      dispatch(updateTool({index: editToolId!, data}));
 
       toast.success("Tool updated successfully!", {
         id: "edit-tool-success",
       });
     } else {
-      setTools((prev) => [...prev, data]);
+      dispatch(addTool(data));
       toast.success("Tool created successfully!", {
         id: "add-tool-success",
       });

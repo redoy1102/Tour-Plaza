@@ -8,25 +8,23 @@ import {
 } from "@/components/ui/table";
 import toast from "react-hot-toast";
 import { prerequisitesTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import type { PrerequisitesFormValue } from "@/schemas/admin/adminSchema";
 import EditButton from "../../shared/EditButton";
 import DeleteButton from "../../shared/DeleteButton";
 import React from "react";
 import { getIcon } from "@/data/icons";
+import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
+import { removePrerequisite } from "@/Redux/slices/prerequisitesSlice";
 
 interface PrerequisiteListProps {
-  prerequisites: PrerequisitesFormValue[];
-  setPrerequisites: React.Dispatch<
-    React.SetStateAction<PrerequisitesFormValue[]>
-  >;
   handleEditPrerequisite: (prerequisiteId: number | null) => void;
 }
 
 const PrerequisiteList = ({
-  prerequisites,
-  setPrerequisites,
   handleEditPrerequisite,
 }: PrerequisiteListProps) => {
+  const prerequisites = useAppSelector((state) => state.prerequisites.items);
+  const dispatch = useAppDispatch();
+
   const handleDelete = (index: number) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
@@ -34,7 +32,7 @@ const PrerequisiteList = ({
         <div className="flex gap-2">
           <button
             onClick={() => {
-              setPrerequisites((prev) => prev.filter((_, i) => i !== index));
+              dispatch(removePrerequisite(index));
               toast.success("Prerequisite deleted successfully!");
               toast.dismiss(t.id);
             }}

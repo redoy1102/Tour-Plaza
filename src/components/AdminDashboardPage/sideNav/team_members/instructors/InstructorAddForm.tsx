@@ -17,22 +17,26 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import ImageUploader from "../../shared/ImageUploader";
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import {
+  addInstructor,
+  updateInstructor,
+} from "@/Redux/slices/instructorSlice";
 
 interface InstructorAddFormProps {
-  instructors: InstructorFormValue[];
-  setInstructors: React.Dispatch<React.SetStateAction<InstructorFormValue[]>>;
   editInstructorId?: number | null;
   handleEditInstructor: (instructorId: number | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const InstructorAddForm = ({
-  instructors,
-  setInstructors,
   editInstructorId,
   handleEditInstructor,
   setDialogOpen,
 }: InstructorAddFormProps) => {
+  const dispatch = useAppDispatch();
+  const instructors = useAppSelector((state) => state.instructors.items);
+
   const defaultValues = useMemo(() => {
     if (editInstructorId != null && instructors[editInstructorId]) {
       const instructor = instructors[editInstructorId];
@@ -84,23 +88,16 @@ const InstructorAddForm = ({
 
   const onSubmit = async (data: InstructorFormValue) => {
     if (editInstructorId !== null) {
-      setInstructors((prev) =>
-        prev.map((instructor, index) =>
-          index === editInstructorId ? data : instructor
-        )
-      );
-
+      dispatch(updateInstructor({ index: editInstructorId!, data }));
       toast.success("Instructor updated successfully!", {
         id: "edit-instructor-success",
       });
     } else {
-      setInstructors((prev) => [...prev, data]);
+      dispatch(addInstructor(data));
       toast.success("Instructor created successfully!", {
         id: "add-instructor-success",
       });
     }
-
-    console.log(data);
 
     handleEditInstructor(null);
     setDialogOpen(false);

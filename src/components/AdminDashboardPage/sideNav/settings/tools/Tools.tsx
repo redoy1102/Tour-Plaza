@@ -1,15 +1,11 @@
-import type { ToolsFormValue } from "@/schemas/admin/adminSchema";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import ToolAddForm from "./ToolAddForm";
 import PageHeader from "../../shared/PageHeader";
-import CreateButton from "../../shared/CreateButton";
+import { Button } from "@/components/ui/button";
 import ToolLists from "./ToolLists";
 
 const Tools = () => {
-  const [tools, setTools] = useState<ToolsFormValue[]>([]);
-  console.log("All tools:", tools);
-
   const [editToolId, setEditToolId] = useState<number | null>(null);
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -32,12 +28,15 @@ const Tools = () => {
           }}
         >
           <DialogTrigger>
-            <CreateButton />
+            <Button
+              size="sm"
+              className="bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
+            >
+              Create
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <ToolAddForm
-              tools={tools}
-              setTools={setTools}
               editToolId={editToolId}
               handleEditTool={handleEditTool}
               setDialogOpen={setDialogOpen}
@@ -47,8 +46,6 @@ const Tools = () => {
       </div>
 
       <ToolLists
-        tools={tools}
-        setTools={setTools}
         handleEditTool={handleEditTool}
       />
     </div>

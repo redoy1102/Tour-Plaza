@@ -9,22 +9,20 @@ import {
 import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { supportStaffTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import type { SupportStuffFormValue } from "@/schemas/admin/adminSchema";
 import ImagePreviewHolder from "../../shared/ImagePreviewHolder";
+import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
+import { removeSupportStaff } from "@/Redux/slices/supportStaffSlice";
 
 interface SupportStaffListsProps {
-  supportStaff: SupportStuffFormValue[];
-  setSupportStaff: React.Dispatch<
-    React.SetStateAction<SupportStuffFormValue[]>
-  >;
   handleEditSupportStaff: (supportStaffId: number | null) => void;
 }
 
 const SupportStaffLists = ({
-  supportStaff,
-  setSupportStaff,
   handleEditSupportStaff,
 }: SupportStaffListsProps) => {
+  const supportStaff = useAppSelector((state) => state.supportStaff.items);
+  const dispatch = useAppDispatch();
+
   const handleDelete = (index: number) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
@@ -32,7 +30,7 @@ const SupportStaffLists = ({
         <div className="flex gap-2">
           <button
             onClick={() => {
-              setSupportStaff((prev) => prev.filter((_, i) => i !== index));
+              dispatch(removeSupportStaff(index));
               toast.success("Support staff member deleted successfully!");
               toast.dismiss(t.id);
             }}
@@ -75,7 +73,7 @@ const SupportStaffLists = ({
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     <ImagePreviewHolder
-                      instructorImage={staff.imageFile}
+                      imageSrc={staff.imageFile}
                       altText={staff.name}
                     />
                   </TableCell>

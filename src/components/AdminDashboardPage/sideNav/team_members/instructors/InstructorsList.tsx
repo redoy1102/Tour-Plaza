@@ -9,20 +9,18 @@ import {
 import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { instructorsTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import type { InstructorFormValue } from "@/schemas/admin/adminSchema";
 import ImagePreviewHolder from "../../shared/ImagePreviewHolder";
+import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
+import { removeInstructor } from "@/Redux/slices/instructorSlice";
 
 interface InstructorsListProps {
-  instructors: InstructorFormValue[];
-  setInstructors: React.Dispatch<React.SetStateAction<InstructorFormValue[]>>;
   handleEditInstructor: (instructorId: number | null) => void;
 }
 
-const InstructorsList = ({
-  instructors,
-  setInstructors,
-  handleEditInstructor,
-}: InstructorsListProps) => {
+const InstructorsList = ({ handleEditInstructor }: InstructorsListProps) => {
+  const instructors = useAppSelector((state) => state.instructors.items);
+  const dispatch = useAppDispatch();
+
   const handleDelete = (index: number) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
@@ -30,7 +28,7 @@ const InstructorsList = ({
         <div className="flex gap-2">
           <button
             onClick={() => {
-              setInstructors((prev) => prev.filter((_, i) => i !== index));
+              dispatch(removeInstructor(index));
               toast.success("Instructor deleted successfully!");
               toast.dismiss(t.id);
             }}

@@ -8,18 +8,19 @@ import {
 } from "@/components/ui/table";
 import toast from "react-hot-toast";
 import { toolsTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import type { ToolsFormValue } from "@/schemas/admin/adminSchema";
 import ImagePreviewHolder from "../../shared/ImagePreviewHolder";
 import EditButton from "../../shared/EditButton";
 import DeleteButton from "../../shared/DeleteButton";
+import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
+import { removeTool } from "@/Redux/slices/toolsSlice";
 
 interface ToolListsProps {
-  tools: ToolsFormValue[];
-  setTools: React.Dispatch<React.SetStateAction<ToolsFormValue[]>>;
   handleEditTool: (toolId: number | null) => void;
 }
 
-const ToolLists = ({ tools, setTools, handleEditTool }: ToolListsProps) => {
+const ToolLists = ({ handleEditTool }: ToolListsProps) => {
+  const dispatch = useAppDispatch();
+  const tools = useAppSelector((state) => state.tools.items);
   const handleDelete = (index: number) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
@@ -27,7 +28,7 @@ const ToolLists = ({ tools, setTools, handleEditTool }: ToolListsProps) => {
         <div className="flex gap-2">
           <button
             onClick={() => {
-              setTools((prev) => prev.filter((_, i) => i !== index));
+              dispatch(removeTool(index));
               toast.success("Tool deleted successfully!");
               toast.dismiss(t.id);
             }}

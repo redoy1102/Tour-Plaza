@@ -1,20 +1,13 @@
-import type { PrerequisitesFormValue } from "@/schemas/admin/adminSchema";
 import { useState } from "react";
-// import PageHeader from "../shared/PageHeader";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import PageHeader from "../../shared/PageHeader";
-import CreateButton from "../../shared/CreateButton";
+import { Button } from "@/components/ui/button";
 import PrerequisiteList from "./PrerequisiteList";
 import PrerequisitesAddForm from "./PrerequisitesAddForm";
 
 const Prerequisites = () => {
-  const [prerequisites, setPrerequisites] = useState<PrerequisitesFormValue[]>(
-    [],
-  );
-  console.log("All prerequisites:", prerequisites);
-
   const [editPrerequisiteId, setEditPrerequisiteId] = useState<number | null>(
-    null,
+    null
   );
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -25,6 +18,7 @@ const Prerequisites = () => {
       setDialogOpen(true);
     }
   };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
       <div className="flex items-center justify-between gap-2">
@@ -37,12 +31,15 @@ const Prerequisites = () => {
           }}
         >
           <DialogTrigger>
-            <CreateButton />
+            <Button
+              size="sm"
+              className="bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
+            >
+              Create
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <PrerequisitesAddForm
-              prerequisites={prerequisites}
-              setPrerequisites={setPrerequisites}
               editPrerequisiteId={editPrerequisiteId}
               handleEditPrerequisite={handleEditPrerequisite}
               setDialogOpen={setDialogOpen}
@@ -51,11 +48,7 @@ const Prerequisites = () => {
         </Dialog>
       </div>
 
-      <PrerequisiteList
-        prerequisites={prerequisites}
-        setPrerequisites={setPrerequisites}
-        handleEditPrerequisite={handleEditPrerequisite}
-      />
+      <PrerequisiteList handleEditPrerequisite={handleEditPrerequisite} />
     </div>
   );
 };

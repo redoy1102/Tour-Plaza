@@ -1,15 +1,11 @@
-import type { SupportStuffFormValue } from "@/schemas/admin/adminSchema";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import SupportStaffAddForm from "./SupportStaffAddForm";
 import PageHeader from "../../shared/PageHeader";
-import CreateButton from "../../shared/CreateButton";
 import SupportStaffLists from "./SupportStaffLists";
+import { Button } from "@/components/ui/button";
 
 const SupportStaff = () => {
-  const [supportStaff, setSupportStaff] = useState<SupportStuffFormValue[]>([]);
-  console.log("All support staff:", supportStaff);
-
   const [editSupportStaffId, setEditSupportStaffId] = useState<number | null>(
     null
   );
@@ -34,12 +30,15 @@ const SupportStaff = () => {
           }}
         >
           <DialogTrigger>
-            <CreateButton />
+            <Button
+              size="sm"
+              className="bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
+            >
+              Create
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <SupportStaffAddForm
-              supportStaff={supportStaff}
-              setSupportStaff={setSupportStaff}
               editSupportStaffId={editSupportStaffId}
               handleEditSupportStaff={handleEditSupportStaff}
               setDialogOpen={setDialogOpen}
@@ -48,11 +47,7 @@ const SupportStaff = () => {
         </Dialog>
       </div>
 
-      <SupportStaffLists
-        supportStaff={supportStaff}
-        setSupportStaff={setSupportStaff}
-        handleEditSupportStaff={handleEditSupportStaff}
-      />
+      <SupportStaffLists handleEditSupportStaff={handleEditSupportStaff} />
     </div>
   );
 };

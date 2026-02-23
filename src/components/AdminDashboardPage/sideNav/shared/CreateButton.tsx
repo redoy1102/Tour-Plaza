@@ -1,17 +1,20 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 interface CreateButtonProps {
-  onRoute?: string;
+  route?: string;
+  btnLabel?: string;
 }
 
-const CreateButton = ({ onRoute }: CreateButtonProps) => {
+const CreateButton = ({ route = "#", btnLabel = "Create" }: CreateButtonProps) => {
   return (
-    <Button
-      onClick={() => onRoute}
-      size="lg"
-      className="bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
-    >
-      Create
-    </Button>
+    <Link to={route}>
+      <Button
+        size="lg"
+        className="bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
+      >
+        {btnLabel}
+      </Button>
+    </Link>
   );
 };
 

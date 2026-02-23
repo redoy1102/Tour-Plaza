@@ -76,8 +76,27 @@ function App() {
           <Route path="/admin-dashboard" element={<AdminDashboardLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="enrollments" element={<Enrollments />} />
-            <Route path="courses/allCourses" element={<Courses courses={courses} setCourses={setCourses} handleEditCourse={handleEditCourse} />} />
-            <Route path="courses/addCourse" element={<AddCourseForm courses={courses} setCourses={setCourses} />} />
+            <Route
+              path="courses/allCourses"
+              element={
+                <Courses
+                  courses={courses}
+                  setCourses={setCourses}
+                  handleEditCourse={handleEditCourse}
+                />
+              }
+            />
+            <Route
+              path="courses/addCourse"
+              element={
+                <AddCourseForm
+                  courses={courses}
+                  setCourses={setCourses}
+                  handleEditCourse={handleEditCourse}
+                  editCourseId={editCourseId}
+                />
+              }
+            />
             <Route path="courses/courseCategory" element={<CourseCategory />} />
 
             <Route path="students" element={<Students />} />

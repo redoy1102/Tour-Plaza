@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import PromoCodesForm from "./PromoCodesForm";
 import PageHeader from "../../shared/PageHeader";
-import CreateButton from "../../shared/CreateButton";
 import PromoCodesList from "./PromoCodesList";
+import { Button } from "@/components/ui/button";
 
 
 const PromoCodes = () => {
@@ -34,7 +34,12 @@ const PromoCodes = () => {
           }}
         >
           <DialogTrigger>
-            <CreateButton />
+            <Button
+              size="sm"
+              className="bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
+            >
+              Create
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <PromoCodesForm

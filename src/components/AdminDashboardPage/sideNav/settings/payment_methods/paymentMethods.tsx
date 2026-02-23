@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import PaymentMethodAddForm from "./PaymentMethodAddForm";
 import PageHeader from "../../shared/PageHeader";
-import CreateButton from "../../shared/CreateButton";
+import { Button } from "@/components/ui/button";
 import PaymentMethodLists from "./PaymentMethodLists";
 
 const PaymentMethods = () => {
@@ -36,7 +36,12 @@ const PaymentMethods = () => {
           }}
         >
           <DialogTrigger>
-            <CreateButton />
+            <Button
+              size="sm"
+              className="bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
+            >
+              Create
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <PaymentMethodAddForm

@@ -23,33 +23,35 @@ import {
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { lucideIcons, getIcon } from "@/data/icons";
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import {
+  addPrerequisite,
+  updatePrerequisite,
+} from "@/Redux/slices/prerequisitesSlice";
 
 interface PrerequisitesFormProps {
-  prerequisites: PrerequisitesFormValue[];
-  setPrerequisites: React.Dispatch<
-    React.SetStateAction<PrerequisitesFormValue[]>
-  >;
   editPrerequisiteId?: number | null;
   handleEditPrerequisite: (prerequisiteId: number | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PrerequisitesAddForm = ({
-  prerequisites,
-  setPrerequisites,
   editPrerequisiteId,
   handleEditPrerequisite,
   setDialogOpen,
 }: PrerequisitesFormProps) => {
+  const dispatch = useAppDispatch();
+  const prerequisites = useAppSelector((state) => state.prerequisites.items);
+
   const form = useForm<PrerequisitesFormValue>({
     resolver: zodResolver(prerequisitesSchema),
     defaultValues: {
       title:
-        editPrerequisiteId !== null
+        editPrerequisiteId !== null && prerequisites[editPrerequisiteId!]
           ? prerequisites[editPrerequisiteId!].title
           : "",
       icon:
-        editPrerequisiteId !== null
+        editPrerequisiteId !== null && prerequisites[editPrerequisiteId!]
           ? prerequisites[editPrerequisiteId!].icon
           : "",
     },
@@ -57,23 +59,16 @@ const PrerequisitesAddForm = ({
 
   const onSubmit = (data: PrerequisitesFormValue) => {
     if (editPrerequisiteId !== null) {
-      setPrerequisites((prev) =>
-        prev.map((prerequisite, index) =>
-          index === editPrerequisiteId ? data : prerequisite,
-        ),
-      );
-
+      dispatch(updatePrerequisite({ index: editPrerequisiteId!, data }));
       toast.success("Prerequisite updated successfully!", {
         id: "edit-prerequisite-success",
       });
     } else {
-      setPrerequisites((prev) => [...prev, data]);
+      dispatch(addPrerequisite(data));
       toast.success("Prerequisite created successfully!", {
         id: "add-prerequisite-success",
       });
     }
-
-    console.log(data);
 
     handleEditPrerequisite(null);
     setDialogOpen(false);

@@ -20,7 +20,7 @@ export type CategoryFormValue = z.infer<typeof categorySchema>;
 // ----------- Promo Code Schema ---------
 export const promoCodeSchema = z.object({
   code: z.string().min(2, "Promo code must be at least 2 characters").max(20),
-  discountPercentage: z
+  discountPercentage: z.coerce
     .number()
     .min(1, "Discount must be at least 1%")
     .max(100, "Discount cannot exceed 100%"),
@@ -175,15 +175,22 @@ export const addCourseSchema = z.object({
 
   title: z.string().min(5, "Title must be at least 5 characters").max(100),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  price: z
+  seo: z.array(z.string()),
+  price: z.coerce
     .number()
     .min(0, "Price cannot be negative")
     .max(10000, "Price cannot exceed 10000"),
-  totalLiveClasses: z
+  discount: z.coerce
+    .number()
+    .min(0, "Discount cannot be negative")
+    .max(10000, "Discount cannot exceed 10000"),
+  liveClassTime: z.string().optional(),
+  supportClassTime: z.string().optional(),
+  totalLiveClasses: z.coerce
     .number()
     .min(1, "There must be at least 1 live class")
     .max(1000, "Total live classes cannot exceed 1000"),
-  totalPreRecordedClasses: z
+  totalPreRecordedClasses: z.coerce
     .number()
     .min(0, "Total pre-recorded classes cannot be negative")
     .max(1000, "Total pre-recorded classes cannot exceed 1000"),
@@ -195,14 +202,19 @@ export const addCourseSchema = z.object({
       today.setHours(0, 0, 0, 0); // Set time to midnight
       return !date || date >= today;
     }, "Valid until date must be today or in the future"),
-  totalSeat: z
+  totalSeat: z.coerce
     .number()
     .min(1, "There must be at least 1 seat")
     .max(10000, "Total seats cannot exceed 10000"),
-  batchNumber: z
+  batchNumber: z.coerce
     .number()
     .min(1, "Batch number must be at least 1")
     .max(1000, "Batch number cannot exceed 1000"),
-  isLive: z.boolean(),
+  courseDuration: z.coerce
+    .number()
+    .min(1, "Course duration must be at least 1")
+    .max(1000, "Course duration cannot exceed 1000"),
+  isFeatured: z.boolean(),
+  isFreeCourse: z.boolean(),
 });
 export type AddCourseFormValue = z.infer<typeof addCourseSchema>;

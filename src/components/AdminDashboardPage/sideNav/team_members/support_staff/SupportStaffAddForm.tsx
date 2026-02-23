@@ -17,24 +17,25 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import ImageUploader from "../../shared/ImageUploader";
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import {
+  addSupportStaff,
+  updateSupportStaff,
+} from "@/Redux/slices/supportStaffSlice";
 
 interface SupportStaffAddFormProps {
-  supportStaff: SupportStuffFormValue[];
-  setSupportStaff: React.Dispatch<
-    React.SetStateAction<SupportStuffFormValue[]>
-  >;
   editSupportStaffId?: number | null;
   handleEditSupportStaff: (supportStaffId: number | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SupportStaffAddForm = ({
-  supportStaff,
-  setSupportStaff,
   editSupportStaffId,
   handleEditSupportStaff,
   setDialogOpen,
 }: SupportStaffAddFormProps) => {
+  const dispatch = useAppDispatch();
+  const supportStaff = useAppSelector((state) => state.supportStaff.items);
   const defaultValues = useMemo(() => {
     if (editSupportStaffId != null && supportStaff[editSupportStaffId]) {
       const staff = supportStaff[editSupportStaffId];
@@ -86,23 +87,16 @@ const SupportStaffAddForm = ({
 
   const onSubmit = async (data: SupportStuffFormValue) => {
     if (editSupportStaffId !== null) {
-      setSupportStaff((prev) =>
-        prev.map((staff, index) =>
-          index === editSupportStaffId ? data : staff
-        )
-      );
-
+      dispatch(updateSupportStaff({ index: editSupportStaffId!, data }));
       toast.success("Support staff member updated successfully!", {
         id: "edit-support-staff-success",
       });
     } else {
-      setSupportStaff((prev) => [...prev, data]);
+      dispatch(addSupportStaff(data));
       toast.success("Support staff member created successfully!", {
         id: "add-support-staff-success",
       });
     }
-
-    console.log(data);
 
     handleEditSupportStaff(null);
     setDialogOpen(false);
