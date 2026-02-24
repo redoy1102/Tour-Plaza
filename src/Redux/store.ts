@@ -5,6 +5,7 @@ import toolsReducer from "./slices/toolsSlice";
 import categoriesReducer from "./slices/categorySlice";
 import instructorsReducer from "./slices/instructorSlice";
 import supportStaffReducer from "./slices/supportStaffSlice";
+import coursesReducer from "./slices/courseSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     categories: categoriesReducer,
     instructors: instructorsReducer,
     supportStaff: supportStaffReducer,
+    courses: coursesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(searchApi.middleware),

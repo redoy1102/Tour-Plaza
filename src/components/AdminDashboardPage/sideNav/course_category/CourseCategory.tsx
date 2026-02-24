@@ -1,4 +1,3 @@
-import type { CategoryFormValue } from "@/schemas/admin/adminSchema";
 import { useState } from "react";
 import PageHeader from "../shared/PageHeader";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -7,14 +6,11 @@ import CourseCategoryList from "./CourseCategoryList";
 import { Button } from "@/components/ui/button";
 
 const CourseCategory = () => {
-  const [categories, setCategories] = useState<CategoryFormValue[]>([]);
-  console.log("All categories:", categories);
-
-  const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
+  const [editCategoryId, setEditCategoryId] = useState<string | null>(null);
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleEditCategory = (categoryId: number | null) => {
+  const handleEditCategory = (categoryId: string | null) => {
     setEditCategoryId(categoryId);
     if (categoryId !== null) {
       setDialogOpen(true);
@@ -42,8 +38,6 @@ const CourseCategory = () => {
           </DialogTrigger>
           <DialogContent>
             <CourseCategoryForm
-              categories={categories}
-              setCategories={setCategories}
               editCategoryId={editCategoryId}
               handleEditCategory={handleEditCategory}
               setDialogOpen={setDialogOpen}
@@ -52,11 +46,7 @@ const CourseCategory = () => {
         </Dialog>
       </div>
 
-      <CourseCategoryList
-        categories={categories}
-        setCategories={setCategories}
-        handleEditCategory={handleEditCategory}
-      />
+      <CourseCategoryList handleEditCategory={handleEditCategory} />
     </div>
   );
 };

@@ -9,26 +9,25 @@ import {
 import toast from "react-hot-toast";
 import { toolsTableHeader } from "@/data/admin/AdminDashboardMenuData";
 import ImagePreviewHolder from "../../shared/ImagePreviewHolder";
-import EditButton from "../../shared/EditButton";
-import DeleteButton from "../../shared/DeleteButton";
+import { SquarePen, Trash } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
 import { removeTool } from "@/Redux/slices/toolsSlice";
 
 interface ToolListsProps {
-  handleEditTool: (toolId: number | null) => void;
+  handleEditTool: (toolId: string | null) => void;
 }
 
 const ToolLists = ({ handleEditTool }: ToolListsProps) => {
   const dispatch = useAppDispatch();
   const tools = useAppSelector((state) => state.tools.items);
-  const handleDelete = (index: number) => {
+  const handleDelete = (id: string) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
         <p>Are you sure you want to delete this tool?</p>
         <div className="flex gap-2">
           <button
             onClick={() => {
-              dispatch(removeTool(index));
+              dispatch(removeTool(id));
               toast.success("Tool deleted successfully!");
               toast.dismiss(t.id);
             }}
@@ -68,7 +67,7 @@ const ToolLists = ({ handleEditTool }: ToolListsProps) => {
             </TableHeader>
             <TableBody>
               {tools.map((tool, index) => (
-                <TableRow key={index}>
+                <TableRow key={tool.id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     <ImagePreviewHolder imageSrc={tool.imageFile} />
@@ -77,8 +76,18 @@ const ToolLists = ({ handleEditTool }: ToolListsProps) => {
                   <TableCell>{tool.description}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <EditButton onEdit={handleEditTool} index={index} />
-                      <DeleteButton onDelete={handleDelete} index={index} />
+                      <button
+                        onClick={() => handleEditTool(tool.id)}
+                        className="cursor-pointer"
+                      >
+                        <SquarePen />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(tool.id)}
+                        className="text-red-500 hover:text-red-700 cursor-pointer"
+                      >
+                        <Trash />
+                      </button>
                     </div>
                   </TableCell>
                 </TableRow>

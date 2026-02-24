@@ -133,7 +133,10 @@ export type PaymentMethodFormValue = z.infer<typeof paymentMethodSchema>;
 // ----------- Tools Schema -----------
 export const toolsSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(50),
-  description: z.string().max(15, "Description cannot exceed 15 characters"),
+  description: z
+    .string()
+    .min(1, "Description is required")
+    .max(500, "Description cannot exceed 500 characters"),
   imageFile: z
     .string()
     .optional()
@@ -171,7 +174,29 @@ export type PrerequisitesFormValue = z.infer<typeof prerequisitesSchema>;
 
 // ----------- Add Course Schema -----------
 export const addCourseSchema = z.object({
-  bannerVideoLink: z.string().url("Please enter a valid URL").optional(),
+  bannerImage: z.string().refine((val) => {
+    // Expect a data URL like: data:<mime>;base64,<data>
+    const parts = val.split(",");
+    if (parts.length !== 2) return false;
+    const base64 = parts[1];
+
+    // Basic sanity check
+    if (!base64 || typeof base64 !== "string") return false;
+
+    // Calculate byte length from base64 string
+    const padding = base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0;
+    const byteLength = (base64.length * 3) / 4 - padding;
+
+    // 5MB limit
+    const MAX_BYTES = 5 * 1024 * 1024;
+    return byteLength <= MAX_BYTES;
+  }, "Image size must not exceed 5MB"),
+  bannerVideoLink: z
+    .string().min(1, "Banner video link is required")
+    .refine(
+      (val) => !val || val === "" || z.string().url().safeParse(val).success,
+      "Please enter a valid URL"
+    ),
 
   title: z.string().min(5, "Title must be at least 5 characters").max(100),
   description: z.string().min(10, "Description must be at least 10 characters"),
@@ -214,6 +239,14 @@ export const addCourseSchema = z.object({
     .number()
     .min(1, "Course duration must be at least 1")
     .max(1000, "Course duration cannot exceed 1000"),
+  // reference to category id (stored when user selects a category)
+  categoryId: z.string().nonempty("Please select a category"),
+  // reference to tool id
+  toolId: z.string().optional(),
+  // reference to prerequisite id
+  prerequisiteId: z.string().optional(),
+  // reference to instructor id
+  instructorId: z.string().optional(),
   isFeatured: z.boolean(),
   isFreeCourse: z.boolean(),
 });

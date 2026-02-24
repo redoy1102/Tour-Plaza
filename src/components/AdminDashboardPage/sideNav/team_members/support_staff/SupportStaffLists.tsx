@@ -14,7 +14,7 @@ import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
 import { removeSupportStaff } from "@/Redux/slices/supportStaffSlice";
 
 interface SupportStaffListsProps {
-  handleEditSupportStaff: (supportStaffId: number | null) => void;
+  handleEditSupportStaff: (supportStaffId: string | null) => void;
 }
 
 const SupportStaffLists = ({
@@ -23,14 +23,14 @@ const SupportStaffLists = ({
   const supportStaff = useAppSelector((state) => state.supportStaff.items);
   const dispatch = useAppDispatch();
 
-  const handleDelete = (index: number) => {
+  const handleDelete = (id: string) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
         <p>Are you sure you want to delete this support staff member?</p>
         <div className="flex gap-2">
           <button
             onClick={() => {
-              dispatch(removeSupportStaff(index));
+              dispatch(removeSupportStaff(id));
               toast.success("Support staff member deleted successfully!");
               toast.dismiss(t.id);
             }}
@@ -68,8 +68,8 @@ const SupportStaffLists = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {supportStaff.map((staff, index: number) => (
-                <TableRow key={index}>
+              {supportStaff.map((staff, index) => (
+                <TableRow key={staff.id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     <ImagePreviewHolder
@@ -84,13 +84,13 @@ const SupportStaffLists = ({
                   </TableCell>
                   <TableCell className="text-right flex items-center justify-end gap-2">
                     <button
-                      onClick={() => handleEditSupportStaff(index)}
+                      onClick={() => handleEditSupportStaff(staff.id)}
                       className="cursor-pointer"
                     >
                       <SquarePen />
                     </button>
                     <button
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(staff.id)}
                       className="text-red-500 hover:text-red-700 cursor-pointer"
                     >
                       <Trash />

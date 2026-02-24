@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { AddCourseFormValue } from "@/schemas/admin/adminSchema";
 import toast from "react-hot-toast";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   Form,
   FormControl,
@@ -28,83 +28,115 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { ChevronDownIcon } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useWatch } from "react-hook-form";
+import ImageUploader from "../shared/ImageUploader";
+import { addCourse, updateCourse } from "@/Redux/slices/courseSlice";
+import { useParams, useNavigate } from "react-router-dom";
 
-interface AddCourseFormProps {
-  courses: AddCourseFormValue[];
-  setCourses: React.Dispatch<React.SetStateAction<AddCourseFormValue[]>>;
-  editCourseId?: number | null;
-  handleEditCourse: (courseId: number | null) => void;
-}
+const AddCourseForm = () => {
+  const { courseId } = useParams<{ courseId: string }>();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const courses = useAppSelector((state) => state.courses.items);
+  const categories = useAppSelector((state) => state.categories.items);
+  const tools = useAppSelector((state) => state.tools.items);
+  const prerequisites = useAppSelector((state) => state.prerequisites.items);
+  const instructors = useAppSelector((state) => state.instructors.items);
 
-const AddCourseForm = ({
-  courses,
-  setCourses,
-  editCourseId,
-  handleEditCourse,
-}: AddCourseFormProps) => {
+  const editCourse = useMemo(
+    () => courses.find((c) => c.id === courseId),
+    [courses, courseId]
+  );
+
+  const defaultValues = useMemo(
+    () => ({
+      bannerImage: editCourse?.bannerImage,
+      bannerVideoLink: editCourse?.bannerVideoLink || "",
+      title: editCourse?.title || "",
+      description: editCourse?.description || "",
+      seo: editCourse?.seo || ["programming", "web development"],
+      liveClassTime: editCourse?.liveClassTime || "",
+      supportClassTime: editCourse?.supportClassTime || "",
+      price: editCourse?.price || 0,
+      discount: editCourse?.discount || 0,
+      totalLiveClasses: editCourse?.totalLiveClasses || 1,
+      totalPreRecordedClasses: editCourse?.totalPreRecordedClasses || 0,
+      startDate: editCourse?.startDate
+        ? new Date(editCourse.startDate)
+        : undefined,
+      totalSeat: editCourse?.totalSeat || 1,
+      batchNumber: editCourse?.batchNumber || 1,
+      courseDuration: editCourse?.courseDuration || 1,
+      categoryId: editCourse?.categoryId || "",
+      toolId: editCourse?.toolId || "",
+      prerequisiteId: editCourse?.prerequisiteId || "",
+      instructorId: editCourse?.instructorId || "",
+      isFeatured: editCourse?.isFeatured ?? true,
+      isFreeCourse: editCourse?.isFreeCourse ?? false,
+    }),
+    [editCourse]
+  );
+
   const form = useForm<AddCourseFormValue>({
     resolver: zodResolver(addCourseSchema),
-    defaultValues: {
-      bannerVideoLink:
-        editCourseId !== null ? courses[editCourseId!].bannerVideoLink : "",
-      title: editCourseId !== null ? courses[editCourseId!].title : "",
-      description:
-        editCourseId !== null ? courses[editCourseId!].description : "",
-      seo:
-        editCourseId !== null
-          ? courses[editCourseId!].seo
-          : ["programming", "web development"],
-      liveClassTime:
-        editCourseId !== null ? courses[editCourseId!].liveClassTime ?? "" : "",
-      price: editCourseId !== null ? courses[editCourseId!].price : 0,
-      discount: editCourseId !== null ? courses[editCourseId!].discount : 0,
-      totalLiveClasses:
-        editCourseId !== null ? courses[editCourseId!].totalLiveClasses : 1,
-      totalPreRecordedClasses:
-        editCourseId !== null
-          ? courses[editCourseId!].totalPreRecordedClasses
-          : 0,
-      startDate:
-        editCourseId !== null && courses[editCourseId!].startDate
-          ? new Date(courses[editCourseId!].startDate!)
-          : undefined,
-      totalSeat: editCourseId !== null ? courses[editCourseId!].totalSeat : 1,
-      batchNumber:
-        editCourseId !== null ? courses[editCourseId!].batchNumber : 1,
-      isFeatured:
-        editCourseId !== null ? courses[editCourseId!].isFeatured : true,
-      isFreeCourse:
-        editCourseId !== null ? courses[editCourseId!].isFreeCourse : false,
-      courseDuration:
-        editCourseId !== null ? courses[editCourseId!].courseDuration : 1,
-    },
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+    defaultValues,
   });
 
-  const onSubmit = (data: AddCourseFormValue) => {
-    if (editCourseId !== null) {
-      setCourses((prev) =>
-        prev.map((course, index) => (index === editCourseId ? data : course))
-      );
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [defaultValues, form]);
 
+  const bannerImagePreview = useWatch({
+    control: form.control,
+    name: "bannerImage",
+  });
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        form.setValue("bannerImage", reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    form.setValue("bannerImage", "");
+  };
+
+  const onSubmit = (data: AddCourseFormValue) => {
+    if (courseId) {
+      dispatch(updateCourse({ id: courseId, data }));
       toast.success("Course updated successfully!", {
         id: "edit-course-success",
       });
     } else {
-      setCourses((prev) => [...prev, data]);
+      dispatch(addCourse(data));
       toast.success("Course created successfully!", {
         id: "add-course-success",
       });
     }
 
     console.log(data);
-
-    handleEditCourse(null);
-    form.reset();
+    navigate("/admin-dashboard/courses/allCourses");
   };
+
   return (
     <div>
       <div className="flex items-center justify-between gap-2 mb-3">
-        <PageHeader>Add Course</PageHeader>
+        <PageHeader>{courseId ? "Edit Course" : "Add Course"}</PageHeader>
         <CreateButton
           route="/admin-dashboard/courses/allCourses"
           btnLabel="Back"
@@ -116,35 +148,63 @@ const AddCourseForm = ({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 p-6"
           >
-            {/* bannerVideoLink */}
-            <FormField
-              control={form.control}
-              name="bannerVideoLink"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Banner Video Link</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter banner video link" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-col lg:flex-row gap-4">
+              {/* Banner video link and title */}
+              <div className="flex-1">
+                {/* bannerVideoLink */}
+                <FormField
+                  control={form.control}
+                  name="bannerVideoLink"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Banner Video Link</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter banner video link"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            {/* title */}
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter course title" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                {/* title */}
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter course title" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              {/* banner image */}
+              <div className="flex-1">
+                <FormField
+                  control={form.control}
+                  name="bannerImage"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Thumbnail*</FormLabel>
+                      <FormControl>
+                        <ImageUploader
+                          handleImageChange={handleImageChange}
+                          imagePreview={bannerImagePreview}
+                          handleRemoveImage={handleRemoveImage}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
             {/* description */}
             <FormField
@@ -367,6 +427,122 @@ const AddCourseForm = ({
                   </FormItem>
                 )}
               />
+
+              {/* category selection */}
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((cat) => (
+                            <SelectItem key={cat.id} value={cat.id}>
+                              {cat.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* tool selection */}
+              <FormField
+                control={form.control}
+                name="toolId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tool</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a tool" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {tools.map((tool) => (
+                            <SelectItem key={tool.id} value={tool.id}>
+                              {tool.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* prerequisite selection */}
+              <FormField
+                control={form.control}
+                name="prerequisiteId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Prerequisite</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a prerequisite" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {prerequisites.map((p) => (
+                            <SelectItem key={p.id} value={p.id}>
+                              {p.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* instructor selection */}
+              <FormField
+                control={form.control}
+                name="instructorId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Instructor</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select an instructor" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {instructors.map((inst) => (
+                            <SelectItem key={inst.id} value={inst.id}>
+                              {inst.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               {/* isFeatured */}
               <FormField
                 control={form.control}
@@ -436,7 +612,7 @@ const AddCourseForm = ({
                 className="gap-2 shadow-lg hover:shadow-xl bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
               >
                 <Send className="w-4 h-4" />
-                {editCourseId !== null ? "Update Course" : "Add Course"}
+                {courseId ? "Update Course" : "Add Course"}
               </Button>
             </div>
           </form>

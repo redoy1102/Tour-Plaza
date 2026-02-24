@@ -1,8 +1,16 @@
 import type { InstructorFormValue } from "@/schemas/admin/adminSchema";
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction, nanoid } from "@reduxjs/toolkit";
+
+export interface InstructorItem {
+  id: string;
+  name: string;
+  role: string;
+  imageFile?: string;
+  runningCompanyName: string;
+}
 
 interface InstructorsState {
-  items: InstructorFormValue[];
+  items: InstructorItem[];
 }
 
 const initialState: InstructorsState = {
@@ -13,23 +21,24 @@ const instructorsSlice = createSlice({
   name: "instructors",
   initialState,
   reducers: {
-    setInstructors(state, action: PayloadAction<InstructorFormValue[]>) {
+    setInstructors(state, action: PayloadAction<InstructorItem[]>) {
       state.items = action.payload;
     },
     addInstructor(state, action: PayloadAction<InstructorFormValue>) {
-      state.items.push(action.payload);
+      state.items.push({ id: nanoid(), ...action.payload });
     },
     updateInstructor(
       state,
-      action: PayloadAction<{ index: number; data: InstructorFormValue }>
+      action: PayloadAction<{ id: string; data: InstructorFormValue }>
     ) {
-      const { index, data } = action.payload;
-      if (state.items[index]) {
-        state.items[index] = data;
+      const { id, data } = action.payload;
+      const idx = state.items.findIndex((i) => i.id === id);
+      if (idx !== -1) {
+        state.items[idx] = { ...state.items[idx], ...data };
       }
     },
-    removeInstructor(state, action: PayloadAction<number>) {
-      state.items.splice(action.payload, 1);
+    removeInstructor(state, action: PayloadAction<string>) {
+      state.items = state.items.filter((i) => i.id !== action.payload);
     },
     clearInstructors(state) {
       state.items = [];
@@ -37,7 +46,12 @@ const instructorsSlice = createSlice({
   },
 });
 
-export const { setInstructors, addInstructor, updateInstructor, removeInstructor, clearInstructors } =
-  instructorsSlice.actions;
+export const {
+  setInstructors,
+  addInstructor,
+  updateInstructor,
+  removeInstructor,
+  clearInstructors,
+} = instructorsSlice.actions;
 
 export default instructorsSlice.reducer;

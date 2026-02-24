@@ -30,8 +30,8 @@ import {
 } from "@/Redux/slices/prerequisitesSlice";
 
 interface PrerequisitesFormProps {
-  editPrerequisiteId?: number | null;
-  handleEditPrerequisite: (prerequisiteId: number | null) => void;
+  editPrerequisiteId?: string | null;
+  handleEditPrerequisite: (prerequisiteId: string | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -45,21 +45,23 @@ const PrerequisitesAddForm = ({
 
   const form = useForm<PrerequisitesFormValue>({
     resolver: zodResolver(prerequisitesSchema),
+    mode: "onSubmit",
+    reValidateMode: "onChange",
     defaultValues: {
       title:
-        editPrerequisiteId !== null && prerequisites[editPrerequisiteId!]
-          ? prerequisites[editPrerequisiteId!].title
+        editPrerequisiteId !== null
+          ? prerequisites.find((p) => p.id === editPrerequisiteId)?.title || ""
           : "",
       icon:
-        editPrerequisiteId !== null && prerequisites[editPrerequisiteId!]
-          ? prerequisites[editPrerequisiteId!].icon
+        editPrerequisiteId !== null
+          ? prerequisites.find((p) => p.id === editPrerequisiteId)?.icon || ""
           : "",
     },
   });
 
   const onSubmit = (data: PrerequisitesFormValue) => {
     if (editPrerequisiteId !== null) {
-      dispatch(updatePrerequisite({ index: editPrerequisiteId!, data }));
+      dispatch(updatePrerequisite({ id: editPrerequisiteId!, data }));
       toast.success("Prerequisite updated successfully!", {
         id: "edit-prerequisite-success",
       });

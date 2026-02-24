@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import ToolLists from "./ToolLists";
 
 const Tools = () => {
-  const [editToolId, setEditToolId] = useState<number | null>(null);
+  const [editToolId, setEditToolId] = useState<string | null>(null);
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleEditTool = (toolId: number | null) => {
+  const handleEditTool = (toolId: string | null) => {
     setEditToolId(toolId);
     if (toolId !== null) {
       setDialogOpen(true);
@@ -45,9 +45,7 @@ const Tools = () => {
         </Dialog>
       </div>
 
-      <ToolLists
-        handleEditTool={handleEditTool}
-      />
+      <ToolLists handleEditTool={handleEditTool} />
     </div>
   );
 };

@@ -24,8 +24,8 @@ import {
 } from "@/Redux/slices/instructorSlice";
 
 interface InstructorAddFormProps {
-  editInstructorId?: number | null;
-  handleEditInstructor: (instructorId: number | null) => void;
+  editInstructorId?: string | null;
+  handleEditInstructor: (instructorId: string | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -38,14 +38,16 @@ const InstructorAddForm = ({
   const instructors = useAppSelector((state) => state.instructors.items);
 
   const defaultValues = useMemo(() => {
-    if (editInstructorId != null && instructors[editInstructorId]) {
-      const instructor = instructors[editInstructorId];
-      return {
-        name: instructor.name,
-        role: instructor.role,
-        imageFile: instructor.imageFile,
-        runningCompanyName: instructor.runningCompanyName,
-      };
+    if (editInstructorId != null) {
+      const instructor = instructors.find((i) => i.id === editInstructorId);
+      if (instructor) {
+        return {
+          name: instructor.name,
+          role: instructor.role,
+          imageFile: instructor.imageFile,
+          runningCompanyName: instructor.runningCompanyName,
+        };
+      }
     }
     return {
       name: "",
@@ -57,6 +59,8 @@ const InstructorAddForm = ({
 
   const form = useForm<InstructorFormValue>({
     resolver: zodResolver(instructorSchema),
+    mode: "onSubmit",
+    reValidateMode: "onChange",
     defaultValues,
   });
 
@@ -88,7 +92,7 @@ const InstructorAddForm = ({
 
   const onSubmit = async (data: InstructorFormValue) => {
     if (editInstructorId !== null) {
-      dispatch(updateInstructor({ index: editInstructorId!, data }));
+      dispatch(updateInstructor({ id: editInstructorId!, data }));
       toast.success("Instructor updated successfully!", {
         id: "edit-instructor-success",
       });

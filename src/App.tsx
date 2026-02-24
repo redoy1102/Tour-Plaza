@@ -34,18 +34,9 @@ import CourseCategory from "@/components/AdminDashboardPage/sideNav/course_categ
 import Tools from "@/components/AdminDashboardPage/sideNav/settings/tools/Tools";
 import Prerequisites from "@/components/AdminDashboardPage/sideNav/settings/prerequisites/Prerequisites";
 import AddCourseForm from "./components/AdminDashboardPage/sideNav/courses/AddCourseForm";
-import { useState } from "react";
-import type { AddCourseFormValue } from "./schemas/admin/adminSchema";
+import CourseView from "./components/AdminDashboardPage/sideNav/courses/CourseView";
 
 function App() {
-  const [courses, setCourses] = useState<AddCourseFormValue[]>([]);
-  console.log("All courses:", courses);
-
-  const [editCourseId, setEditCourseId] = useState<number | null>(null);
-
-  const handleEditCourse = (courseId: number | null) => {
-    setEditCourseId(courseId);
-  };
   return (
     <>
       <Toaster position="top-center" />
@@ -76,27 +67,10 @@ function App() {
           <Route path="/admin-dashboard" element={<AdminDashboardLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="enrollments" element={<Enrollments />} />
-            <Route
-              path="courses/allCourses"
-              element={
-                <Courses
-                  courses={courses}
-                  setCourses={setCourses}
-                  handleEditCourse={handleEditCourse}
-                />
-              }
-            />
-            <Route
-              path="courses/addCourse"
-              element={
-                <AddCourseForm
-                  courses={courses}
-                  setCourses={setCourses}
-                  handleEditCourse={handleEditCourse}
-                  editCourseId={editCourseId}
-                />
-              }
-            />
+            <Route path="courses/allCourses" element={<Courses />} />
+            <Route path="courses/addCourse" element={<AddCourseForm />} />
+            <Route path="courses/edit/:courseId" element={<AddCourseForm />} />
+            <Route path="courses/view/:courseId" element={<CourseView />} />
             <Route path="courses/courseCategory" element={<CourseCategory />} />
 
             <Route path="students" element={<Students />} />

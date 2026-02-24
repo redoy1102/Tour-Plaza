@@ -8,15 +8,14 @@ import {
 } from "@/components/ui/table";
 import toast from "react-hot-toast";
 import { prerequisitesTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import EditButton from "../../shared/EditButton";
-import DeleteButton from "../../shared/DeleteButton";
 import React from "react";
 import { getIcon } from "@/data/icons";
+import { SquarePen, Trash } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
 import { removePrerequisite } from "@/Redux/slices/prerequisitesSlice";
 
 interface PrerequisiteListProps {
-  handleEditPrerequisite: (prerequisiteId: number | null) => void;
+  handleEditPrerequisite: (prerequisiteId: string | null) => void;
 }
 
 const PrerequisiteList = ({
@@ -25,14 +24,14 @@ const PrerequisiteList = ({
   const prerequisites = useAppSelector((state) => state.prerequisites.items);
   const dispatch = useAppDispatch();
 
-  const handleDelete = (index: number) => {
+  const handleDelete = (id: string) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
         <p>Are you sure you want to delete this prerequisite?</p>
         <div className="flex gap-2">
           <button
             onClick={() => {
-              dispatch(removePrerequisite(index));
+              dispatch(removePrerequisite(id));
               toast.success("Prerequisite deleted successfully!");
               toast.dismiss(t.id);
             }}
@@ -71,7 +70,7 @@ const PrerequisiteList = ({
             </TableHeader>
             <TableBody>
               {prerequisites.map((prerequisite, index: number) => (
-                <TableRow key={index}>
+                <TableRow key={prerequisite.id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell className="flex items-center gap-2">
                     {React.createElement(getIcon(prerequisite.icon), {
@@ -84,8 +83,18 @@ const PrerequisiteList = ({
                   </TableCell>
 
                   <TableCell className="text-right flex items-center justify-end gap-2">
-                    <EditButton onEdit={handleEditPrerequisite} index={index} />
-                    <DeleteButton onDelete={handleDelete} index={index} />
+                    <button
+                      onClick={() => handleEditPrerequisite(prerequisite.id)}
+                      className="cursor-pointer"
+                    >
+                      <SquarePen />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(prerequisite.id)}
+                      className="text-red-500 hover:text-red-700 cursor-pointer"
+                    >
+                      <Trash />
+                    </button>
                   </TableCell>
                 </TableRow>
               ))}

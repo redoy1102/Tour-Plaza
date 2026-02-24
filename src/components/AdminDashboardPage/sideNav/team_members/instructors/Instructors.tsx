@@ -6,12 +6,11 @@ import InstructorsList from "./InstructorsList";
 import { Button } from "@/components/ui/button";
 
 const Instructors = () => {
-
-  const [editInstructorId, setEditInstructorId] = useState<number | null>(null);
+  const [editInstructorId, setEditInstructorId] = useState<string | null>(null);
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleEditInstructor = (instructorId: number | null) => {
+  const handleEditInstructor = (instructorId: string | null) => {
     setEditInstructorId(instructorId);
     if (instructorId !== null) {
       setDialogOpen(true);

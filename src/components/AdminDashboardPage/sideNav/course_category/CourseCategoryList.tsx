@@ -9,30 +9,31 @@ import {
 import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { courseCategoryTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import type { CategoryFormValue } from "@/schemas/admin/adminSchema";
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import { removeCategory } from "@/Redux/slices/categorySlice";
 
 interface CourseCategoryListProps {
-  categories: CategoryFormValue[];
-  setCategories: React.Dispatch<
-    React.SetStateAction<CategoryFormValue[]>
-  >;
-  handleEditCategory: (categoryId: number | null) => void;
+  handleEditCategory: (categoryId: string | null) => void;
 }
 
 const CourseCategoryList = ({
-  categories,
-  setCategories,
   handleEditCategory,
 }: CourseCategoryListProps) => {
-  const handleDelete = (index: number) => {
+  const dispatch = useAppDispatch();
+  const categories = useAppSelector((state) => state.categories.items);
+  console.log(categories);
+
+  const handleDelete = (id: string) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
         <p>Are you sure you want to delete this course category?</p>
         <div className="flex gap-2">
           <button
             onClick={() => {
-              setCategories((prev) => prev.filter((_, i) => i !== index));
-              toast.success("Course category deleted successfully!");
+              dispatch(removeCategory(id));
+              toast.success("Course category deleted successfully!", {
+                id: "delete-category-success",
+              });
               toast.dismiss(t.id);
             }}
             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
@@ -70,21 +71,19 @@ const CourseCategoryList = ({
             </TableHeader>
             <TableBody>
               {categories.map((category, index: number) => (
-                <TableRow key={index}>
+                <TableRow key={category.id}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell className="font-medium">
-                    {category.name}
-                  </TableCell>
+                  <TableCell className="font-medium">{category.name}</TableCell>
 
                   <TableCell className="text-right flex items-center justify-end gap-2">
                     <button
-                      onClick={() => handleEditCategory(index)}
+                      onClick={() => handleEditCategory(category.id)}
                       className="cursor-pointer"
                     >
                       <SquarePen />
                     </button>
                     <button
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(category.id)}
                       className="text-red-500 hover:text-red-700 cursor-pointer"
                     >
                       <Trash />

@@ -14,21 +14,21 @@ import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
 import { removeInstructor } from "@/Redux/slices/instructorSlice";
 
 interface InstructorsListProps {
-  handleEditInstructor: (instructorId: number | null) => void;
+  handleEditInstructor: (instructorId: string | null) => void;
 }
 
 const InstructorsList = ({ handleEditInstructor }: InstructorsListProps) => {
   const instructors = useAppSelector((state) => state.instructors.items);
   const dispatch = useAppDispatch();
 
-  const handleDelete = (index: number) => {
+  const handleDelete = (id: string) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
         <p>Are you sure you want to delete this instructor?</p>
         <div className="flex gap-2">
           <button
             onClick={() => {
-              dispatch(removeInstructor(index));
+              dispatch(removeInstructor(id));
               toast.success("Instructor deleted successfully!");
               toast.dismiss(t.id);
             }}
@@ -67,7 +67,7 @@ const InstructorsList = ({ handleEditInstructor }: InstructorsListProps) => {
             </TableHeader>
             <TableBody>
               {instructors.map((instructor, index: number) => (
-                <TableRow key={index}>
+                <TableRow key={instructor.id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     <ImagePreviewHolder
@@ -86,13 +86,13 @@ const InstructorsList = ({ handleEditInstructor }: InstructorsListProps) => {
                   </TableCell>
                   <TableCell className="text-right flex items-center justify-end gap-2">
                     <button
-                      onClick={() => handleEditInstructor(index)}
+                      onClick={() => handleEditInstructor(instructor.id)}
                       className="cursor-pointer"
                     >
                       <SquarePen />
                     </button>
                     <button
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(instructor.id)}
                       className="text-red-500 hover:text-red-700 cursor-pointer"
                     >
                       <Trash />

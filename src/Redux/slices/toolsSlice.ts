@@ -1,8 +1,15 @@
 import type { ToolsFormValue } from "@/schemas/admin/adminSchema";
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction, nanoid } from "@reduxjs/toolkit";
+
+export interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  imageFile?: string;
+}
 
 interface ToolsState {
-  items: ToolsFormValue[];
+  items: Tool[];
 }
 
 const initialState: ToolsState = {
@@ -13,23 +20,24 @@ const toolsSlice = createSlice({
   name: "tools",
   initialState,
   reducers: {
-    setTools(state, action: PayloadAction<ToolsFormValue[]>) {
+    setTools(state, action: PayloadAction<Tool[]>) {
       state.items = action.payload;
     },
     addTool(state, action: PayloadAction<ToolsFormValue>) {
-      state.items.push(action.payload);
+      state.items.push({ id: nanoid(), ...action.payload });
     },
     updateTool(
       state,
-      action: PayloadAction<{ index: number; data: ToolsFormValue }>
+      action: PayloadAction<{ id: string; data: ToolsFormValue }>
     ) {
-      const { index, data } = action.payload;
-      if (state.items[index]) {
-        state.items[index] = data;
+      const { id, data } = action.payload;
+      const idx = state.items.findIndex((t) => t.id === id);
+      if (idx !== -1) {
+        state.items[idx] = { ...state.items[idx], ...data };
       }
     },
-    removeTool(state, action: PayloadAction<number>) {
-      state.items.splice(action.payload, 1);
+    removeTool(state, action: PayloadAction<string>) {
+      state.items = state.items.filter((t) => t.id !== action.payload);
     },
     clearTools(state) {
       state.items = [];

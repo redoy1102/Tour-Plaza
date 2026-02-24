@@ -20,8 +20,8 @@ import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
 import { updateTool, addTool } from "@/Redux/slices/toolsSlice";
 
 interface ToolAddFormProps {
-  editToolId?: number | null;
-  handleEditTool: (toolId: number | null) => void;
+  editToolId?: string | null;
+  handleEditTool: (toolId: string | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -34,13 +34,15 @@ const ToolAddForm = ({
   const tools = useAppSelector((state) => state.tools.items);
 
   const defaultValues = useMemo(() => {
-    if (editToolId != null && tools[editToolId]) {
-      const tool = tools[editToolId];
-      return {
-        name: tool.name,
-        description: tool.description,
-        imageFile: tool.imageFile,
-      };
+    if (editToolId != null) {
+      const tool = tools.find((t) => t.id === editToolId);
+      if (tool) {
+        return {
+          name: tool.name,
+          description: tool.description,
+          imageFile: tool.imageFile,
+        };
+      }
     }
     return {
       name: "",
@@ -52,6 +54,8 @@ const ToolAddForm = ({
   const form = useForm<ToolsFormValue>({
     resolver: zodResolver(toolsSchema),
     defaultValues,
+    mode: "onSubmit",
+    reValidateMode: "onChange",
   });
 
   // Watch the imageFile field for preview
@@ -88,24 +92,29 @@ const ToolAddForm = ({
   };
 
   const onSubmit = async (data: ToolsFormValue) => {
-    if (editToolId !== null) {
-      dispatch(updateTool({index: editToolId!, data}));
+    try {
+      console.log("Form submitted with data:", data);
 
-      toast.success("Tool updated successfully!", {
-        id: "edit-tool-success",
-      });
-    } else {
-      dispatch(addTool(data));
-      toast.success("Tool created successfully!", {
-        id: "add-tool-success",
-      });
+      if (editToolId !== null) {
+        dispatch(updateTool({ id: editToolId!, data }));
+        toast.success("Tool updated successfully!", {
+          id: "edit-tool-success",
+        });
+      } else {
+        console.log("Adding new tool:", data);
+        dispatch(addTool(data));
+        toast.success("Tool created successfully!", {
+          id: "add-tool-success",
+        });
+      }
+
+      handleEditTool(null);
+      setDialogOpen(false);
+      form.reset();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Failed to save tool");
     }
-
-    console.log(data);
-
-    handleEditTool(null);
-    setDialogOpen(false);
-    form.reset();
   };
 
   return (

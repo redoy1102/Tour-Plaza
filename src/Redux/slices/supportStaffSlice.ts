@@ -1,8 +1,16 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, type PayloadAction } from "@reduxjs/toolkit";
 import type { SupportStuffFormValue } from "@/schemas/admin/adminSchema";
 
+export interface supportStaffItem {
+  id: string;
+  name: string;
+  role: string;
+  imageFile?: string;
+  runningCompanyName: string;
+}
+
 interface SupportStaffState {
-  items: SupportStuffFormValue[];
+  items: supportStaffItem[];
 }
 
 const initialState: SupportStaffState = {
@@ -13,23 +21,24 @@ const supportStaffSlice = createSlice({
   name: "supportStaff",
   initialState,
   reducers: {
-    setSupportStaff(state, action: PayloadAction<SupportStuffFormValue[]>) {
+    setSupportStaff(state, action: PayloadAction<supportStaffItem[]>) {
       state.items = action.payload;
     },
     addSupportStaff(state, action: PayloadAction<SupportStuffFormValue>) {
-      state.items.push(action.payload);
+      state.items.push({ id: nanoid(), ...action.payload });
     },
     updateSupportStaff(
       state,
-      action: PayloadAction<{ index: number; data: SupportStuffFormValue }>
+      action: PayloadAction<{ id: string; data: SupportStuffFormValue }>
     ) {
-      const { index, data } = action.payload;
-      if (state.items[index]) {
-        state.items[index] = data;
+      const { id, data } = action.payload;
+      const existIndex = state.items.findIndex((item) => item.id === id);
+      if (existIndex !== -1) {
+        state.items[existIndex] = { ...state.items[existIndex], ...data };
       }
     },
-    removeSupportStaff(state, action: PayloadAction<number>) {
-      state.items.splice(action.payload, 1);
+    removeSupportStaff(state, action: PayloadAction<string>) {
+      state.items = state.items.filter((item) => item.id !== action.payload);
     },
     clearSupportStaff(state) {
       state.items = [];

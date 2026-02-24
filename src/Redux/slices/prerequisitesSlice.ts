@@ -1,9 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { PrerequisitesFormValue } from "@/schemas/admin/adminSchema";
 
+export interface PrerequisiteItem {
+  id: string;
+  icon: string;
+  title: string;
+}
+
 interface PrerequisitesState {
-  items: PrerequisitesFormValue[];
+  items: PrerequisiteItem[];
 }
 
 const initialState: PrerequisitesState = {
@@ -14,23 +20,24 @@ const prerequisitesSlice = createSlice({
   name: "prerequisites",
   initialState,
   reducers: {
-    setPrerequisites(state, action: PayloadAction<PrerequisitesFormValue[]>) {
+    setPrerequisites(state, action: PayloadAction<PrerequisiteItem[]>) {
       state.items = action.payload;
     },
     addPrerequisite(state, action: PayloadAction<PrerequisitesFormValue>) {
-      state.items.push(action.payload);
+      state.items.push({ id: nanoid(), ...action.payload });
     },
     updatePrerequisite(
       state,
-      action: PayloadAction<{ index: number; data: PrerequisitesFormValue }>
+      action: PayloadAction<{ id: string; data: PrerequisitesFormValue }>
     ) {
-      const { index, data } = action.payload;
-      if (state.items[index]) {
-        state.items[index] = data;
+      const { id, data } = action.payload;
+      const idx = state.items.findIndex((p) => p.id === id);
+      if (idx !== -1) {
+        state.items[idx] = { ...state.items[idx], ...data };
       }
     },
-    removePrerequisite(state, action: PayloadAction<number>) {
-      state.items.splice(action.payload, 1);
+    removePrerequisite(state, action: PayloadAction<string>) {
+      state.items = state.items.filter((p) => p.id !== action.payload);
     },
     clearPrerequisites(state) {
       state.items = [];

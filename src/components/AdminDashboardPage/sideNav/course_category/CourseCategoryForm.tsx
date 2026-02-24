@@ -14,42 +14,42 @@ import {
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import { updateCategory, addCategory } from "@/Redux/slices/categorySlice";
 
 interface CourseCategoryFormProps {
-  categories: CategoryFormValue[];
-  setCategories: React.Dispatch<React.SetStateAction<CategoryFormValue[]>>;
-  editCategoryId?: number | null;
-  handleEditCategory: (categoryId: number | null) => void;
+  editCategoryId?: string | null;
+  handleEditCategory: (categoryId: string | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CourseCategoryForm = ({
-  categories,
-  setCategories,
   editCategoryId,
   handleEditCategory,
   setDialogOpen,
 }: CourseCategoryFormProps) => {
+  const dispatch = useAppDispatch();
+  const categories = useAppSelector((state) => state.categories.items);
+
   const form = useForm<CategoryFormValue>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
-      name: editCategoryId !== null ? categories[editCategoryId!].name : "",
+      name:
+        editCategoryId !== null
+          ? categories.find((c) => c.id === editCategoryId!)?.name || ""
+          : "",
     },
   });
 
   const onSubmit = (data: CategoryFormValue) => {
     if (editCategoryId !== null) {
-      setCategories((prev) =>
-        prev.map((category, index) =>
-          index === editCategoryId ? data : category
-        )
-      );
+      dispatch(updateCategory({ id: editCategoryId!, data }));
 
       toast.success("Category updated successfully!", {
         id: "edit-category-success",
       });
     } else {
-      setCategories((prev) => [...prev, data]);
+      dispatch(addCategory(data));
 
       toast.success("Category created successfully!", {
         id: "add-category-success",

@@ -6,13 +6,13 @@ import SupportStaffLists from "./SupportStaffLists";
 import { Button } from "@/components/ui/button";
 
 const SupportStaff = () => {
-  const [editSupportStaffId, setEditSupportStaffId] = useState<number | null>(
+  const [editSupportStaffId, setEditSupportStaffId] = useState<string | null>(
     null
   );
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleEditSupportStaff = (supportStaffId: number | null) => {
+  const handleEditSupportStaff = (supportStaffId: string | null) => {
     setEditSupportStaffId(supportStaffId);
     if (supportStaffId !== null) {
       setDialogOpen(true);

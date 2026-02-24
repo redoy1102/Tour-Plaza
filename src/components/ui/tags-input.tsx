@@ -62,15 +62,15 @@ const TagsInput: React.FC<TagsInputProps> = ({
       {value.map((tag) => (
         <span
           key={tag}
-          className="flex items-center bg-neutral-100 rounded-full px-2 py-0.5 text-sm whitespace-nowrap max-w-37.5 truncate"
+          className="flex items-center bg-neutral-100 rounded-full px-2 py-0.5 text-sm whitespace-nowrap max-w-xs "
         >
-          {tag}
+          <span className="truncate flex-1 min-w-0">{tag}</span>
           {!disabled && (
-            <div className="bg-red-500 hover:bg-red-600 rounded-full p-0.5 ml-1">
-                <X
-              className="h-3 w-3 cursor-pointer "
-              onClick={() => removeTag(tag)}
-            />
+            <div className="bg-red-500 hover:bg-red-600 rounded-full p-0.5 ml-1 flex-shrink-0">
+              <X
+                className="h-3 w-3 cursor-pointer text-white"
+                onClick={() => removeTag(tag)}
+              />
             </div>
           )}
         </span>

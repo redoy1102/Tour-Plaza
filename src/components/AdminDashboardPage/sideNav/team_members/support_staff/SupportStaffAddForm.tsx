@@ -24,8 +24,8 @@ import {
 } from "@/Redux/slices/supportStaffSlice";
 
 interface SupportStaffAddFormProps {
-  editSupportStaffId?: number | null;
-  handleEditSupportStaff: (supportStaffId: number | null) => void;
+  editSupportStaffId?: string | null;
+  handleEditSupportStaff: (supportStaffId: string | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -36,15 +36,18 @@ const SupportStaffAddForm = ({
 }: SupportStaffAddFormProps) => {
   const dispatch = useAppDispatch();
   const supportStaff = useAppSelector((state) => state.supportStaff.items);
+  
   const defaultValues = useMemo(() => {
-    if (editSupportStaffId != null && supportStaff[editSupportStaffId]) {
-      const staff = supportStaff[editSupportStaffId];
-      return {
-        name: staff.name,
-        role: staff.role,
-        imageFile: staff.imageFile,
-        runningCompanyName: staff.runningCompanyName,
-      };
+    if (editSupportStaffId != null) {
+      const staff = supportStaff.find((s) => s.id === editSupportStaffId);
+      if (staff) {
+        return {
+          name: staff.name,
+          role: staff.role,
+          imageFile: staff.imageFile,
+          runningCompanyName: staff.runningCompanyName,
+        };
+      }
     }
     return {
       name: "",
@@ -87,7 +90,7 @@ const SupportStaffAddForm = ({
 
   const onSubmit = async (data: SupportStuffFormValue) => {
     if (editSupportStaffId !== null) {
-      dispatch(updateSupportStaff({ index: editSupportStaffId!, data }));
+      dispatch(updateSupportStaff({ id: editSupportStaffId!, data }));
       toast.success("Support staff member updated successfully!", {
         id: "edit-support-staff-success",
       });

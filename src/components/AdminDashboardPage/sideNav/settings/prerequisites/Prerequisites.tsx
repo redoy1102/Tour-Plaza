@@ -6,13 +6,13 @@ import PrerequisiteList from "./PrerequisiteList";
 import PrerequisitesAddForm from "./PrerequisitesAddForm";
 
 const Prerequisites = () => {
-  const [editPrerequisiteId, setEditPrerequisiteId] = useState<number | null>(
+  const [editPrerequisiteId, setEditPrerequisiteId] = useState<string | null>(
     null
   );
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleEditPrerequisite = (prerequisiteId: number | null) => {
+  const handleEditPrerequisite = (prerequisiteId: string | null) => {
     setEditPrerequisiteId(prerequisiteId);
     if (prerequisiteId !== null) {
       setDialogOpen(true);
