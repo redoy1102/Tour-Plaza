@@ -51,13 +51,25 @@ const CourseView = () => {
 
   const categoryName =
     categories.find((c) => c.id === course.categoryId)?.name || "N/A";
-  const toolName = tools.find((t) => t.id === course.toolId)?.name;
-  const prerequisiteTitle = prerequisites.find(
-    (p) => p.id === course.prerequisiteId
-  )?.title;
-  const instructorName = instructors.find(
-    (i) => i.id === course.instructorId
-  )?.name;
+
+  const toolIds = Array.isArray(course.toolsIds) ? course.toolsIds : [];
+  const toolNames = tools
+    .filter((t) => toolIds.includes(t.id))
+    .map((t) => t.name);
+
+  const prerequisitesIds = Array.isArray(course.prerequisitesIds)
+    ? course.prerequisitesIds
+    : [];
+  const prerequisiteTitles = prerequisites
+    .filter((p) => prerequisitesIds.includes(p.id))
+    .map((p) => p.title);
+
+  const instructorsIds = Array.isArray(course.instructorsIds)
+    ? course.instructorsIds
+    : [];
+  const instructorNames = instructors
+    .filter((i) => instructorsIds.includes(i.id))
+    .map((i) => i.name);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
@@ -111,6 +123,18 @@ const CourseView = () => {
                   <span className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
                     Free
                   </span>
+                )}
+                {toolNames && toolNames.length > 0 && (
+                  <div className="flex flex-wrap gap-2 ml-2">
+                    {toolNames.map((n, i) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full"
+                      >
+                        {n}
+                      </span>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>
@@ -218,27 +242,29 @@ const CourseView = () => {
               Additional Information
             </h3>
 
-            {toolName && (
+            {toolNames && toolNames.length > 0 && (
               <div className="flex items-center justify-between py-2 border-b">
                 <span className="text-gray-600">Tool/Technology</span>
-                <span className="font-medium text-gray-900">{toolName}</span>
-              </div>
-            )}
-
-            {prerequisiteTitle && (
-              <div className="flex items-center justify-between py-2 border-b">
-                <span className="text-gray-600">Prerequisite</span>
                 <span className="font-medium text-gray-900">
-                  {prerequisiteTitle}
+                  {toolNames.join(", ")}
                 </span>
               </div>
             )}
 
-            {instructorName && (
+            {prerequisiteTitles && prerequisiteTitles.length > 0 && (
+              <div className="flex items-center justify-between py-2 border-b">
+                <span className="text-gray-600">Prerequisite</span>
+                <span className="font-medium text-gray-900">
+                  {prerequisiteTitles.join(", ")}
+                </span>
+              </div>
+            )}
+
+            {instructorNames && instructorNames.length > 0 && (
               <div className="flex items-center justify-between py-2 border-b">
                 <span className="text-gray-600">Instructor</span>
                 <span className="font-medium text-gray-900">
-                  {instructorName}
+                  {instructorNames.join(", ")}
                 </span>
               </div>
             )}

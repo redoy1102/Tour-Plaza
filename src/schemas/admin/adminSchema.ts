@@ -174,25 +174,30 @@ export type PrerequisitesFormValue = z.infer<typeof prerequisitesSchema>;
 
 // ----------- Add Course Schema -----------
 export const addCourseSchema = z.object({
-  bannerImage: z.string().refine((val) => {
-    // Expect a data URL like: data:<mime>;base64,<data>
-    const parts = val.split(",");
-    if (parts.length !== 2) return false;
-    const base64 = parts[1];
+  bannerImage: z
+    .string()
+    .nonempty("Banner image is required")
+    .refine((val) => {
+      // Expect a data URL like: data:<mime>;base64,<data>
+      if (!val || typeof val !== "string") return false;
+      const parts = val.split(",");
+      if (parts.length !== 2) return false;
+      const base64 = parts[1];
 
-    // Basic sanity check
-    if (!base64 || typeof base64 !== "string") return false;
+      // Basic sanity check
+      if (!base64 || typeof base64 !== "string") return false;
 
-    // Calculate byte length from base64 string
-    const padding = base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0;
-    const byteLength = (base64.length * 3) / 4 - padding;
+      // Calculate byte length from base64 string
+      const padding = base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0;
+      const byteLength = (base64.length * 3) / 4 - padding;
 
-    // 5MB limit
-    const MAX_BYTES = 5 * 1024 * 1024;
-    return byteLength <= MAX_BYTES;
-  }, "Image size must not exceed 5MB"),
+      // 5MB limit
+      const MAX_BYTES = 5 * 1024 * 1024;
+      return byteLength <= MAX_BYTES;
+    }, "Image size must not exceed 5MB"),
   bannerVideoLink: z
-    .string().min(1, "Banner video link is required")
+    .string()
+    .min(1, "Banner video link is required")
     .refine(
       (val) => !val || val === "" || z.string().url().safeParse(val).success,
       "Please enter a valid URL"
@@ -203,14 +208,30 @@ export const addCourseSchema = z.object({
   seo: z.array(z.string()),
   price: z.coerce
     .number()
-    .min(0, "Price cannot be negative")
+    .min(1, "Price must be at least 1")
     .max(10000, "Price cannot exceed 10000"),
   discount: z.coerce
     .number()
     .min(0, "Discount cannot be negative")
     .max(10000, "Discount cannot exceed 10000"),
-  liveClassTime: z.string().optional(),
-  supportClassTime: z.string().optional(),
+  liveClassTime: z
+    .array(
+      z.object({
+        day: z.string(),
+        startTime: z.string(),
+        endTime: z.string(),
+      })
+    )
+    .optional(),
+  supportClassTime: z
+    .array(
+      z.object({
+        day: z.string(),
+        startTime: z.string(),
+        endTime: z.string(),
+      })
+    )
+    .optional(),
   totalLiveClasses: z.coerce
     .number()
     .min(1, "There must be at least 1 live class")
@@ -241,12 +262,11 @@ export const addCourseSchema = z.object({
     .max(1000, "Course duration cannot exceed 1000"),
   // reference to category id (stored when user selects a category)
   categoryId: z.string().nonempty("Please select a category"),
-  // reference to tool id
-  toolId: z.string().optional(),
-  // reference to prerequisite id
-  prerequisiteId: z.string().optional(),
-  // reference to instructor id
-  instructorId: z.string().optional(),
+  // reference to tool ids (multiple tools can be selected)
+  toolsIds: z.array(z.string()).optional(),
+  prerequisitesIds: z.array(z.string()).optional(),
+  instructorsIds: z.array(z.string()).optional(),
+  supportStaffs: z.array(z.string()).optional(),
   isFeatured: z.boolean(),
   isFreeCourse: z.boolean(),
 });

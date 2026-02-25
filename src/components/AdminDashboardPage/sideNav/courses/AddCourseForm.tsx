@@ -20,7 +20,7 @@ import CreateButton from "../shared/CreateButton";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { TagsInput } from "@/components/ui/tags-input";
-import { TimeRangePicker } from "@/components/ui/time-range-picker";
+import DayTimePicker from "@/components/ui/day-time-picker";
 import {
   Popover,
   PopoverTrigger,
@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/select";
 import { useWatch } from "react-hook-form";
 import ImageUploader from "../shared/ImageUploader";
+import MultiSelect from "@/components/ui/multi-select";
 import { addCourse, updateCourse } from "@/Redux/slices/courseSlice";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -50,6 +51,7 @@ const AddCourseForm = () => {
   const tools = useAppSelector((state) => state.tools.items);
   const prerequisites = useAppSelector((state) => state.prerequisites.items);
   const instructors = useAppSelector((state) => state.instructors.items);
+  const supportStaffs = useAppSelector((state) => state.supportStaff.items);
 
   const editCourse = useMemo(
     () => courses.find((c) => c.id === courseId),
@@ -58,13 +60,13 @@ const AddCourseForm = () => {
 
   const defaultValues = useMemo(
     () => ({
-      bannerImage: editCourse?.bannerImage,
+      bannerImage: editCourse?.bannerImage || "",
       bannerVideoLink: editCourse?.bannerVideoLink || "",
       title: editCourse?.title || "",
       description: editCourse?.description || "",
       seo: editCourse?.seo || ["programming", "web development"],
-      liveClassTime: editCourse?.liveClassTime || "",
-      supportClassTime: editCourse?.supportClassTime || "",
+      liveClassTime: editCourse?.liveClassTime || [],
+      supportClassTime: editCourse?.supportClassTime || [],
       price: editCourse?.price || 0,
       discount: editCourse?.discount || 0,
       totalLiveClasses: editCourse?.totalLiveClasses || 1,
@@ -76,9 +78,9 @@ const AddCourseForm = () => {
       batchNumber: editCourse?.batchNumber || 1,
       courseDuration: editCourse?.courseDuration || 1,
       categoryId: editCourse?.categoryId || "",
-      toolId: editCourse?.toolId || "",
-      prerequisiteId: editCourse?.prerequisiteId || "",
-      instructorId: editCourse?.instructorId || "",
+      toolsId: editCourse?.toolsIds || [],
+      prerequisiteId: editCourse?.prerequisitesIds || [],
+      instructorId: editCourse?.instructorsIds || [],
       isFeatured: editCourse?.isFeatured ?? true,
       isFreeCourse: editCourse?.isFreeCourse ?? false,
     }),
@@ -103,17 +105,29 @@ const AddCourseForm = () => {
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        form.setValue("bannerImage", reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    if (!file) {
+      form.setValue("bannerImage", "", {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      form.setValue("bannerImage", reader.result as string, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleRemoveImage = () => {
-    form.setValue("bannerImage", "");
+    form.setValue("bannerImage", "", {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   };
 
   const onSubmit = (data: AddCourseFormValue) => {
@@ -157,7 +171,7 @@ const AddCourseForm = () => {
                   name="bannerVideoLink"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Banner Video Link</FormLabel>
+                      <FormLabel>Banner Video Link*</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Enter banner video link"
@@ -175,7 +189,7 @@ const AddCourseForm = () => {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Title</FormLabel>
+                      <FormLabel>Title*</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter course title" {...field} />
                       </FormControl>
@@ -212,7 +226,7 @@ const AddCourseForm = () => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Description*</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Enter course description"
@@ -287,8 +301,8 @@ const AddCourseForm = () => {
                   <FormItem>
                     <FormLabel>Class Time</FormLabel>
                     <FormControl>
-                      <TimeRangePicker
-                        value={field.value}
+                      <DayTimePicker
+                        value={Array.isArray(field.value) ? field.value : []}
                         onChange={field.onChange}
                       />
                     </FormControl>
@@ -305,8 +319,8 @@ const AddCourseForm = () => {
                   <FormItem>
                     <FormLabel>Support Class Time</FormLabel>
                     <FormControl>
-                      <TimeRangePicker
-                        value={field.value}
+                      <DayTimePicker
+                        value={Array.isArray(field.value) ? field.value : []}
                         onChange={field.onChange}
                       />
                     </FormControl>
@@ -321,7 +335,7 @@ const AddCourseForm = () => {
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price</FormLabel>
+                    <FormLabel>Main Price*</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -340,7 +354,7 @@ const AddCourseForm = () => {
                 name="discount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Discount</FormLabel>
+                    <FormLabel>Discount Price</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -415,7 +429,7 @@ const AddCourseForm = () => {
                 name="courseDuration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Course Duration</FormLabel>
+                    <FormLabel>Course Duration (Month)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -457,29 +471,20 @@ const AddCourseForm = () => {
                 )}
               />
 
-              {/* tool selection */}
+              {/* tool selection (multi-select) */}
               <FormField
                 control={form.control}
-                name="toolId"
+                name="toolsIds"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Tool</FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a tool" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {tools.map((tool) => (
-                            <SelectItem key={tool.id} value={tool.id}>
-                              {tool.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <MultiSelect
+                        options={tools.map((t) => ({ id: t.id, name: t.name }))}
+                        value={Array.isArray(field.value) ? field.value : []}
+                        onChange={(vals) => field.onChange(vals)}
+                        placeholder="Select tools"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -489,26 +494,20 @@ const AddCourseForm = () => {
               {/* prerequisite selection */}
               <FormField
                 control={form.control}
-                name="prerequisiteId"
+                name="prerequisitesIds"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Prerequisite</FormLabel>
+                    <FormLabel>Prerequisites</FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a prerequisite" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {prerequisites.map((p) => (
-                            <SelectItem key={p.id} value={p.id}>
-                              {p.title}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <MultiSelect
+                        options={prerequisites.map((p) => ({
+                          id: p.id,
+                          name: p.title,
+                        }))}
+                        value={Array.isArray(field.value) ? field.value : []}
+                        onChange={(vals) => field.onChange(vals)}
+                        placeholder="Select prerequisites"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -518,26 +517,43 @@ const AddCourseForm = () => {
               {/* instructor selection */}
               <FormField
                 control={form.control}
-                name="instructorId"
+                name="instructorsIds"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Instructor</FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select an instructor" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {instructors.map((inst) => (
-                            <SelectItem key={inst.id} value={inst.id}>
-                              {inst.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <MultiSelect
+                        options={instructors.map((i) => ({
+                          id: i.id,
+                          name: i.name,
+                        }))}
+                        value={Array.isArray(field.value) ? field.value : []}
+                        onChange={(vals) => field.onChange(vals)}
+                        placeholder="Select instructors "
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* support team member selection */}
+              <FormField
+                control={form.control}
+                name="supportStaffs"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Support Team Member</FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        options={supportStaffs.map((i) => ({
+                          id: i.id,
+                          name: i.name,
+                        }))}
+                        value={Array.isArray(field.value) ? field.value : []}
+                        onChange={(vals) => field.onChange(vals)}
+                        placeholder="Select support team members"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 
@@ -12,9 +13,31 @@ const ImageUploader = ({
   imagePreview,
   handleRemoveImage,
 }: ImageUploaderProps) => {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  // Clear the native file input when preview is removed so same file can be re-selected
+  useEffect(() => {
+    if (!imagePreview && fileInputRef.current) {
+      try {
+        fileInputRef.current.value = "";
+      } catch (e) {
+        console.error("Error clearing file input:", e);
+      }
+    }
+  }, [imagePreview]);
+
+  const handleRemove = () => {
+    handleRemoveImage();
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   return (
     <div className="space-y-2">
-      <Input type="file" accept="image/*" onChange={handleImageChange} />
+      <Input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+      />
       {imagePreview && (
         <div className="relative inline-block">
           <img
@@ -24,7 +47,7 @@ const ImageUploader = ({
           />
           <button
             type="button"
-            onClick={handleRemoveImage}
+            onClick={handleRemove}
             className="absolute -top-1 -right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-lg transition-colors"
             aria-label="Remove image"
           >
