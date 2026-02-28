@@ -13,7 +13,14 @@ interface ToolsState {
 }
 
 const initialState: ToolsState = {
-  items: [],
+  items: [
+    {
+      id: nanoid(),
+      name: "VS Code",
+      description: "A popular code editor developed by Microsoft.",
+      imageFile: undefined,
+    }
+  ],
 };
 
 const toolsSlice = createSlice({

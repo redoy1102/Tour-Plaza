@@ -22,7 +22,7 @@ const MyCourses = () => {
             
             duration: "49:13 minute",
             completed: true,
-          },
+          },    
           // Class - 2
           {
             classNo: 2,

@@ -223,15 +223,7 @@ export const addCourseSchema = z.object({
       })
     )
     .optional(),
-  supportClassTime: z
-    .array(
-      z.object({
-        day: z.string(),
-        startTime: z.string(),
-        endTime: z.string(),
-      })
-    )
-    .optional(),
+
   totalLiveClasses: z.coerce
     .number()
     .min(1, "There must be at least 1 live class")
@@ -267,7 +259,37 @@ export const addCourseSchema = z.object({
   prerequisitesIds: z.array(z.string()).optional(),
   instructorsIds: z.array(z.string()).optional(),
   supportStaffs: z.array(z.string()).optional(),
-  isFeatured: z.boolean(),
-  isFreeCourse: z.boolean(),
+  isFeatured: z.boolean().optional(),
+  isLiveCourse: z.boolean().optional(),
+  isPreRecordedCourse: z.boolean().optional(),
+
+  supportClassTime: z
+    .array(
+      z.object({
+        day: z.string(),
+        startTime: z.string(),
+        endTime: z.string(),
+      })
+    )
+    .optional(),
+
+  // Course outline (managed on a separate page; optional here)
+  courseOutline: z
+    .array(
+      z.array(
+        z.object({
+          title: z.string().nonempty("Title is required"),
+          description: z.string().nonempty("Description is required"),
+          ytVideoUrl: z
+            .string()
+            .refine(
+              (val) =>
+                !val || val === "" || z.string().url().safeParse(val).success,
+              "Please enter a valid URL"
+            ),
+        })
+      )
+    )
+    .optional(),
 });
 export type AddCourseFormValue = z.infer<typeof addCourseSchema>;

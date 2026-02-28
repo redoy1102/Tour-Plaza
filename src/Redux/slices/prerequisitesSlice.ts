@@ -13,7 +13,13 @@ interface PrerequisitesState {
 }
 
 const initialState: PrerequisitesState = {
-  items: [],
+  items: [
+    {
+      id: nanoid(),
+      icon: "",
+      title: "GitHub",
+    },
+  ],
 };
 
 const prerequisitesSlice = createSlice({

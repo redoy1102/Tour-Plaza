@@ -35,6 +35,7 @@ import Tools from "@/components/AdminDashboardPage/sideNav/settings/tools/Tools"
 import Prerequisites from "@/components/AdminDashboardPage/sideNav/settings/prerequisites/Prerequisites";
 import AddCourseForm from "./components/AdminDashboardPage/sideNav/courses/AddCourseForm";
 import CourseView from "./components/AdminDashboardPage/sideNav/courses/CourseView";
+import CourseOutlinePage from "./components/AdminDashboardPage/sideNav/courses/CourseOutlinePage";
 
 function App() {
   return (
@@ -71,6 +72,11 @@ function App() {
             <Route path="courses/addCourse" element={<AddCourseForm />} />
             <Route path="courses/edit/:courseId" element={<AddCourseForm />} />
             <Route path="courses/view/:courseId" element={<CourseView />} />
+            <Route path="courses/outline" element={<CourseOutlinePage />} />
+            <Route
+              path="courses/outline/:courseId"
+              element={<CourseOutlinePage />}
+            />
             <Route path="courses/courseCategory" element={<CourseCategory />} />
 
             <Route path="students" element={<Students />} />

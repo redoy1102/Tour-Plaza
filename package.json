@@ -26,6 +26,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "jodit": "^4.9.14",
+    "jodit-react": "^5.3.21",
     "jspdf": "^4.1.0",
     "jspdf-autotable": "^5.0.7",
     "lucide": "^0.563.0",

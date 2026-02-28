@@ -12,7 +12,10 @@ interface CategoriesState {
 }
 
 const initialState: CategoriesState = {
-  items: [],
+  items: [{
+    id: nanoid(),
+    name: "Fuad",
+  }],
 };
 
 const categoriesSlice = createSlice({

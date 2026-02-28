@@ -14,7 +14,15 @@ interface SupportStaffState {
 }
 
 const initialState: SupportStaffState = {
-  items: [],
+  items: [
+    {
+      id: nanoid(),
+      name: "John Doe",
+      role: "Support Engineer",
+      runningCompanyName: "eManagerIT",
+      imageFile: undefined,
+    }
+  ],
 };
 
 const supportStaffSlice = createSlice({

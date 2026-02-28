@@ -93,7 +93,7 @@ const DayTimePicker = ({ value, onChange }: DayTimePickerProps) => {
                   onValueChange={(val) => handleUpdate(index, "day", val)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select day" />
+                    <SelectValue placeholder="Day" />
                   </SelectTrigger>
                   <SelectContent>
                     {DAYS.map((d) => (
@@ -110,7 +110,7 @@ const DayTimePicker = ({ value, onChange }: DayTimePickerProps) => {
                   onValueChange={(val) => handleUpdate(index, "startTime", val)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Start time" />
+                    <SelectValue placeholder="Start Time" />
                   </SelectTrigger>
                   <SelectContent>
                     {TIME_OPTIONS.map((time) => (
@@ -127,7 +127,7 @@ const DayTimePicker = ({ value, onChange }: DayTimePickerProps) => {
                   onValueChange={(val) => handleUpdate(index, "endTime", val)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="End time" />
+                    <SelectValue placeholder="End Time" />
                   </SelectTrigger>
                   <SelectContent>
                     {TIME_OPTIONS.map((time) => (
@@ -158,7 +158,7 @@ const DayTimePicker = ({ value, onChange }: DayTimePickerProps) => {
         variant="outline"
         size="sm"
         onClick={handleAdd}
-        className="w-full gap-2"
+        className="w-full gap-2 mt-1"
       >
         <Plus className="w-4 h-4" />
         Add Schedule

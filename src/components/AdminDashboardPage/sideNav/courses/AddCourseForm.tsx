@@ -17,7 +17,8 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageHeader from "../shared/PageHeader";
 import CreateButton from "../shared/CreateButton";
-import { Textarea } from "@/components/ui/textarea";
+// Textarea import removed (unused)
+import RichTextEditor from "@/components/ui/RichTextEditor";
 import { Calendar } from "@/components/ui/calendar";
 import { TagsInput } from "@/components/ui/tags-input";
 import DayTimePicker from "@/components/ui/day-time-picker";
@@ -39,8 +40,14 @@ import {
 import { useWatch } from "react-hook-form";
 import ImageUploader from "../shared/ImageUploader";
 import MultiSelect from "@/components/ui/multi-select";
-import { addCourse, updateCourse } from "@/Redux/slices/courseSlice";
+import {
+  addCourse,
+  updateCourse,
+  clearDraftOutline,
+  type WeekClasses,
+} from "@/Redux/slices/courseSlice";
 import { useParams, useNavigate } from "react-router-dom";
+import { BookOpen } from "lucide-react";
 
 const AddCourseForm = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -52,6 +59,7 @@ const AddCourseForm = () => {
   const prerequisites = useAppSelector((state) => state.prerequisites.items);
   const instructors = useAppSelector((state) => state.instructors.items);
   const supportStaffs = useAppSelector((state) => state.supportStaff.items);
+  const draftOutline = useAppSelector((state) => state.courses.draftOutline);
 
   const editCourse = useMemo(
     () => courses.find((c) => c.id === courseId),
@@ -82,7 +90,8 @@ const AddCourseForm = () => {
       prerequisiteId: editCourse?.prerequisitesIds || [],
       instructorId: editCourse?.instructorsIds || [],
       isFeatured: editCourse?.isFeatured ?? true,
-      isFreeCourse: editCourse?.isFreeCourse ?? false,
+      isLiveCourse: editCourse?.isLiveCourse ?? false,
+      isPreRecordedCourse: editCourse?.isPreRecordedCourse ?? false,
     }),
     [editCourse]
   );
@@ -131,13 +140,19 @@ const AddCourseForm = () => {
   };
 
   const onSubmit = (data: AddCourseFormValue) => {
+    const outline: WeekClasses[] =
+      (editCourse?.courseOutline as WeekClasses[] | undefined) ?? draftOutline;
+
+    const fullData: AddCourseFormValue = { ...data, courseOutline: outline };
+
     if (courseId) {
-      dispatch(updateCourse({ id: courseId, data }));
+      dispatch(updateCourse({ id: courseId, data: fullData }));
       toast.success("Course updated successfully!", {
         id: "edit-course-success",
       });
     } else {
-      dispatch(addCourse(data));
+      dispatch(addCourse(fullData));
+      dispatch(clearDraftOutline()); // clean up temp outline after course is saved
       toast.success("Course created successfully!", {
         id: "add-course-success",
       });
@@ -162,148 +177,117 @@ const AddCourseForm = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 p-6"
           >
-            <div className="flex flex-col lg:flex-row gap-4">
-              {/* Banner video link and title */}
-              <div className="flex-1">
-                {/* bannerVideoLink */}
-                <FormField
-                  control={form.control}
-                  name="bannerVideoLink"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Banner Video Link*</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter banner video link"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* isFeatured */}
+              <FormField
+                control={form.control}
+                name="isFeatured"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <Input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
+                    </FormControl>
+                    <FormLabel className="text-sm font-normal">
+                      Featured course
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
 
-                {/* title */}
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Title*</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter course title" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              {/* banner image */}
-              <div className="flex-1">
-                <FormField
-                  control={form.control}
-                  name="bannerImage"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>Thumbnail*</FormLabel>
-                      <FormControl>
-                        <ImageUploader
-                          handleImageChange={handleImageChange}
-                          imagePreview={bannerImagePreview}
-                          handleRemoveImage={handleRemoveImage}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              {/* isLiveCourse */}
+              <FormField
+                control={form.control}
+                name="isLiveCourse"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <Input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
+                    </FormControl>
+                    <FormLabel className="text-sm font-normal">
+                      Live course
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+
+              {/* isPreRecordedCourse */}
+              <FormField
+                control={form.control}
+                name="isPreRecordedCourse"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <Input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
+                    </FormControl>
+                    <FormLabel className="text-sm font-normal">
+                      Pre-recorded course
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
             </div>
 
-            {/* description */}
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description*</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Enter course description"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-4 items-center gap-6">
-              {/* batchNumber */}
+            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* category selection */}
               <FormField
                 control={form.control}
-                name="batchNumber"
+                name="categoryId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Batch Number</FormLabel>
+                    <FormLabel>Category</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter batch number" {...field} />
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((cat) => (
+                            <SelectItem key={cat.id} value={cat.id}>
+                              {cat.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              {/*Batch  start date */}
+              {/* instructor selection */}
               <FormField
                 control={form.control}
-                name="startDate"
+                name="instructorsIds"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Batch Start Date</FormLabel>
+                    <FormLabel>Instructor</FormLabel>
                     <FormControl>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            data-empty={!field.value}
-                            className="data-[empty=true]:text-muted-foreground w-53 justify-between text-left font-normal"
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <ChevronDownIcon />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-53 p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                            className="w-full"
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* class time range */}
-              <FormField
-                control={form.control}
-                name="liveClassTime"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Class Time</FormLabel>
-                    <FormControl>
-                      <DayTimePicker
+                      <MultiSelect
+                        options={instructors.map((i) => ({
+                          id: i.id,
+                          name: i.name,
+                        }))}
                         value={Array.isArray(field.value) ? field.value : []}
-                        onChange={field.onChange}
+                        onChange={(vals) => field.onChange(vals)}
+                        placeholder="Select instructors "
                       />
                     </FormControl>
                     <FormMessage />
@@ -311,18 +295,60 @@ const AddCourseForm = () => {
                 )}
               />
 
-              {/* support class time range */}
+              {/* tools selection (multi-select) */}
               <FormField
                 control={form.control}
-                name="supportClassTime"
+                name="toolsIds"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Support Class Time</FormLabel>
+                    <FormLabel>Tool</FormLabel>
                     <FormControl>
-                      <DayTimePicker
+                      <MultiSelect
+                        options={tools.map((t) => ({ id: t.id, name: t.name }))}
                         value={Array.isArray(field.value) ? field.value : []}
-                        onChange={field.onChange}
+                        onChange={(vals) => field.onChange(vals)}
+                        placeholder="Select tools"
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* prerequisite selection */}
+              <FormField
+                control={form.control}
+                name="prerequisitesIds"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Prerequisites</FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        options={prerequisites.map((p) => ({
+                          id: p.id,
+                          name: p.title,
+                        }))}
+                        value={Array.isArray(field.value) ? field.value : []}
+                        onChange={(vals) => field.onChange(vals)}
+                        placeholder="Select prerequisites"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* title */}
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title*</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter course title" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -367,6 +393,200 @@ const AddCourseForm = () => {
                 )}
               />
 
+              {/* thumbnail */}
+              <div className="flex-1">
+                <FormField
+                  control={form.control}
+                  name="bannerImage"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Thumbnail*</FormLabel>
+                      <FormControl>
+                        <ImageUploader
+                          handleImageChange={handleImageChange}
+                          imagePreview={bannerImagePreview}
+                          handleRemoveImage={handleRemoveImage}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="border border-gray-100 rounded-2xl p-6">
+              {/* bannerVideoLink */}
+              <FormField
+                control={form.control}
+                name="bannerVideoLink"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Banner Video Link*</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter banner video link" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* description */}
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description*</FormLabel>
+                    <FormControl>
+                      <RichTextEditor
+                        value={field.value || ""}
+                        onChange={(content) => field.onChange(content)}
+                        placeholder="Enter course description"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* courseDuration */}
+              <FormField
+                control={form.control}
+                name="courseDuration"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Course Duration (Month)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Enter course duration"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* support class time range */}
+              <FormField
+                control={form.control}
+                name="supportClassTime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Support Class Time</FormLabel>
+                    <FormControl>
+                      <DayTimePicker
+                        value={Array.isArray(field.value) ? field.value : []}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* support team member selection */}
+              <FormField
+                control={form.control}
+                name="supportStaffs"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Support Team Member</FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        options={supportStaffs.map((i) => ({
+                          id: i.id,
+                          name: i.name,
+                        }))}
+                        value={Array.isArray(field.value) ? field.value : []}
+                        onChange={(vals) => field.onChange(vals)}
+                        placeholder="Select support team members"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* batchNumber */}
+              <FormField
+                control={form.control}
+                name="batchNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Batch Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter batch number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/*Batch  start date */}
+              <FormField
+                control={form.control}
+                name="startDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Batch Start Date</FormLabel>
+                    <br />
+                    <FormControl>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            data-empty={!field.value}
+                            className="data-[empty=true]:text-muted-foreground w-full justify-between text-left font-normal"
+                          >
+                            {field.value ? (
+                              format(field.value, "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <ChevronDownIcon />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-53 p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            initialFocus
+                            className="w-full"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* class time range */}
+              <FormField
+                control={form.control}
+                name="liveClassTime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Class Time</FormLabel>
+                    <FormControl>
+                      <DayTimePicker
+                        value={Array.isArray(field.value) ? field.value : []}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               {/* totalLiveClasses */}
               <FormField
                 control={form.control}
@@ -404,6 +624,7 @@ const AddCourseForm = () => {
                   </FormItem>
                 )}
               />
+
               {/* totalPreRecordedClasses */}
               <FormField
                 control={form.control}
@@ -419,184 +640,6 @@ const AddCourseForm = () => {
                       />
                     </FormControl>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* courseDuration */}
-              <FormField
-                control={form.control}
-                name="courseDuration"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Course Duration (Month)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Enter course duration"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* category selection */}
-              <FormField
-                control={form.control}
-                name="categoryId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {categories.map((cat) => (
-                            <SelectItem key={cat.id} value={cat.id}>
-                              {cat.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* tool selection (multi-select) */}
-              <FormField
-                control={form.control}
-                name="toolsIds"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tool</FormLabel>
-                    <FormControl>
-                      <MultiSelect
-                        options={tools.map((t) => ({ id: t.id, name: t.name }))}
-                        value={Array.isArray(field.value) ? field.value : []}
-                        onChange={(vals) => field.onChange(vals)}
-                        placeholder="Select tools"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* prerequisite selection */}
-              <FormField
-                control={form.control}
-                name="prerequisitesIds"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Prerequisites</FormLabel>
-                    <FormControl>
-                      <MultiSelect
-                        options={prerequisites.map((p) => ({
-                          id: p.id,
-                          name: p.title,
-                        }))}
-                        value={Array.isArray(field.value) ? field.value : []}
-                        onChange={(vals) => field.onChange(vals)}
-                        placeholder="Select prerequisites"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* instructor selection */}
-              <FormField
-                control={form.control}
-                name="instructorsIds"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Instructor</FormLabel>
-                    <FormControl>
-                      <MultiSelect
-                        options={instructors.map((i) => ({
-                          id: i.id,
-                          name: i.name,
-                        }))}
-                        value={Array.isArray(field.value) ? field.value : []}
-                        onChange={(vals) => field.onChange(vals)}
-                        placeholder="Select instructors "
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* support team member selection */}
-              <FormField
-                control={form.control}
-                name="supportStaffs"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Support Team Member</FormLabel>
-                    <FormControl>
-                      <MultiSelect
-                        options={supportStaffs.map((i) => ({
-                          id: i.id,
-                          name: i.name,
-                        }))}
-                        value={Array.isArray(field.value) ? field.value : []}
-                        onChange={(vals) => field.onChange(vals)}
-                        placeholder="Select support team members"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* isFeatured */}
-              <FormField
-                control={form.control}
-                name="isFeatured"
-                render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <Input
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
-                        checked={field.value}
-                        onChange={(e) => field.onChange(e.target.checked)}
-                      />
-                    </FormControl>
-                    <FormLabel className="text-sm font-normal">
-                      Featured course
-                    </FormLabel>
-                  </FormItem>
-                )}
-              />
-
-              {/* isFreeCourse */}
-              <FormField
-                control={form.control}
-                name="isFreeCourse"
-                render={({ field }) => (
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <Input
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
-                        checked={field.value}
-                        onChange={(e) => field.onChange(e.target.checked)}
-                      />
-                    </FormControl>
-                    <FormLabel className="text-sm font-normal">
-                      Free course
-                    </FormLabel>
                   </FormItem>
                 )}
               />
@@ -620,6 +663,44 @@ const AddCourseForm = () => {
                 </FormItem>
               )}
             />
+
+            {/* Course Outline */}
+            <div className="flex items-center justify-between border border-gray-100 rounded-2xl p-5">
+              <div>
+                <p className="font-medium text-gray-800">Course Outline</p>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  {(() => {
+                    const count =
+                      (editCourse?.courseOutline as WeekClasses[] | undefined)
+                        ?.length ?? draftOutline.length;
+                    return count > 0
+                      ? `${count} week${count > 1 ? "s" : ""} added`
+                      : "No weeks added yet";
+                  })()}
+                </p>
+              </div>
+              <Button
+                type="button"
+                onClick={() =>
+                  navigate(
+                    courseId
+                      ? `/admin-dashboard/courses/outline/${courseId}`
+                      : "/admin-dashboard/courses/outline"
+                  )
+                }
+                className="bg-red-500 hover:bg-red-600 rounded-xl gap-2 cursor-pointer"
+              >
+                <BookOpen className="w-4 h-4" />
+                {(() => {
+                  const count =
+                    (editCourse?.courseOutline as WeekClasses[] | undefined)
+                      ?.length ?? draftOutline.length;
+                  return count > 0
+                    ? "Edit Course Outline"
+                    : "Add Course Outline";
+                })()}
+              </Button>
+            </div>
 
             {/* Submit button */}
             <div className="flex items-center gap-2 mt-12">

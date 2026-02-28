@@ -14,7 +14,15 @@ interface InstructorsState {
 }
 
 const initialState: InstructorsState = {
-  items: [],
+  items: [
+    {
+      id: nanoid(),
+      name: "Fuad",
+      role: "Junior Software Engineer",
+      runningCompanyName: "eManagerIT",
+      imageFile: undefined,
+    },
+  ],
 };
 
 const instructorsSlice = createSlice({
