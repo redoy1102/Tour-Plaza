@@ -690,44 +690,6 @@ const AddCourseForm = () => {
               )}
             />
 
-            {/* Course Outline */}
-            <div className="flex items-center justify-between border border-gray-100 rounded-2xl p-5">
-              {/* <div>
-                <p className="font-medium text-gray-800">Course Outline</p>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  {(() => {
-                    const count =
-                      (editCourse?.courseOutline as WeekClasses[] | undefined)
-                        ?.length ?? draftOutline.length;
-                    return count > 0
-                      ? `${count} week${count > 1 ? "s" : ""} added`
-                      : "No weeks added yet";
-                  })()}
-                </p>
-              </div> */}
-              {/* <Button
-                type="button"
-                onClick={() =>
-                  navigate(
-                    courseId
-                      ? `/admin-dashboard/courses/outline/${courseId}`
-                      : "/admin-dashboard/courses/outline"
-                  )
-                }
-                className="bg-red-500 hover:bg-red-600 rounded-xl gap-2 cursor-pointer"
-              >
-                <BookOpen className="w-4 h-4" />
-                {(() => {
-                  const count =
-                    (editCourse?.courseOutline as WeekClasses[] | undefined)
-                      ?.length ?? draftOutline.length;
-                  return count > 0
-                    ? "Edit Course Outline"
-                    : "Add Course Outline";
-                })()}
-              </Button> */}
-              
-            </div>
             <CourseOutlinePage />
 
             {/* Submit button */}

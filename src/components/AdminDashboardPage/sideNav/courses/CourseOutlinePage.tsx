@@ -101,41 +101,22 @@ const CourseOutlinePage = () => {
     );
   };
 
-  const handleBack = () => {
-    navigate(
-      courseId
-        ? `/admin-dashboard/courses/edit/${courseId}`
-        : "/admin-dashboard/courses/addCourse"
-    );
-  };
-
   // ── render ────────────────────────────────────────────────────────────────
 
   return (
-    <div>
+    <div className="mt-12">
       {/* ── Header ── */}
       <div className="flex items-center justify-between gap-2 mb-6">
         <PageHeader>Course Outline</PageHeader>
 
-        <div className="flex items-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleBack}
-            className="rounded-xl"
-          >
-            Back
-          </Button>
-
-          <Button
-            type="button"
-            onClick={addWeek}
-            className="bg-red-500 hover:bg-red-600 rounded-xl gap-2"
-          >
-            <PlusCircle className="w-4 h-4" />
-            Add Week
-          </Button>
-        </div>
+        <Button
+          type="button"
+          onClick={addWeek}
+          className="bg-red-500 hover:bg-red-600 rounded-xl gap-2"
+        >
+          <PlusCircle className="w-4 h-4" />
+          Add Week
+        </Button>
       </div>
 
       {/* ── Empty state ── */}
