@@ -6,6 +6,7 @@ export interface RichTextEditorProps {
   onChange: (content: string) => void;
   placeholder?: string;
   config?: Record<string, unknown>;
+  height: number;
 }
 
 const RichTextEditor: React.FC<RichTextEditorProps> = ({
@@ -13,6 +14,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   onChange,
   placeholder,
   config = {},
+  height = 400,
 }) => {
   type EditorCandidate = {
     getEditorValue?: () => string;
@@ -27,7 +29,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const defaultConfig: Record<string, unknown> = {
     readonly: false,
     placeholder: placeholder || "",
-    height: 300,
+    height,
     toolbarAdaptive: true,
     ...config,
   };
@@ -82,7 +84,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       }}
       value={value}
       config={defaultConfig}
-      tabIndex={0} // tabIndex of textarea
+      tabIndex={0}
       onBlur={(newContent) => onChange(newContent)}
       onChange={() => {
         /* required by jodit-react but we handle updates onBlur */

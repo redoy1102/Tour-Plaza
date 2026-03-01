@@ -1,374 +1,295 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/Redux/hooks";
 import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 import {
-  ArrowLeft,
-  Calendar,
+  CalendarDays,
   Clock,
   Users,
-  BookOpen,
-  Award,
-  DollarSign,
+  MonitorPlay,
+  PlayCircle,
+  Wrench,
+  CheckCircle2,
+  GraduationCap,
+  Info
 } from "lucide-react";
 import PageHeader from "../shared/PageHeader";
-import { format } from "date-fns";
 
-const CourseView = () => {
+const CourseViewPage = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
-  const courses = useAppSelector((state) => state.courses.items);
+
+  const course = useAppSelector((state) =>
+    state.courses.items.find((c) => c.id === courseId)
+  );
+
   const categories = useAppSelector((state) => state.categories.items);
+  const instructors = useAppSelector((state) => state.instructors.items);
   const tools = useAppSelector((state) => state.tools.items);
   const prerequisites = useAppSelector((state) => state.prerequisites.items);
-  const instructors = useAppSelector((state) => state.instructors.items);
-
-  const course = courses.find((c) => c.id === courseId);
 
   if (!course) {
     return (
-      <div className="space-y-6 animate-in fade-in duration-700">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="outline"
-            onClick={() => navigate("/admin-dashboard/courses/allCourses")}
-            className="gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Courses
-          </Button>
-        </div>
-        <div className="text-center py-12">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Course not found
-          </h2>
-          <p className="text-gray-600 mt-2">
-            The course you're looking for doesn't exist.
-          </p>
-        </div>
+      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
+        <Info className="w-12 h-12 text-gray-400" />
+        <h2 className="text-xl font-semibold">Course not found</h2>
+        <Button onClick={() => navigate("/admin-dashboard/courses/allCourses")}>
+          Go Back
+        </Button>
       </div>
     );
   }
 
-  const categoryName =
-    categories.find((c) => c.id === course.categoryId)?.name || "N/A";
-
-  const toolIds = Array.isArray(course.toolsIds) ? course.toolsIds : [];
-  const toolNames = tools
-    .filter((t) => toolIds.includes(t.id))
-    .map((t) => t.name);
-
-  const prerequisitesIds = Array.isArray(course.prerequisitesIds)
-    ? course.prerequisitesIds
-    : [];
-  const prerequisiteTitles = prerequisites
-    .filter((p) => prerequisitesIds.includes(p.id))
-    .map((p) => p.title);
-
-  const instructorsIds = Array.isArray(course.instructorsIds)
-    ? course.instructorsIds
-    : [];
-  const instructorNames = instructors
-    .filter((i) => instructorsIds.includes(i.id))
-    .map((i) => i.name);
+  const categoryName = categories.find((c) => c.id === course.categoryId)?.name || "Uncategorized";
+  const instructorNames = instructors.filter((i) => course.instructorsIds?.includes(i.id)).map((i) => i.name);
+  const toolNames = tools.filter((t) => course.toolsIds?.includes(t.id)).map((t) => t.name);
+  const prerequisiteTitles = prerequisites.filter((p) => course.prerequisitesIds?.includes(p.id)).map((p) => p.title);
+  
+  const finalPrice = course.discount > 0 ? course.price - course.discount : course.price;
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-700">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="outline"
-            onClick={() => navigate("/admin-dashboard/courses/allCourses")}
-            className="gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back
-          </Button>
-          <PageHeader>Course Details</PageHeader>
-        </div>
+    <div className="max-w-7xl mx-auto space-y-6 pb-12">
+      {/* Top Navigation */}
+      <div className="flex justify-between items-center">
+        <PageHeader>Course Details</PageHeader>
+        <Button
+          variant="outline"
+          onClick={() => navigate("/admin-dashboard/courses/allCourses")}
+        >
+          Back to Courses
+        </Button>
       </div>
 
-      {/* Course Banner */}
-      {course.bannerImage && (
-        <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden">
-          <img
-            src={course.bannerImage}
-            alt={course.title}
-            className="w-full h-64 object-cover"
-          />
-        </div>
-      )}
-
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Main Info */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Basic Info Card */}
-          <div className="bg-white rounded-3xl border border-gray-200 p-6 space-y-4">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                {course.title}
-              </h1>
-              <div className="flex items-center gap-2 mt-2">
-                <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
-                  {categoryName}
-                </span>
-                {course.isFeatured && (
-                  <span className="px-3 py-1 bg-amber-100 text-amber-800 text-sm font-medium rounded-full flex items-center gap-1">
-                    <Award className="w-3 h-3" />
-                    Featured
-                  </span>
-                )}
-                {course.isFreeCourse && (
-                  <span className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
-                    Free
-                  </span>
-                )}
-                {toolNames && toolNames.length > 0 && (
-                  <div className="flex flex-wrap gap-2 ml-2">
-                    {toolNames.map((n, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full"
-                      >
-                        {n}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        
+        {/* ======================= LEFT COLUMN (Main Content) ======================= */}
+        <div className="lg:col-span-2 space-y-8">
+          
+          {/* Header Title Section */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full">
+                {categoryName}
+              </span>
+              <span className="px-3 py-1 text-xs font-semibold bg-gray-100 text-gray-700 rounded-full">
+                Batch {course.batchNumber}
+              </span>
             </div>
-
-            <div className="border-t pt-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Description
-              </h3>
-              <p className="text-gray-700 leading-relaxed">
-                {course.description}
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+              {course.title}
+            </h1>
+            {instructorNames.length > 0 && (
+              <p className="text-gray-600 flex items-center gap-2">
+                <GraduationCap className="w-5 h-5" />
+                Instructors: <span className="font-medium text-gray-900">{instructorNames.join(", ")}</span>
               </p>
+            )}
+          </div>
+
+          {/* Description */}
+          <div className="bg-white border rounded-2xl p-6 md:p-8">
+            <h2 className="text-xl font-bold mb-4">About this Course</h2>
+            <div
+              className="prose max-w-none text-gray-600"
+              dangerouslySetInnerHTML={{ __html: course.description }}
+            />
+          </div>
+
+          {/* Tools & Prerequisites */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white border rounded-2xl p-6">
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-green-600" /> Prerequisites
+              </h2>
+              {prerequisiteTitles.length ? (
+                <ul className="space-y-2 text-gray-600">
+                  {prerequisiteTitles.map((title, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-green-500 mt-1">•</span> {title}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-gray-500">No prerequisites required.</p>
+              )}
             </div>
 
-            {course.bannerVideoLink && (
-              <div className="border-t pt-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Banner Video
-                </h3>
-                <a
-                  href={course.bannerVideoLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  {course.bannerVideoLink}
-                </a>
-              </div>
-            )}
-
-            {course.seo && course.seo.length > 0 && (
-              <div className="border-t pt-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                  SEO Keywords
-                </h3>
+            <div className="bg-white border rounded-2xl p-6">
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+                <Wrench className="w-5 h-5 text-blue-600" /> Tools Covered
+              </h2>
+              {toolNames.length ? (
                 <div className="flex flex-wrap gap-2">
-                  {course.seo.map((keyword, idx) => (
-                    <span
-                      key={idx}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full"
-                    >
-                      {keyword}
+                  {toolNames.map((name, idx) => (
+                    <span key={idx} className="bg-gray-100 border text-gray-700 text-sm px-3 py-1 rounded-md">
+                      {name}
                     </span>
                   ))}
                 </div>
-              </div>
-            )}
-          </div>
-
-          {/* Course Content Stats */}
-          <div className="bg-white rounded-3xl border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Course Content
-            </h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <BookOpen className="w-5 h-5 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Live Classes</p>
-                  <p className="text-xl font-semibold text-gray-900">
-                    {course.totalLiveClasses}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <BookOpen className="w-5 h-5 text-purple-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Pre-Recorded Classes</p>
-                  <p className="text-xl font-semibold text-gray-900">
-                    {course.totalPreRecordedClasses}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <Clock className="w-5 h-5 text-green-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Duration</p>
-                  <p className="text-xl font-semibold text-gray-900">
-                    {course.courseDuration} months
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-amber-100 rounded-lg">
-                  <Users className="w-5 h-5 text-amber-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Total Seats</p>
-                  <p className="text-xl font-semibold text-gray-900">
-                    {course.totalSeat}
-                  </p>
-                </div>
-              </div>
+              ) : (
+                <p className="text-sm text-gray-500">No specific tools listed.</p>
+              )}
             </div>
           </div>
 
-          {/* Additional Details */}
-          <div className="bg-white rounded-3xl border border-gray-200 p-6 space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Additional Information
-            </h3>
-
-            {toolNames && toolNames.length > 0 && (
-              <div className="flex items-center justify-between py-2 border-b">
-                <span className="text-gray-600">Tool/Technology</span>
-                <span className="font-medium text-gray-900">
-                  {toolNames.join(", ")}
-                </span>
+          {/* Course Outline (Syllabus) */}
+          <div className="bg-white border rounded-2xl p-6 md:p-8">
+            <h2 className="text-xl font-bold mb-6">Course Syllabus</h2>
+            {course.courseOutline?.length ? (
+              <div className="space-y-4">
+                {course.courseOutline.map((week, wIdx) => (
+                  <div key={wIdx} className="border border-gray-200 rounded-xl overflow-hidden">
+                    <div className="bg-gray-50 border-b px-5 py-4">
+                      <h3 className="font-bold text-gray-900">Week {wIdx + 1}</h3>
+                    </div>
+                    <div className="divide-y divide-gray-100">
+                      {week.map((cls, cIdx) => (
+                        <div key={cIdx} className="p-5 hover:bg-gray-50 transition-colors">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <p className="font-semibold text-gray-900">{cls.title}</p>
+                              <p className="text-sm text-gray-600 mt-1">{cls.description}</p>
+                            </div>
+                            {cls.ytVideoUrl && (
+                              <a
+                                href={cls.ytVideoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="shrink-0 flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1.5 rounded-lg transition-colors"
+                              >
+                                <PlayCircle className="w-4 h-4" /> Watch
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
-
-            {prerequisiteTitles && prerequisiteTitles.length > 0 && (
-              <div className="flex items-center justify-between py-2 border-b">
-                <span className="text-gray-600">Prerequisite</span>
-                <span className="font-medium text-gray-900">
-                  {prerequisiteTitles.join(", ")}
-                </span>
-              </div>
-            )}
-
-            {instructorNames && instructorNames.length > 0 && (
-              <div className="flex items-center justify-between py-2 border-b">
-                <span className="text-gray-600">Instructor</span>
-                <span className="font-medium text-gray-900">
-                  {instructorNames.join(", ")}
-                </span>
-              </div>
-            )}
-
-            {course.liveClassTime && (
-              <div className="flex items-center justify-between py-2 border-b">
-                <span className="text-gray-600">Live Class Time</span>
-                <span className="font-medium text-gray-900">
-                  {course.liveClassTime}
-                </span>
-              </div>
-            )}
-
-            {course.supportClassTime && (
-              <div className="flex items-center justify-between py-2">
-                <span className="text-gray-600">Support Class Time</span>
-                <span className="font-medium text-gray-900">
-                  {course.supportClassTime}
-                </span>
+            ) : (
+              <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed">
+                <p className="text-gray-500">Course outline has not been published yet.</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* Right Column - Sidebar */}
-        <div className="space-y-6">
-          {/* Pricing Card */}
-          <div className="bg-white rounded-3xl border border-gray-200 p-6 space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Pricing</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">Price</span>
-                <div className="flex items-center gap-1">
-                  <DollarSign className="w-4 h-4 text-gray-600" />
-                  <span className="text-2xl font-bold text-gray-900">
-                    {course.price}
-                  </span>
+        {/* ======================= RIGHT COLUMN (Sticky Sidebar) ======================= */}
+        <div className="lg:col-span-1 space-y-6 lg:sticky lg:top-6">
+          
+          {/* Main Action / Info Card */}
+          <div className="bg-white border rounded-2xl overflow-hidden shadow-sm">
+            {course.bannerImage ? (
+              <img
+                src={course.bannerImage}
+                alt={course.title}
+                className="w-full h-48 object-cover"
+              />
+            ) : (
+              <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
+                <MonitorPlay className="w-12 h-12 text-gray-300" />
+              </div>
+            )}
+            
+            <div className="p-6 space-y-6">
+              {/* Pricing */}
+              <div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold text-gray-900">${finalPrice}</span>
+                  {course.discount > 0 && (
+                    <span className="text-lg text-gray-400 line-through">${course.price}</span>
+                  )}
+                </div>
+                {course.discount > 0 && (
+                  <p className="text-sm text-green-600 font-medium mt-1">
+                    You save ${course.discount}!
+                  </p>
+                )}
+              </div>
+
+              <hr />
+
+              {/* Quick Stats */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 text-sm text-gray-700">
+                  <CalendarDays className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <p className="font-medium">Starts</p>
+                    <p className="text-gray-500">{course.startDate ? format(new Date(course.startDate), "MMMM d, yyyy") : "TBA"}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3 text-sm text-gray-700">
+                  <Clock className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <p className="font-medium">Duration</p>
+                    <p className="text-gray-500">{course.courseDuration} Months</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 text-sm text-gray-700">
+                  <Users className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <p className="font-medium">Seats</p>
+                    <p className="text-gray-500">{course.totalSeat} Total</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 text-sm text-gray-700">
+                  <MonitorPlay className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <p className="font-medium">Live Classes</p>
+                    <p className="text-gray-500">{course.totalLiveClasses} Sessions</p>
+                  </div>
                 </div>
               </div>
-              {course.discount > 0 && (
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Discount</span>
-                  <div className="flex items-center gap-1">
-                    <DollarSign className="w-4 h-4 text-gray-600" />
-                    <span className="text-xl font-semibold text-green-600">
-                      {course.discount}
-                    </span>
-                  </div>
-                </div>
+            </div>
+          </div>
+
+          {/* Schedule Card */}
+          <div className="bg-white border rounded-2xl p-6 space-y-6 shadow-sm">
+            <div>
+              <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <MonitorPlay className="w-4 h-4 text-red-500" /> Live Schedule
+              </h3>
+              {course.liveClassTime?.length ? (
+                <ul className="space-y-2 text-sm text-gray-600">
+                  {course.liveClassTime.map((item, idx) => (
+                    <li key={idx} className="flex justify-between border-b border-gray-50 pb-1 last:border-0">
+                      <span className="font-medium">{item.day}</span>
+                      <span>{item.startTime} - {item.endTime}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-gray-400 italic">No schedule added.</p>
               )}
-              {course.discount > 0 && (
-                <div className="pt-3 border-t">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-900 font-medium">
-                      Final Price
-                    </span>
-                    <div className="flex items-center gap-1">
-                      <DollarSign className="w-5 h-5 text-red-600" />
-                      <span className="text-2xl font-bold text-red-600">
-                        {course.price - course.discount}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <Info className="w-4 h-4 text-blue-500" /> Support Schedule
+              </h3>
+              {course.supportClassTime?.length ? (
+                <ul className="space-y-2 text-sm text-gray-600">
+                  {course.supportClassTime.map((item, idx) => (
+                    <li key={idx} className="flex justify-between border-b border-gray-50 pb-1 last:border-0">
+                      <span className="font-medium">{item.day}</span>
+                      <span>{item.startTime} - {item.endTime}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-gray-400 italic">No schedule added.</p>
               )}
             </div>
           </div>
 
-          {/* Batch Info Card */}
-          <div className="bg-white rounded-3xl border border-gray-200 p-6 space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Batch Information
-            </h3>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-indigo-100 rounded-lg">
-                  <Calendar className="w-5 h-5 text-indigo-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Batch Number</p>
-                  <p className="text-lg font-semibold text-gray-900">
-                    #{course.batchNumber}
-                  </p>
-                </div>
-              </div>
-              {course.startDate && (
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-teal-100 rounded-lg">
-                    <Calendar className="w-5 h-5 text-teal-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Start Date</p>
-                    <p className="text-lg font-semibold text-gray-900">
-                      {format(new Date(course.startDate), "PPP")}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default CourseView;
+export default CourseViewPage;

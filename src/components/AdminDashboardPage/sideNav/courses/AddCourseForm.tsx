@@ -47,7 +47,7 @@ import {
   type WeekClasses,
 } from "@/Redux/slices/courseSlice";
 import { useParams, useNavigate } from "react-router-dom";
-import { BookOpen } from "lucide-react";
+import CourseOutlinePage from "./CourseOutlinePage";
 
 const AddCourseForm = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -86,9 +86,10 @@ const AddCourseForm = () => {
       batchNumber: editCourse?.batchNumber || 1,
       courseDuration: editCourse?.courseDuration || 1,
       categoryId: editCourse?.categoryId || "",
-      toolsId: editCourse?.toolsIds || [],
-      prerequisiteId: editCourse?.prerequisitesIds || [],
-      instructorId: editCourse?.instructorsIds || [],
+      toolsIds: editCourse?.toolsIds || [],
+      prerequisitesIds: editCourse?.prerequisitesIds || [],
+      instructorsIds: editCourse?.instructorsIds || [],
+      supportStaffs: editCourse?.supportStaffs || [],
       isFeatured: editCourse?.isFeatured ?? true,
       isLiveCourse: editCourse?.isLiveCourse ?? false,
       isPreRecordedCourse: editCourse?.isPreRecordedCourse ?? false,
@@ -339,7 +340,7 @@ const AddCourseForm = () => {
               />
             </div>
 
-            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* title */}
               <FormField
                 control={form.control}
@@ -442,6 +443,7 @@ const AddCourseForm = () => {
                       <RichTextEditor
                         value={field.value || ""}
                         onChange={(content) => field.onChange(content)}
+                        height={500}
                         placeholder="Enter course description"
                       />
                     </FormControl>
@@ -451,198 +453,222 @@ const AddCourseForm = () => {
               />
             </div>
 
-            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* courseDuration */}
-              <FormField
-                control={form.control}
-                name="courseDuration"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Course Duration (Month)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Enter course duration"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-12 gap-4">
+              <div className="col-span-5">
+                {/* courseDuration */}
+                <div className="mb-2">
+                  <FormField
+                    control={form.control}
+                    name="courseDuration"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Course Duration (Month)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Enter course duration"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                {/* support team member selection */}
+                <div className="">
+                  <FormField
+                    control={form.control}
+                    name="supportStaffs"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Support Team Member</FormLabel>
+                        <FormControl>
+                          <MultiSelect
+                            options={supportStaffs.map((i) => ({
+                              id: i.id,
+                              name: i.name,
+                            }))}
+                            value={
+                              Array.isArray(field.value) ? field.value : []
+                            }
+                            onChange={(vals) => field.onChange(vals)}
+                            placeholder="Select support team members"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
               {/* support class time range */}
-              <FormField
-                control={form.control}
-                name="supportClassTime"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Support Class Time</FormLabel>
-                    <FormControl>
-                      <DayTimePicker
-                        value={Array.isArray(field.value) ? field.value : []}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* support team member selection */}
-              <FormField
-                control={form.control}
-                name="supportStaffs"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Support Team Member</FormLabel>
-                    <FormControl>
-                      <MultiSelect
-                        options={supportStaffs.map((i) => ({
-                          id: i.id,
-                          name: i.name,
-                        }))}
-                        value={Array.isArray(field.value) ? field.value : []}
-                        onChange={(vals) => field.onChange(vals)}
-                        placeholder="Select support team members"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="col-span-7">
+                <FormField
+                  control={form.control}
+                  name="supportClassTime"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Support Class Time</FormLabel>
+                      <FormControl>
+                        <DayTimePicker
+                          value={Array.isArray(field.value) ? field.value : []}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
-            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* batchNumber */}
-              <FormField
-                control={form.control}
-                name="batchNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Batch Number</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter batch number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div className="border border-gray-100 rounded-2xl p-6 ">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <div className="col-span-5">
+                  {/* batchNumber */}
+                  <FormField
+                    control={form.control}
+                    name="batchNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Batch Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter batch number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              {/*Batch  start date */}
-              <FormField
-                control={form.control}
-                name="startDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Batch Start Date</FormLabel>
-                    <br />
-                    <FormControl>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            data-empty={!field.value}
-                            className="data-[empty=true]:text-muted-foreground w-full justify-between text-left font-normal"
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <ChevronDownIcon />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-53 p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                            className="w-full"
+                  <div className="mt-2">
+                    {/*Batch  start date */}
+                    <FormField
+                      control={form.control}
+                      name="startDate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Batch Start Date</FormLabel>
+                          <br />
+                          <FormControl>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  data-empty={!field.value}
+                                  className="data-[empty=true]:text-muted-foreground w-full justify-between text-left font-normal"
+                                >
+                                  {field.value ? (
+                                    format(field.value, "PPP")
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <ChevronDownIcon />
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent
+                                className="w-53 p-0"
+                                align="start"
+                              >
+                                <Calendar
+                                  mode="single"
+                                  selected={field.value}
+                                  onSelect={field.onChange}
+                                  initialFocus
+                                  className="w-full"
+                                />
+                              </PopoverContent>
+                            </Popover>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-span-7">
+                  {/* class time range */}
+                  <FormField
+                    control={form.control}
+                    name="liveClassTime"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Live Class Time</FormLabel>
+                        <FormControl>
+                          <DayTimePicker
+                            value={
+                              Array.isArray(field.value) ? field.value : []
+                            }
+                            onChange={field.onChange}
                           />
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
-              {/* class time range */}
-              <FormField
-                control={form.control}
-                name="liveClassTime"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Class Time</FormLabel>
-                    <FormControl>
-                      <DayTimePicker
-                        value={Array.isArray(field.value) ? field.value : []}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-3 gap-3 mt-2">
+                {/* totalLiveClasses */}
+                <FormField
+                  control={form.control}
+                  name="totalLiveClasses"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Total Live Classes</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Enter total live classes"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              {/* totalLiveClasses */}
-              <FormField
-                control={form.control}
-                name="totalLiveClasses"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Total Live Classes</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Enter total live classes"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                {/* totalSeat */}
+                <FormField
+                  control={form.control}
+                  name="totalSeat"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Total Seat</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Enter total seat"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              {/* totalSeat */}
-              <FormField
-                control={form.control}
-                name="totalSeat"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Total Seat</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Enter total seat"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* totalPreRecordedClasses */}
-              <FormField
-                control={form.control}
-                name="totalPreRecordedClasses"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Total Pre-Recorded Classes</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Enter total pre-recorded classes"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                {/* totalPreRecordedClasses */}
+                <FormField
+                  control={form.control}
+                  name="totalPreRecordedClasses"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Total Pre-Recorded Classes</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Enter total pre-recorded classes"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             {/* SEO keywords */}
@@ -666,7 +692,7 @@ const AddCourseForm = () => {
 
             {/* Course Outline */}
             <div className="flex items-center justify-between border border-gray-100 rounded-2xl p-5">
-              <div>
+              {/* <div>
                 <p className="font-medium text-gray-800">Course Outline</p>
                 <p className="text-sm text-gray-500 mt-0.5">
                   {(() => {
@@ -678,8 +704,8 @@ const AddCourseForm = () => {
                       : "No weeks added yet";
                   })()}
                 </p>
-              </div>
-              <Button
+              </div> */}
+              {/* <Button
                 type="button"
                 onClick={() =>
                   navigate(
@@ -699,8 +725,10 @@ const AddCourseForm = () => {
                     ? "Edit Course Outline"
                     : "Add Course Outline";
                 })()}
-              </Button>
+              </Button> */}
+              
             </div>
+            <CourseOutlinePage />
 
             {/* Submit button */}
             <div className="flex items-center gap-2 mt-12">

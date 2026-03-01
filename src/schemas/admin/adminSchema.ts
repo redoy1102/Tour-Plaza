@@ -176,7 +176,7 @@ export type PrerequisitesFormValue = z.infer<typeof prerequisitesSchema>;
 export const addCourseSchema = z.object({
   bannerImage: z
     .string()
-    .nonempty("Banner image is required")
+    .nonempty("Thumbnail is required")
     .refine((val) => {
       // Expect a data URL like: data:<mime>;base64,<data>
       if (!val || typeof val !== "string") return false;

@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -86,67 +85,77 @@ const DayTimePicker = ({ value, onChange }: DayTimePickerProps) => {
               key={index}
               className="flex flex-col gap-2 p-3 border border-gray-200 rounded-md bg-white"
             >
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-12 items-center w-full gap-2">
                 {/* Day selector */}
-                <Select
-                  value={entry.day}
-                  onValueChange={(val) => handleUpdate(index, "day", val)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Day" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {DAYS.map((d) => (
-                      <SelectItem key={d} value={d}>
-                        {d}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="col-span-3">
+                  <Select
+                    value={entry.day}
+                    onValueChange={(val) => handleUpdate(index, "day", val)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Day" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {DAYS.map((d) => (
+                        <SelectItem key={d} value={d}>
+                          {d}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 {/* Start time */}
-                <Select
-                  value={entry.startTime}
-                  onValueChange={(val) => handleUpdate(index, "startTime", val)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Start Time" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {TIME_OPTIONS.map((time) => (
-                      <SelectItem key={time} value={time}>
-                        {time}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="col-span-4">
+                  <Select
+                    value={entry.startTime}
+                    onValueChange={(val) =>
+                      handleUpdate(index, "startTime", val)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Start Time" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {TIME_OPTIONS.map((time) => (
+                        <SelectItem key={time} value={time}>
+                          {time}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 {/* End time */}
-                <Select
-                  value={entry.endTime}
-                  onValueChange={(val) => handleUpdate(index, "endTime", val)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="End Time" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {TIME_OPTIONS.map((time) => (
-                      <SelectItem key={time} value={time}>
-                        {time}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                <div className="col-span-4">
+                  <Select
+                    value={entry.endTime}
+                    onValueChange={(val) => handleUpdate(index, "endTime", val)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="End Time" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {TIME_OPTIONS.map((time) => (
+                        <SelectItem key={time} value={time}>
+                          {time}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              {/* Remove button */}
-              <button
-                type="button"
-                onClick={() => handleRemove(index)}
-                className="self-end text-sm text-red-500 hover:text-red-600 flex items-center gap-1"
-              >
-                <X className="w-4 h-4" />
-              </button>
+                {/* Remove button */}
+                <div className="col-span-1 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => handleRemove(index)}
+                    className="text-sm text-red-500 hover:text-red-600 gap-1 cursor-pointer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
         </div>
