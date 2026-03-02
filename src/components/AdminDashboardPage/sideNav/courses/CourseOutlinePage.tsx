@@ -29,7 +29,7 @@ const CourseOutlinePage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // Preload: for existing courses read from the course itself; for new, from draftOutline
+  // Preload: for existing courses read from the course itself; for new, from draftOutline.
   const existingCourse = useAppSelector((state) =>
     state.courses.items.find((c) => c.id === courseId)
   );
@@ -138,7 +138,7 @@ const CourseOutlinePage = () => {
             className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm"
           >
             {/* Week header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-gray-50 border-b border-gray-100">
+            <div className="flex items-center justify-between px-3 py-2 bg-gray-50 border-b border-gray-100">
               <h2 className="font-semibold text-gray-800 text-base">
                 Week {wIdx + 1}
               </h2>
@@ -156,11 +156,11 @@ const CourseOutlinePage = () => {
             </div>
 
             {/* Classes */}
-            <div className="p-6 space-y-4">
+            <div className="p-3 space-y-4">
               {week.map((cls, cIdx) => (
                 <div
                   key={cIdx}
-                  className="border border-gray-100 rounded-xl p-4 bg-gray-50/50"
+                  className="border border-gray-100 rounded-xl p-3 bg-gray-50/50"
                 >
                   {/* Class header */}
                   <div className="flex items-center justify-between mb-3">
