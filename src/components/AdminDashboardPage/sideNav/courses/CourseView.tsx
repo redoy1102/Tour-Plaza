@@ -248,47 +248,61 @@ const CourseViewPage = () => {
             <h2 className="text-xl font-bold mb-3">Course Syllabus</h2>
             {course.courseOutline?.length ? (
               <div className="space-y-4">
-                {course.courseOutline.map((week, wIdx) => (
-                  <div
-                    key={wIdx}
-                    className="border border-gray-200 rounded-xl overflow-hidden"
-                  >
-                    <div className="bg-gray-50 border-b px-4 py-3">
-                      <h3 className="font-bold text-gray-900">
-                        Week {wIdx + 1}
-                      </h3>
-                    </div>
-                    <div className="divide-y divide-gray-100">
-                      {week.map((cls, cIdx) => (
-                        <div
-                          key={cIdx}
-                          className="p-5 hover:bg-gray-50 transition-colors"
-                        >
-                          <div className="flex items-center justify-between gap-4">
-                            <div>
-                              <p className="font-semibold text-gray-900">
-                                Class-{cIdx + 1}: {cls.title}
-                              </p>
-                              <p className="text-sm text-gray-600 mt-1">
-                                {cls.description}
-                              </p>
+                {course.courseOutline.map((module, mIdx) => {
+                  const classes = module.classes ?? [];
+                  return (
+                    <div
+                      key={mIdx}
+                      className="border border-gray-200 rounded-xl overflow-hidden"
+                    >
+                      <div className="bg-gray-50 border-b px-4 py-3">
+                        <h3 className="font-bold text-gray-900">
+                          {module.moduleTitle?.trim()
+                            ? module.moduleTitle
+                            : `Module ${mIdx + 1}`}
+                        </h3>
+                      </div>
+                      <div className="divide-y divide-gray-100">
+                        {classes.length ? (
+                          classes.map((cls, cIdx) => (
+                            <div
+                              key={cIdx}
+                              className="p-5 hover:bg-gray-50 transition-colors"
+                            >
+                              <div className="flex items-center justify-between gap-4">
+                                <div>
+                                  <p className="font-semibold text-gray-900">
+                                    Class-{cIdx + 1}
+                                    {cls.title ? `: ${cls.title}` : ""}
+                                  </p>
+                                  {cls.resources && (
+                                    <p className="text-sm text-gray-600 mt-1">
+                                      {cls.resources}
+                                    </p>
+                                  )}
+                                </div>
+                                {cls.ytVideoUrl && (
+                                  <a
+                                    href={cls.ytVideoUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="shrink-0 flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1.5 rounded-lg transition-colors"
+                                  >
+                                    <PlayCircle className="w-4 h-4" /> Watch
+                                  </a>
+                                )}
+                              </div>
                             </div>
-                            {cls.ytVideoUrl && (
-                              <a
-                                href={cls.ytVideoUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="shrink-0 flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1.5 rounded-lg transition-colors"
-                              >
-                                <PlayCircle className="w-4 h-4" /> Watch
-                              </a>
-                            )}
+                          ))
+                        ) : (
+                          <div className="p-5 text-sm text-gray-500">
+                            No classes added for this module.
                           </div>
-                        </div>
-                      ))}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed">

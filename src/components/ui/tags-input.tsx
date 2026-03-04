@@ -17,16 +17,17 @@ const TagsInput: React.FC<TagsInputProps> = ({
   disabled,
 }) => {
   const [inputValue, setInputValue] = React.useState("");
+  const safeValue = Array.isArray(value) ? value : [];
 
   const addTag = (tag: string) => {
     const clean = tag.trim();
     if (!clean) return;
-    if (value.includes(clean)) return;
-    onChange([...value, clean]);
+    if (safeValue.includes(clean)) return;
+    onChange([...safeValue, clean]);
   };
 
   const removeTag = (tag: string) => {
-    onChange(value.filter((t) => t !== tag));
+    onChange(safeValue.filter((t) => t !== tag));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -39,9 +40,9 @@ const TagsInput: React.FC<TagsInputProps> = ({
         .filter(Boolean)
         .forEach(addTag);
       setInputValue("");
-    } else if (e.key === "Backspace" && inputValue === "" && value.length) {
+    } else if (e.key === "Backspace" && inputValue === "" && safeValue.length) {
       e.preventDefault();
-      onChange(value.slice(0, -1));
+      onChange(safeValue.slice(0, -1));
     }
   };
 
@@ -59,7 +60,7 @@ const TagsInput: React.FC<TagsInputProps> = ({
         disabled && "opacity-50 cursor-not-allowed"
       )}
     >
-      {value.map((tag) => (
+      {safeValue.map((tag) => (
         <span
           key={tag}
           className="flex items-center bg-neutral-100 rounded-full px-2 py-0.5 text-sm whitespace-nowrap max-w-xs "

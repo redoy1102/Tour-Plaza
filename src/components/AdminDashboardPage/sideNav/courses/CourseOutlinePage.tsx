@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { BookOpen, PlusCircle, Save, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -7,80 +7,124 @@ import { Input } from "@/components/ui/input";
 import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
 import {
   updateCourseOutline,
-  setDraftOutline,
-  type ClassItem,
-  type WeekClasses,
+  type Class as ClassItem,
+  type Module,
 } from "@/Redux/slices/courseSlice";
 import PageHeader from "../shared/PageHeader";
+import { Textarea } from "@/components/ui/textarea";
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
 const emptyClass = (): ClassItem => ({
   title: "",
-  description: "",
+  resources: "",
   ytVideoUrl: "",
+});
+
+const emptyModule = (): Module => ({
+  moduleTitle: "",
+  classes: [emptyClass()],
 });
 
 // ─── component ──────────────────────────────────────────────────────────────
 
-const CourseOutlinePage = () => {
+type CourseOutlinePageProps = {
+  value?: Module[];
+  onChange?: (modules: Module[]) => void;
+};
+
+const CourseOutlinePage = ({ value, onChange }: CourseOutlinePageProps) => {
   const { courseId } = useParams<{ courseId: string }>();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // Preload: for existing courses read from the course itself; for new, from draftOutline.
+  const isControlled = Boolean(onChange);
+
+  // Preload: for existing courses read from the course itself.
   const existingCourse = useAppSelector((state) =>
     state.courses.items.find((c) => c.id === courseId)
   );
-  const draftOutline = useAppSelector((state) => state.courses.draftOutline);
 
-  const [weeks, setWeeks] = useState<WeekClasses[]>(
-    (existingCourse?.courseOutline as WeekClasses[] | undefined) ??
-      (courseId ? [] : draftOutline)
+  const initialModules = useMemo(
+    () => (existingCourse?.courseOutline as Module[] | undefined) ?? [],
+    [existingCourse]
   );
 
-  // ── week operations ────────────────────────────────────────────────────────
+  const [internalModules, setInternalModules] =
+    useState<Module[]>(initialModules);
 
-  const addWeek = () => {
-    setWeeks((prev) => [...prev, [emptyClass()]]);
+  const modules = isControlled ? value ?? [] : internalModules;
+
+  const setModules = (
+    updater: Module[] | ((prev: Module[]) => Module[])
+  ) => {
+    const next = typeof updater === "function" ? updater(modules) : updater;
+    if (onChange) {
+      onChange(next);
+      return;
+    }
+    setInternalModules(next);
   };
 
-  const removeWeek = (wIdx: number) => {
-    setWeeks((prev) => prev.filter((_, i) => i !== wIdx));
+  // ── module operations ──────────────────────────────────────────────────────
+  const addModule = () => {
+    setModules((prev) => [...prev, emptyModule()]);
+  };
+
+  const removeModule = (mIdx: number) => {
+    setModules((prev) => prev.filter((_, i) => i !== mIdx));
+  };
+
+  const updateModuleTitle = (mIdx: number, val: string) => {
+    setModules((prev) =>
+      prev.map((module, mi) =>
+        mi === mIdx ? { ...module, moduleTitle: val } : module
+      )
+    );
   };
 
   // ── class operations ───────────────────────────────────────────────────────
-
-  const addClassToWeek = (wIdx: number) => {
-    setWeeks((prev) => {
+  const addClassToModule = (mIdx: number) => {
+    setModules((prev) => {
       const updated = [...prev];
-      updated[wIdx] = [...updated[wIdx], emptyClass()];
+      const classes = updated[mIdx].classes ?? [];
+      updated[mIdx] = {
+        ...updated[mIdx],
+        classes: [...classes, emptyClass()],
+      };
       return updated;
     });
   };
 
-  const removeClass = (wIdx: number, cIdx: number) => {
-    setWeeks((prev) => {
+  const removeClass = (mIdx: number, cIdx: number) => {
+    setModules((prev) => {
       const updated = [...prev];
-      updated[wIdx] = updated[wIdx].filter((_, i) => i !== cIdx);
+      const classes = updated[mIdx].classes ?? [];
+      updated[mIdx] = {
+        ...updated[mIdx],
+        classes: classes.filter((_, i) => i !== cIdx),
+      };
       return updated;
     });
   };
 
   const updateClass = (
-    wIdx: number,
+    mIdx: number,
     cIdx: number,
     field: keyof ClassItem,
     val: string
   ) => {
-    setWeeks((prev) =>
-      prev.map((week, wi) =>
-        wi === wIdx
-          ? week.map((cls, ci) =>
-              ci === cIdx ? { ...cls, [field]: val } : cls
-            )
-          : week
+    setModules((prev) =>
+      prev.map((module, mi) =>
+        mi === mIdx
+          ? {
+              ...module,
+              classes: (module.classes ?? []).map((cls, ci) =>
+                ci === cIdx ? { ...cls, [field]: val } : cls
+              ),
+            }
+          : module
       )
     );
   };
@@ -88,16 +132,11 @@ const CourseOutlinePage = () => {
   // ── save ──────────────────────────────────────────────────────────────────
 
   const handleSave = () => {
-    if (courseId) {
-      dispatch(updateCourseOutline({ id: courseId, outline: weeks }));
-    } else {
-      dispatch(setDraftOutline(weeks));
-    }
+    if (!courseId) return;
+    dispatch(updateCourseOutline({ id: courseId, outline: modules }));
     toast.success("Course outline saved!", { id: "outline-save" });
     navigate(
-      courseId
-        ? `/admin-dashboard/courses/edit/${courseId}`
-        : "/admin-dashboard/courses/addCourse"
+      courseId ? `/admin-dashboard/courses/edit/${courseId}` : "/"
     );
   };
 
@@ -111,53 +150,61 @@ const CourseOutlinePage = () => {
 
         <Button
           type="button"
-          onClick={addWeek}
+          onClick={addModule}
           className="bg-red-500 hover:bg-red-600 rounded-xl gap-2"
         >
           <PlusCircle className="w-4 h-4" />
-          Add Week
+          Add Module
         </Button>
       </div>
 
       {/* ── Empty state ── */}
-      {weeks.length === 0 && (
+      {modules.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 text-gray-400">
           <BookOpen className="w-14 h-14 mb-4 opacity-30" />
-          <p className="text-lg font-medium">No weeks added yet</p>
+          <p className="text-lg font-medium">No modules added yet</p>
           <p className="text-sm mt-1">
-            Click &ldquo;Add Week&rdquo; in the top-right to get started.
+            Click &ldquo;Add Module&rdquo; in the top-right to get started.
           </p>
         </div>
       )}
 
-      {/* ── Weeks ── */}
+      {/* ── Modules ── */}
       <div className="space-y-6">
-        {weeks.map((week, wIdx) => (
+        {modules.map((module, mIdx) => (
           <div
-            key={wIdx}
+            key={mIdx}
             className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm"
           >
-            {/* Week header */}
+            {/* Module header */}
             <div className="flex items-center justify-between px-3 py-2 bg-gray-50 border-b border-gray-100">
-              <h2 className="font-semibold text-gray-800 text-base">
-                Week {wIdx + 1}
-              </h2>
-
+              <div className="flex items-center gap-3">
+                <h2 className="font-semibold text-gray-800 text-base">
+                  Module {mIdx + 1}
+                </h2>
+                <Input
+                  placeholder="Enter module title"
+                  value={module.moduleTitle}
+                  onChange={(e) => updateModuleTitle(mIdx, e.target.value)}
+                  className="h-8 w-64"
+                />
+              </div>
+              {/* Remove module button */}
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                onClick={() => removeWeek(wIdx)}
+                onClick={() => removeModule(mIdx)}
                 className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg gap-1"
               >
                 <Trash2 className="w-4 h-4" />
-                Remove Week
+                Remove Module
               </Button>
             </div>
 
             {/* Classes */}
             <div className="p-3 space-y-4">
-              {week.map((cls, cIdx) => (
+              {(module.classes ?? []).map((cls, cIdx) => (
                 <div
                   key={cIdx}
                   className="border border-gray-100 rounded-xl p-3 bg-gray-50/50"
@@ -168,10 +215,10 @@ const CourseOutlinePage = () => {
                       Class {cIdx + 1}
                     </span>
 
-                    {week.length > 1 && (
+                    {(module.classes?.length ?? 0) > 1 && (
                       <button
                         type="button"
-                        onClick={() => removeClass(wIdx, cIdx)}
+                        onClick={() => removeClass(mIdx, cIdx)}
                         className="text-gray-400 hover:text-red-500 transition-colors p-1 rounded"
                         aria-label="Remove class"
                       >
@@ -190,7 +237,7 @@ const CourseOutlinePage = () => {
                         placeholder="e.g. Introduction to Variables"
                         value={cls.title}
                         onChange={(e) =>
-                          updateClass(wIdx, cIdx, "title", e.target.value)
+                          updateClass(mIdx, cIdx, "title", e.target.value)
                         }
                       />
                     </div>
@@ -203,20 +250,20 @@ const CourseOutlinePage = () => {
                         placeholder="https://youtube.com/..."
                         value={cls.ytVideoUrl}
                         onChange={(e) =>
-                          updateClass(wIdx, cIdx, "ytVideoUrl", e.target.value)
+                          updateClass(mIdx, cIdx, "ytVideoUrl", e.target.value)
                         }
                       />
                     </div>
 
                     <div>
                       <label className="text-xs font-medium text-gray-500 mb-1 block">
-                        Topics <span className="text-red-400">*</span>
+                        Resources
                       </label>
-                      <Input
+                      <Textarea
                         placeholder="Topics covered in this class"
-                        value={cls.description}
+                        value={cls.resources}
                         onChange={(e) =>
-                          updateClass(wIdx, cIdx, "description", e.target.value)
+                          updateClass(mIdx, cIdx, "resources", e.target.value)
                         }
                       />
                     </div>
@@ -228,7 +275,7 @@ const CourseOutlinePage = () => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => addClassToWeek(wIdx)}
+                onClick={() => addClassToModule(mIdx)}
                 className="w-full border-dashed border-gray-300 text-gray-500 hover:text-red-500 hover:border-red-300 rounded-xl gap-2"
               >
                 <PlusCircle className="w-4 h-4" />
@@ -240,7 +287,7 @@ const CourseOutlinePage = () => {
       </div>
 
       {/* ── Save button ── */}
-      {weeks.length > 0 && (
+      {!isControlled && Boolean(courseId) && modules.length > 0 && (
         <div className="mt-8 flex justify-end">
           <Button
             type="button"

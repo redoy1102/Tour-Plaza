@@ -2,12 +2,15 @@ import type { AddCourseFormValue } from "@/schemas/admin/adminSchema";
 import { createSlice, type PayloadAction, nanoid } from "@reduxjs/toolkit";
 
 // ─── Outline types (shared with CourseOutlinePage) ────────────────────────────
-export interface ClassItem {
-  title: string;
-  description: string;
+export interface Class {
+  title?: string;
+  resources?: string;
   ytVideoUrl: string;
 }
-export type WeekClasses = ClassItem[];
+export interface Module {
+  moduleTitle?: string;
+  classes?: Class[];
+}
 
 export interface Course extends AddCourseFormValue {
   id: string;
@@ -15,13 +18,10 @@ export interface Course extends AddCourseFormValue {
 
 interface CoursesState {
   items: Course[];
-  /** Temporary outline for a course that hasn't been created yet ("add" flow). */
-  draftOutline: WeekClasses[];
 }
 
 const initialState: CoursesState = {
   items: [],
-  draftOutline: [],
 };
 
 const coursesSlice = createSlice({
@@ -47,7 +47,7 @@ const coursesSlice = createSlice({
     /** Update only the courseOutline of an already-saved course. */
     updateCourseOutline(
       state,
-      action: PayloadAction<{ id: string; outline: WeekClasses[] }>
+      action: PayloadAction<{ id: string; outline: Module[] }>
     ) {
       const { id, outline } = action.payload;
       const index = state.items.findIndex((c) => c.id === id);
@@ -61,13 +61,6 @@ const coursesSlice = createSlice({
     clearCourses(state) {
       state.items = [];
     },
-    /** Temporarily holds the outline while creating a brand-new course. */
-    setDraftOutline(state, action: PayloadAction<WeekClasses[]>) {
-      state.draftOutline = action.payload;
-    },
-    clearDraftOutline(state) {
-      state.draftOutline = [];
-    },
   },
 });
 
@@ -78,8 +71,6 @@ export const {
   updateCourseOutline,
   removeCourse,
   clearCourses,
-  setDraftOutline,
-  clearDraftOutline,
 } = coursesSlice.actions;
 
 export default coursesSlice.reducer;

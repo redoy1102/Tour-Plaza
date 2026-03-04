@@ -43,8 +43,7 @@ import MultiSelect from "@/components/ui/multi-select";
 import {
   addCourse,
   updateCourse,
-  clearDraftOutline,
-  type WeekClasses,
+  type Module,
 } from "@/Redux/slices/courseSlice";
 import { useParams, useNavigate } from "react-router-dom";
 import CourseOutlinePage from "./CourseOutlinePage";
@@ -59,7 +58,6 @@ const AddCourseForm = () => {
   const prerequisites = useAppSelector((state) => state.prerequisites.items);
   const instructors = useAppSelector((state) => state.instructors.items);
   const supportStaffs = useAppSelector((state) => state.supportStaff.items);
-  const draftOutline = useAppSelector((state) => state.courses.draftOutline);
 
   const editCourse = useMemo(
     () => courses.find((c) => c.id === courseId),
@@ -72,7 +70,7 @@ const AddCourseForm = () => {
       bannerVideoLink: editCourse?.bannerVideoLink || "",
       title: editCourse?.title || "",
       description: editCourse?.description || "",
-      seo: editCourse?.seo || ["programming", "web development"],
+      tags: editCourse?.tags || ["programming", "web development"],
       liveClassTime: editCourse?.liveClassTime || [],
       supportClassTime: editCourse?.supportClassTime || [],
       price: editCourse?.price || 0,
@@ -93,6 +91,7 @@ const AddCourseForm = () => {
       isFeatured: editCourse?.isFeatured ?? true,
       isLiveCourse: editCourse?.isLiveCourse ?? false,
       isPreRecordedCourse: editCourse?.isPreRecordedCourse ?? false,
+      courseOutline: (editCourse?.courseOutline as Module[] | undefined) ?? [],
     }),
     [editCourse]
   );
@@ -102,6 +101,11 @@ const AddCourseForm = () => {
     mode: "onSubmit",
     reValidateMode: "onChange",
     defaultValues,
+  });
+
+  const courseOutline = useWatch({
+    control: form.control,
+    name: "courseOutline",
   });
 
   useEffect(() => {
@@ -141,19 +145,13 @@ const AddCourseForm = () => {
   };
 
   const onSubmit = (data: AddCourseFormValue) => {
-    const outline: WeekClasses[] =
-      (editCourse?.courseOutline as WeekClasses[] | undefined) ?? draftOutline;
-
-    const fullData: AddCourseFormValue = { ...data, courseOutline: outline };
-
     if (courseId) {
-      dispatch(updateCourse({ id: courseId, data: fullData }));
+      dispatch(updateCourse({ id: courseId, data }));
       toast.success("Course updated successfully!", {
         id: "edit-course-success",
       });
     } else {
-      dispatch(addCourse(fullData));
-      dispatch(clearDraftOutline()); // clean up temp outline after course is saved
+      dispatch(addCourse(data));
       toast.success("Course created successfully!", {
         id: "add-course-success",
       });
@@ -416,7 +414,7 @@ const AddCourseForm = () => {
               </div>
             </div>
 
-            <div className="border border-gray-100 rounded-2xl p-6">
+            <div className="border border-gray-100 rounded-2xl p-6 space-y-3">
               {/* bannerVideoLink */}
               <FormField
                 control={form.control}
@@ -453,58 +451,28 @@ const AddCourseForm = () => {
               />
             </div>
 
-            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-12 gap-4">
-              <div className="col-span-5">
-                {/* courseDuration */}
-                <div className="mb-2">
-                  <FormField
-                    control={form.control}
-                    name="courseDuration"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Course Duration (Month)</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Enter course duration"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                {/* support team member selection */}
-                <div className="">
-                  <FormField
-                    control={form.control}
-                    name="supportStaffs"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Support Team Member</FormLabel>
-                        <FormControl>
-                          <MultiSelect
-                            options={supportStaffs.map((i) => ({
-                              id: i.id,
-                              name: i.name,
-                            }))}
-                            value={
-                              Array.isArray(field.value) ? field.value : []
-                            }
-                            onChange={(vals) => field.onChange(vals)}
-                            placeholder="Select support team members"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Live class time */}
+              <div className="mb-2">
+                <FormField
+                  control={form.control}
+                  name="liveClassTime"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Live Class Time</FormLabel>
+                      <FormControl>
+                        <DayTimePicker
+                          value={Array.isArray(field.value) ? field.value : []}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-
-              {/* support class time range */}
-              <div className="col-span-7">
+              {/* support class time */}
+              <div className="">
                 <FormField
                   control={form.control}
                   name="supportClassTime"
@@ -522,87 +490,104 @@ const AddCourseForm = () => {
                   )}
                 />
               </div>
+              {/* support team member selection */}
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="supportStaffs"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Support Team Member</FormLabel>
+                      <FormControl>
+                        <MultiSelect
+                          options={supportStaffs.map((i) => ({
+                            id: i.id,
+                            name: i.name,
+                          }))}
+                          value={Array.isArray(field.value) ? field.value : []}
+                          onChange={(vals) => field.onChange(vals)}
+                          placeholder="Select support team members"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              {/* course Duration */}
+              <div>
+                <FormField
+                  control={form.control}
+                  name="courseDuration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Course Duration (Month)</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Enter course duration"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <div className="border border-gray-100 rounded-2xl p-6 ">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                <div className="col-span-5">
-                  {/* batchNumber */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* batchNumber */}
+                <FormField
+                  control={form.control}
+                  name="batchNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Batch Number</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter batch number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="mt-2">
+                  {/*Batch  start date */}
                   <FormField
                     control={form.control}
-                    name="batchNumber"
+                    name="startDate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Batch Number</FormLabel>
+                        <FormLabel>Batch Start Date</FormLabel>
+                        <br />
                         <FormControl>
-                          <Input placeholder="Enter batch number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className="mt-2">
-                    {/*Batch  start date */}
-                    <FormField
-                      control={form.control}
-                      name="startDate"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Batch Start Date</FormLabel>
-                          <br />
-                          <FormControl>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  data-empty={!field.value}
-                                  className="data-[empty=true]:text-muted-foreground w-full justify-between text-left font-normal"
-                                >
-                                  {field.value ? (
-                                    format(field.value, "PPP")
-                                  ) : (
-                                    <span>Pick a date</span>
-                                  )}
-                                  <ChevronDownIcon />
-                                </Button>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-53 p-0"
-                                align="start"
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                data-empty={!field.value}
+                                className="data-[empty=true]:text-muted-foreground w-full justify-between text-left font-normal"
                               >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value}
-                                  onSelect={field.onChange}
-                                  initialFocus
-                                  className="w-full"
-                                />
-                              </PopoverContent>
-                            </Popover>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-
-                <div className="col-span-7">
-                  {/* class time range */}
-                  <FormField
-                    control={form.control}
-                    name="liveClassTime"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Live Class Time</FormLabel>
-                        <FormControl>
-                          <DayTimePicker
-                            value={
-                              Array.isArray(field.value) ? field.value : []
-                            }
-                            onChange={field.onChange}
-                          />
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <ChevronDownIcon />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-53 p-0" align="start">
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                initialFocus
+                                className="w-full"
+                              />
+                            </PopoverContent>
+                          </Popover>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -674,15 +659,15 @@ const AddCourseForm = () => {
             {/* SEO keywords */}
             <FormField
               control={form.control}
-              name="seo"
+              name="tags"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>SEO Keywords</FormLabel>
+                  <FormLabel>Tags</FormLabel>
                   <FormControl>
                     <TagsInput
                       value={field.value}
                       onChange={field.onChange}
-                      placeholder="Add keyword and press comma or enter"
+                      placeholder="Add tag and press comma or enter"
                     />
                   </FormControl>
                   <FormMessage />
@@ -690,7 +675,15 @@ const AddCourseForm = () => {
               )}
             />
 
-            <CourseOutlinePage />
+            <CourseOutlinePage
+              value={courseOutline ?? []}
+              onChange={(next) =>
+                form.setValue("courseOutline", next, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+            />
 
             {/* Submit button */}
             <div className="flex items-center gap-2 mt-12">

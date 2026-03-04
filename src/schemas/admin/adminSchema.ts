@@ -205,7 +205,7 @@ export const addCourseSchema = z.object({
 
   title: z.string().min(5, "Title must be at least 5 characters").max(100),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  seo: z.array(z.string()),
+  tags: z.array(z.string()),
   price: z.coerce
     .number()
     .min(1, "Price must be at least 1")
@@ -252,9 +252,8 @@ export const addCourseSchema = z.object({
     .number()
     .min(1, "Course duration must be at least 1")
     .max(1000, "Course duration cannot exceed 1000"),
-  // reference to category id (stored when user selects a category)
+
   categoryId: z.string().nonempty("Please select a category"),
-  // reference to tool ids (multiple tools can be selected)
   toolsIds: z.array(z.string()).optional(),
   prerequisitesIds: z.array(z.string()).optional(),
   instructorsIds: z.array(z.string()).optional(),
@@ -276,19 +275,22 @@ export const addCourseSchema = z.object({
   // Course outline (managed on a separate page; optional here)
   courseOutline: z
     .array(
-      z.array(
-        z.object({
-          title: z.string().nonempty("Title is required"),
-          description: z.string().nonempty("Description is required"),
-          ytVideoUrl: z
-            .string()
-            .refine(
-              (val) =>
-                !val || val === "" || z.string().url().safeParse(val).success,
-              "Please enter a valid URL"
-            ),
-        })
-      )
+      z.object({
+        moduleTitle: z.string().optional(),
+        classes: z.array(
+          z.object({
+            title: z.string().optional(),
+            ytVideoUrl: z
+              .string()
+              .refine(
+                (val) =>
+                  !val || val === "" || z.string().url().safeParse(val).success,
+                "Please enter a valid URL"
+              ),
+            resources: z.string().optional(),
+          })
+        ).optional(),
+      })
     )
     .optional(),
 });
