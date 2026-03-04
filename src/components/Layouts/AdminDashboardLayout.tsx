@@ -70,11 +70,7 @@ const AdminDashboardLayout = () => {
                     onClick={() =>
                       setExpandedMenu(expandedMenu === item.id ? null : item.id)
                     }
-                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer ${
-                      expandedMenu === item.id
-                        ? "text-primary shadow-sm"
-                        : "hover:text-gray-800"
-                    }`}
+                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer `}
                   >
                     {item.icon}
                     <span className="font-medium">{item.label}</span>
