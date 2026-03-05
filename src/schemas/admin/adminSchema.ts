@@ -276,22 +276,18 @@ export const addCourseSchema = z.object({
   courseOutline: z
     .array(
       z.object({
-        moduleTitle: z.string().optional(),
-        classes: z.array(
-          z.object({
-            title: z.string().optional(),
-            ytVideoUrl: z
-              .string()
-              .refine(
-                (val) =>
-                  !val || val === "" || z.string().url().safeParse(val).success,
-                "Please enter a valid URL"
-              ),
-            resources: z.string().optional(),
-          })
-        ).optional(),
+        moduleTitle: z.string().min(1, "Module title is required"),
+        classes: z
+          .array(
+            z.object({
+              title: z.string().min(1, "Class title is required"),
+              ytVideoUrl: z.string().url().or(z.literal("")),
+              resources: z.string().optional(),
+            })
+          )
+          .optional(),
       })
     )
-    .optional(),
+    .default([]),
 });
 export type AddCourseFormValue = z.infer<typeof addCourseSchema>;

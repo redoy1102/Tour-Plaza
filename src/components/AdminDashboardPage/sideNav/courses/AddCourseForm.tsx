@@ -40,11 +40,7 @@ import {
 import { useWatch } from "react-hook-form";
 import ImageUploader from "../shared/ImageUploader";
 import MultiSelect from "@/components/ui/multi-select";
-import {
-  addCourse,
-  updateCourse,
-  type Module,
-} from "@/Redux/slices/courseSlice";
+import { addCourse, updateCourse } from "@/Redux/slices/courseSlice";
 import { useParams, useNavigate } from "react-router-dom";
 import CourseOutlinePage from "./CourseOutlinePage";
 
@@ -63,6 +59,7 @@ const AddCourseForm = () => {
     () => courses.find((c) => c.id === courseId),
     [courses, courseId]
   );
+  console.log(editCourse);
 
   const defaultValues = useMemo(
     () => ({
@@ -91,7 +88,7 @@ const AddCourseForm = () => {
       isFeatured: editCourse?.isFeatured ?? true,
       isLiveCourse: editCourse?.isLiveCourse ?? false,
       isPreRecordedCourse: editCourse?.isPreRecordedCourse ?? false,
-      courseOutline: (editCourse?.courseOutline as Module[] | undefined) ?? [],
+      courseOutline: editCourse?.courseOutline ?? [],
     }),
     [editCourse]
   );
@@ -101,11 +98,6 @@ const AddCourseForm = () => {
     mode: "onSubmit",
     reValidateMode: "onChange",
     defaultValues,
-  });
-
-  const courseOutline = useWatch({
-    control: form.control,
-    name: "courseOutline",
   });
 
   useEffect(() => {
@@ -145,6 +137,11 @@ const AddCourseForm = () => {
   };
 
   const onSubmit = (data: AddCourseFormValue) => {
+    // const clearData = {
+    //   ...data,
+    //   startDate: data.startDate ? data.startDate.toISOString() : undefined,
+    // }
+
     if (courseId) {
       dispatch(updateCourse({ id: courseId, data }));
       toast.success("Course updated successfully!", {
@@ -675,15 +672,7 @@ const AddCourseForm = () => {
               )}
             />
 
-            <CourseOutlinePage
-              value={courseOutline ?? []}
-              onChange={(next) =>
-                form.setValue("courseOutline", next, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                })
-              }
-            />
+            <CourseOutlinePage control={form.control} />
 
             {/* Submit button */}
             <div className="flex items-center gap-2 mt-12">
@@ -695,6 +684,23 @@ const AddCourseForm = () => {
                 {courseId ? "Update Course" : "Add Course"}
               </Button>
             </div>
+
+            {/* Replace the JSON.stringify block with this */}
+            {Object.keys(form.formState.errors).length > 0 && (
+              <div className="text-red-500 text-sm mt-4 p-4 bg-red-50 rounded-lg">
+                <p className="font-bold mb-2">
+                  Please fix the following errors:
+                </p>
+                <ul className="list-disc list-inside space-y-1">
+                  {Object.entries(form.formState.errors).map(([key, error]) => (
+                    <li key={key}>
+                      <span className="capitalize font-medium">{key}:</span>{" "}
+                      {error?.message?.toString()}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </form>
         </Form>
       </div>
