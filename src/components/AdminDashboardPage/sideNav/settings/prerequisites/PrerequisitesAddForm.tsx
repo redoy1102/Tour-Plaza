@@ -1,7 +1,7 @@
-import { prerequisitesSchema } from "@/schemas/admin/adminSchema";
+import { prerequisitesSchema } from "@/schemas/admin/prerequisites.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import type { PrerequisitesFormValue } from "@/schemas/admin/adminSchema";
+import type { PrerequisitesFormValue } from "@/schemas/admin/prerequisites.schema";
 import toast from "react-hot-toast";
 import React from "react";
 import {

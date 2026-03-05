@@ -345,7 +345,7 @@ const CourseViewPage = () => {
                 </div>
                 {course.discount > 0 && (
                   <p className="text-sm text-green-600 font-medium mt-1">
-                    You save ${course.discount}!
+                    You save ৳{course.discount}!
                   </p>
                 )}
               </div>

@@ -1,4 +1,4 @@
-import type { CategoryFormValue } from "@/schemas/admin/adminSchema";
+import type { CategoryFormValue } from "@/schemas/admin/category.schema";
 import { createSlice, type PayloadAction, nanoid } from "@reduxjs/toolkit";
 
 // we maintain a unique id for each category so that courses can reference them

@@ -1,7 +1,8 @@
-import { addCourseSchema } from "@/schemas/admin/adminSchema";
+import { addCourseSchema } from "@/schemas/admin/course.schema";
+import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import type { AddCourseFormValue } from "@/schemas/admin/adminSchema";
 import toast from "react-hot-toast";
 import React, { useEffect, useMemo } from "react";
 import {
@@ -137,11 +138,6 @@ const AddCourseForm = () => {
   };
 
   const onSubmit = (data: AddCourseFormValue) => {
-    // const clearData = {
-    //   ...data,
-    //   startDate: data.startDate ? data.startDate.toISOString() : undefined,
-    // }
-
     if (courseId) {
       dispatch(updateCourse({ id: courseId, data }));
       toast.success("Course updated successfully!", {

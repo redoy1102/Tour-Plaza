@@ -1,6 +1,6 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { PrerequisitesFormValue } from "@/schemas/admin/adminSchema";
+import type { PrerequisitesFormValue } from "@/schemas/admin/prerequisites.schema";
 
 export interface PrerequisiteItem {
   id: string;

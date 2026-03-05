@@ -1,4 +1,4 @@
-import type { AddCourseFormValue } from "@/schemas/admin/adminSchema";
+import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
 import { createSlice, type PayloadAction, nanoid } from "@reduxjs/toolkit";
 
 export interface Course extends AddCourseFormValue {

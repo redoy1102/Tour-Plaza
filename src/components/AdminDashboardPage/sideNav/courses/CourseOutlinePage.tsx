@@ -4,7 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { Control } from "react-hook-form";
-import type { AddCourseFormValue } from "@/schemas/admin/adminSchema";
+// import type { AddCourseFormValue } from "@/schemas/admin/adminSchema";
+import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 interface ClassFieldsProps {
   nextIndex: number;
@@ -21,28 +29,35 @@ const ClassFields = ({ nextIndex, control }: ClassFieldsProps) => {
       {fields.map((item, k) => (
         <div
           key={item.id}
-          className="grid grid-cols-1 md:grid-cols-3 gap-3 items-end border-b pb-4 last:border-0"
+          className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center border-b pb-4 last:border-0"
         >
-          <div>
-            <label className="text-xs font-medium mb-1 block">
-              Class Title
-            </label>
-            <Input
-              {...control.register(
-                `courseOutline.${nextIndex}.classes.${k}.title`
-              )}
-              placeholder="Introduction"
-            />
-          </div>
-          <div>
-            <label className="text-xs font-medium mb-1 block">Video URL</label>
-            <Input
-              {...control.register(
-                `courseOutline.${nextIndex}.classes.${k}.ytVideoUrl`
-              )}
-              placeholder="https://..."
-            />
-          </div>
+          <FormField
+            control={control}
+            name={`courseOutline.${nextIndex}.classes.${k}.title`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Class Title</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Introduction" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name={`courseOutline.${nextIndex}.classes.${k}.ytVideoUrl`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Video URL</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="https://..." />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="flex gap-2">
             <div className="flex-1">
               <label className="text-xs font-medium mb-1 block">
@@ -50,7 +65,7 @@ const ClassFields = ({ nextIndex, control }: ClassFieldsProps) => {
               </label>
               <Textarea
                 {...control.register(
-                  `courseOutline.${nextIndex}.classes.${k}.resources`
+                  `courseOutline.${nextIndex}.classes.${k}.resources`,
                 )}
                 placeholder="PDF, Links..."
               />

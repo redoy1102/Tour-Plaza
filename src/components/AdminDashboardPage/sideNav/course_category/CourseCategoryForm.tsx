@@ -1,7 +1,7 @@
-import { categorySchema } from "@/schemas/admin/adminSchema";
+import { categorySchema } from "@/schemas/admin/category.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import type { CategoryFormValue } from "@/schemas/admin/adminSchema";
+import type { CategoryFormValue } from "@/schemas/admin/category.schema";
 import toast from "react-hot-toast";
 import {
   Form,
