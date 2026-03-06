@@ -1,6 +1,5 @@
 import { addCourseSchema } from "@/schemas/admin/course.schema";
 import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -18,7 +17,6 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageHeader from "../shared/PageHeader";
 import CreateButton from "../shared/CreateButton";
-// Textarea import removed (unused)
 import RichTextEditor from "@/components/ui/RichTextEditor";
 import { Calendar } from "@/components/ui/calendar";
 import { TagsInput } from "@/components/ui/tags-input";

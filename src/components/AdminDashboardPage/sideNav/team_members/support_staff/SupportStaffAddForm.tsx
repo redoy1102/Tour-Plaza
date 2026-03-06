@@ -1,7 +1,7 @@
-import { supportStuffSchema } from "@/schemas/admin/adminSchema";
+import { supportStuffSchema } from "@/schemas/admin/people/supportStuff.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
-import type { SupportStuffFormValue } from "@/schemas/admin/adminSchema";
+import type { SupportStuffFormValue } from "@/schemas/admin/people/supportStuff.schema";
 import toast from "react-hot-toast";
 import React, { useMemo } from "react";
 import {
@@ -36,7 +36,7 @@ const SupportStaffAddForm = ({
 }: SupportStaffAddFormProps) => {
   const dispatch = useAppDispatch();
   const supportStaff = useAppSelector((state) => state.supportStaff.items);
-  
+
   const defaultValues = useMemo(() => {
     if (editSupportStaffId != null) {
       const staff = supportStaff.find((s) => s.id === editSupportStaffId);

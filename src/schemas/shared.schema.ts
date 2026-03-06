@@ -1,5 +1,13 @@
 import z from "zod";
 
+export const descriptionSchema = z.string().min(10, "Description must be at least 10 characters");
+
+export const titleSchema = z.string().min(3, "Title must be at least 3 characters").max(100, "Title cannot exceed 100 characters");
+
+export const nameSchema = z.string().min(2, "Name must be at least 2 characters").max(50, "Name cannot exceed 50 characters");
+
+export const roleSchema = z.string().min(2, "Role must be at least 2 characters").max(50, "Role cannot exceed 50 characters");
+
 export const requiredUrlSchema = z
   .string()
   .nonempty("URL is required")

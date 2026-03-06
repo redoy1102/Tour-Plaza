@@ -29,7 +29,7 @@ const NotFound = () => {
       <div className="max-w-2xl w-full text-center relative z-10 animate-fade-in">
         {/* Animated 404 Text */}
         <div className="relative animate-slide-in-bottom">
-          <h1 className="text-[150px] md:text-[220px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-slate-900 to-slate-300">
+          <h1 className="text-[150px] md:text-[220px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-slate-900 to-slate-300">
             404
           </h1>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center pointer-events-none">
@@ -39,7 +39,7 @@ const NotFound = () => {
 
         {/* Text Content */}
         <div
-          className="space-y-6 mt-[-20px] animate-slide-in-bottom"
+          className="space-y-6 -mt-5 animate-slide-in-bottom"
           style={{ animationDelay: "0.2s" }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">

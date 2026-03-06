@@ -1,7 +1,7 @@
-import { instructorSchema } from "@/schemas/admin/adminSchema";
+import { instructorSchema } from "@/schemas/admin/people/instructor.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
-import type { InstructorFormValue } from "@/schemas/admin/adminSchema";
+import type { InstructorFormValue } from "@/schemas/admin/people/instructor.schema";
 import toast from "react-hot-toast";
 import React, { useMemo } from "react";
 import {

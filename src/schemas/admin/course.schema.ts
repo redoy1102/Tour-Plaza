@@ -1,6 +1,10 @@
 import * as z from "zod";
-import { imageUploadSchema, requiredUrlSchema } from "../shared.schema";
-
+import {
+  descriptionSchema,
+  imageUploadSchema,
+  requiredUrlSchema,
+  titleSchema,
+} from "../shared.schema";
 
 export const addCourseSchema = z.object({
   bannerImage: imageUploadSchema,
@@ -40,7 +44,7 @@ export const addCourseSchema = z.object({
     .optional()
     .refine((date) => {
       const today = new Date();
-      today.setHours(0, 0, 0, 0); // Set time to midnight
+      today.setHours(0, 0, 0, 0);
       return !date || date >= today;
     }, "Valid until date must be today or in the future"),
   totalSeat: z.coerce
@@ -75,7 +79,6 @@ export const addCourseSchema = z.object({
     )
     .optional(),
 
-  // Course outline (managed on a separate page; optional here)
   courseOutline: z
     .array(
       z.object({
@@ -89,6 +92,46 @@ export const addCourseSchema = z.object({
             }),
           )
           .optional(),
+        quizzes: z
+          .array(
+            z.object({
+              question: z.string().min(1, "Question is required"),
+              options: z.object({
+                opt1: z
+                  .string()
+                  .min(1, "Option 1 is required")
+                  .nonempty("Option 1 cannot be empty"),
+                opt2: z
+                  .string()
+                  .min(1, "Option 2 is required")
+                  .nonempty("Option 2 cannot be empty"),
+                opt3: z
+                  .string()
+                  .min(1, "Option 3 is required")
+                  .nonempty("Option 3 cannot be empty"),
+                opt4: z.string().min(1, "Option 4 is required"),
+              }),
+              answer: z
+                .enum(["opt1", "opt2", "opt3", "opt4"], {
+                  required_error: "Please select the correct answer",
+                })
+                .optional(),
+            }),
+          )
+          .optional(),
+        assignment: z.object({
+          title: titleSchema.nonempty("Assignment title is required"),
+          description: descriptionSchema.nonempty(
+            "Assignment description is required",
+          ),
+          instruction: z.string().min(1, "Instruction cannot be empty"),
+
+          dueDate: z.date(),
+          maxMarks: z.coerce
+            .number()
+            .min(1, "Max marks must be at least 1")
+            .max(100, "Max marks cannot exceed 100"),
+        }),
       }),
     )
     .default([]),

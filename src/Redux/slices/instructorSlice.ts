@@ -1,4 +1,4 @@
-import type { InstructorFormValue } from "@/schemas/admin/adminSchema";
+import type { InstructorFormValue } from "@/schemas/admin/people/instructor.schema";
 import { createSlice, type PayloadAction, nanoid } from "@reduxjs/toolkit";
 
 export interface InstructorItem {

@@ -2,7 +2,7 @@ import { PlusCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import type { Control } from "react-hook-form";
 // import type { AddCourseFormValue } from "@/schemas/admin/adminSchema";
 import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
@@ -13,6 +13,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import CourseQuiz from "./CourseQuiz";
+import CourseAssignment from "./CourseAssignment";
 
 interface ClassFieldsProps {
   nextIndex: number;
@@ -106,6 +108,7 @@ const CourseOutlinePage = ({ control }: CourseOutlinePageProps) => {
 
   return (
     <div className="mt-10 space-y-6">
+      {/* Header and add module button */}
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-bold">Course Outline</h3>
         <Button
@@ -114,6 +117,13 @@ const CourseOutlinePage = ({ control }: CourseOutlinePageProps) => {
             append({
               moduleTitle: "",
               classes: [{ title: "", ytVideoUrl: "", resources: "" }],
+              assignment: {
+                title: "",
+                description: "",
+                instruction: "",
+                dueDate: new Date(),
+                maxMarks: 100,
+              },
             })
           }
           className="bg-red-500 hover:bg-red-600"
@@ -125,10 +135,11 @@ const CourseOutlinePage = ({ control }: CourseOutlinePageProps) => {
       {fields.map((field, index) => (
         <div
           key={field.id}
-          className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm"
+          className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm p-2"
         >
-          <div className="bg-gray-50 p-4 flex gap-4 items-center border-b">
+          <div className="bg-gray-50 p-4 flex gap-4 items-center border-b rounded-xl">
             <span className="font-bold text-gray-400">#{index + 1}</span>
+
             <Input
               {...control.register(`courseOutline.${index}.moduleTitle`)}
               placeholder="Module Title (e.g., Getting Started)"
@@ -144,6 +155,8 @@ const CourseOutlinePage = ({ control }: CourseOutlinePageProps) => {
             </Button>
           </div>
           <ClassFields nextIndex={index} control={control} />
+          <CourseQuiz control={control} index={index} />
+          <CourseAssignment control={control} index={index} />
         </div>
       ))}
     </div>

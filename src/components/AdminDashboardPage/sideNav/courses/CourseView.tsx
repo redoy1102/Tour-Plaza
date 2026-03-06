@@ -19,15 +19,28 @@ import {
   Cpu,
   Hammer,
   PackageOpen,
+  HelpCircle,
+  FileText,
+  Trophy,
+  BookOpen,
 } from "lucide-react";
 import PageHeader from "../shared/PageHeader";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 
 const CourseViewPage = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
 
   const course = useAppSelector((state) =>
-    state.courses.items.find((c) => c.id === courseId)
+    state.courses.items.find((c) => c.id === courseId),
   );
 
   console.log(course);
@@ -300,6 +313,142 @@ const CourseViewPage = () => {
                           </div>
                         )}
                       </div>
+
+                      {/* Quizzes Table */}
+                      {module.quizzes && module.quizzes.length > 0 && (
+                        <div className="px-5 py-4 bg-gray-50/30 border-t">
+                          <h4 className="flex items-center gap-2 font-bold text-gray-800 mb-3">
+                            <HelpCircle className="w-4 h-4 text-orange-500" />
+                            Module Quizzes
+                          </h4>
+                          <div className="border rounded-lg overflow-hidden bg-white">
+                            <Table>
+                              <TableHeader>
+                                <TableRow className="bg-gray-50/50">
+                                  <TableHead className="w-12">#</TableHead>
+                                  <TableHead>Question</TableHead>
+                                  <TableHead>Options</TableHead>
+                                  <TableHead>Correct Answer</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {module.quizzes.map((quiz, qIdx) => (
+                                  <TableRow key={qIdx}>
+                                    <TableCell className="font-medium text-gray-400">
+                                      {qIdx + 1}
+                                    </TableCell>
+                                    <TableCell className="max-w-md">
+                                      {quiz.question}
+                                    </TableCell>
+                                    <TableCell>
+                                      <div className="grid grid-cols-2 gap-2 text-xs">
+                                        <div className="p-1 px-2 border rounded bg-gray-50">
+                                          1: {quiz.options.opt1}
+                                        </div>
+                                        <div className="p-1 px-2 border rounded bg-gray-50">
+                                          2: {quiz.options.opt2}
+                                        </div>
+                                        <div className="p-1 px-2 border rounded bg-gray-50">
+                                          3: {quiz.options.opt3}
+                                        </div>
+                                        <div className="p-1 px-2 border rounded bg-gray-50">
+                                          4: {quiz.options.opt4}
+                                        </div>
+                                      </div>
+                                    </TableCell>
+                                    <TableCell>
+                                      {quiz.answer ? (
+                                        <Badge
+                                          variant="secondary"
+                                          className="bg-green-100 text-green-700 hover:bg-green-100 border-green-200"
+                                        >
+                                          Option{" "}
+                                          {quiz.answer.replace("opt", "")}
+                                        </Badge>
+                                      ) : (
+                                        <span className="text-gray-400 italic text-xs">
+                                          Not set
+                                        </span>
+                                      )}
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Assignment Section */}
+                      {module.assignment && (
+                        <div className="px-5 py-6 bg-green-50/20 border-t">
+                          <h4 className="flex items-center gap-2 font-bold text-gray-800 mb-4">
+                            <FileText className="w-4 h-4 text-green-600" />
+                            Module Assignment
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div className="md:col-span-3 space-y-4">
+                              <div className="bg-white p-4 border rounded-xl shadow-sm">
+                                <h5 className="font-bold text-lg text-gray-900 mb-2">
+                                  {module.assignment.title}
+                                </h5>
+                                <div
+                                  className="text-sm text-gray-600 prose prose-sm max-w-none mb-4"
+                                  dangerouslySetInnerHTML={{
+                                    __html: module.assignment.description,
+                                  }}
+                                />
+                                {module.assignment.instruction && (
+                                  <div className="bg-amber-50/50 border border-amber-100 p-3 rounded-lg">
+                                    <p className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-2 flex items-center gap-1">
+                                      <BookOpen className="w-3 h-3" />
+                                      Instructions
+                                    </p>
+                                    <p className="text-sm text-gray-700 leading-relaxed italic">
+                                      "{module.assignment.instruction}"
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="space-y-4">
+                              <div className="bg-white p-4 border rounded-xl shadow-sm flex flex-col gap-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="p-2 bg-blue-50 rounded-lg">
+                                    <Trophy className="w-4 h-4 text-blue-600" />
+                                  </div>
+                                  <div>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase">
+                                      Max Marks
+                                    </p>
+                                    <p className="font-bold text-gray-900">
+                                      {module.assignment.maxMarks}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <div className="p-2 bg-red-50 rounded-lg">
+                                    <CalendarDays className="w-4 h-4 text-red-600" />
+                                  </div>
+                                  <div>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase">
+                                      Due Date
+                                    </p>
+                                    <p className="font-bold text-gray-900">
+                                      {module.assignment.dueDate
+                                        ? format(
+                                            new Date(module.assignment.dueDate),
+                                            "PPP",
+                                          )
+                                        : "No Deadline"}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}

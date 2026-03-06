@@ -1,5 +1,5 @@
 import { createSlice, nanoid, type PayloadAction } from "@reduxjs/toolkit";
-import type { SupportStuffFormValue } from "@/schemas/admin/adminSchema";
+import type { SupportStuffFormValue } from "@/schemas/admin/people/supportStuff.schema";
 
 export interface supportStaffItem {
   id: string;
@@ -21,7 +21,7 @@ const initialState: SupportStaffState = {
       role: "Support Engineer",
       runningCompanyName: "eManagerIT",
       imageFile: undefined,
-    }
+    },
   ],
 };
 
@@ -37,7 +37,7 @@ const supportStaffSlice = createSlice({
     },
     updateSupportStaff(
       state,
-      action: PayloadAction<{ id: string; data: SupportStuffFormValue }>
+      action: PayloadAction<{ id: string; data: SupportStuffFormValue }>,
     ) {
       const { id, data } = action.payload;
       const existIndex = state.items.findIndex((item) => item.id === id);
