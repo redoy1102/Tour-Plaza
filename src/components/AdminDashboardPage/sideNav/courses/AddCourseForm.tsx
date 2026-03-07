@@ -56,7 +56,7 @@ const AddCourseForm = () => {
 
   const editCourse = useMemo(
     () => courses.find((c) => c.id === courseId),
-    [courses, courseId]
+    [courses, courseId],
   );
   console.log(editCourse);
 
@@ -89,7 +89,7 @@ const AddCourseForm = () => {
       isPreRecordedCourse: editCourse?.isPreRecordedCourse ?? false,
       courseOutline: editCourse?.courseOutline ?? [],
     }),
-    [editCourse]
+    [editCourse],
   );
 
   const form = useForm<AddCourseFormValue>({
@@ -329,7 +329,7 @@ const AddCourseForm = () => {
               />
             </div>
 
-            <div className="border border-gray-100 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border border-gray-100 rounded-2xl p-6">
               {/* title */}
               <FormField
                 control={form.control}
@@ -345,63 +345,65 @@ const AddCourseForm = () => {
                 )}
               />
 
-              {/* price */}
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Main Price*</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Enter course price"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* discount */}
-              <FormField
-                control={form.control}
-                name="discount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Discount Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Enter course discount"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* thumbnail */}
-              <div className="flex-1">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                {/* price */}
                 <FormField
                   control={form.control}
-                  name="bannerImage"
-                  render={() => (
+                  name="price"
+                  render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Thumbnail*</FormLabel>
+                      <FormLabel>Main Price*</FormLabel>
                       <FormControl>
-                        <ImageUploader
-                          handleImageChange={handleImageChange}
-                          imagePreview={bannerImagePreview}
-                          handleRemoveImage={handleRemoveImage}
+                        <Input
+                          type="number"
+                          placeholder="Enter course price"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
+                {/* discount */}
+                <FormField
+                  control={form.control}
+                  name="discount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Discount Price</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Enter course discount"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* thumbnail */}
+                <div className="flex-1">
+                  <FormField
+                    control={form.control}
+                    name="bannerImage"
+                    render={() => (
+                      <FormItem>
+                        <FormLabel>Thumbnail*</FormLabel>
+                        <FormControl>
+                          <ImageUploader
+                            handleImageChange={handleImageChange}
+                            imagePreview={bannerImagePreview}
+                            handleRemoveImage={handleRemoveImage}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
             </div>
 

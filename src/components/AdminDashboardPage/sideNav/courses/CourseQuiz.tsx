@@ -1,5 +1,5 @@
 import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
-import { useFieldArray, type Control } from "react-hook-form";
+import { useFieldArray, useWatch, type Control } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -28,6 +28,25 @@ const CourseQuiz = ({ control, index }: CourseQuizProps) => {
     name: `courseOutline.${index}.quizzes`,
   });
 
+  const watchedQuizzes = useWatch({
+    control,
+    name: `courseOutline.${index}.quizzes`,
+  });
+  console.log("Watched Quizzes:", watchedQuizzes);
+  const canAddQuiz =
+    !watchedQuizzes ||
+    watchedQuizzes.length === 0 ||
+    watchedQuizzes.every((quiz) => {
+      const hasQuestion = quiz.question?.trim();
+      const hasOptions =
+        quiz.options.opt1?.trim() &&
+        quiz.options.opt2?.trim() &&
+        quiz.options.opt3?.trim() &&
+        quiz.options.opt4?.trim();
+      const hasAnswer = quiz.answer?.trim();
+      return hasQuestion && hasOptions && hasAnswer;
+    });
+
   return (
     <div className="space-y-4 p-4 bg-blue-50/50 rounded-xl border border-blue-100 mt-4">
       <div className="flex items-center justify-between">
@@ -42,6 +61,7 @@ const CourseQuiz = ({ control, index }: CourseQuizProps) => {
             })
           }
           className="bg-red-500 hover:bg-red-600 cursor-pointer"
+          disabled={!canAddQuiz}
         >
           Add Quiz
         </Button>
@@ -71,7 +91,7 @@ const CourseQuiz = ({ control, index }: CourseQuizProps) => {
               )}
             />
             {/* Options */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 mb-2">
               <FormField
                 control={control}
                 name={`courseOutline.${index}.quizzes.${k}.options.opt1`}

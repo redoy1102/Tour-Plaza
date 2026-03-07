@@ -14,3 +14,26 @@ export function formatDateShort(date?: Date | string | null): string {
     year: "numeric",
   }).format(d);
 }
+
+export const handlePreventEmptyField = <T extends Record<string, string>>(
+  value: T[],
+) => {
+  const final: boolean[] = [];
+  value.map((item) => {
+    const itemArray = Object.entries(item);
+
+    itemArray.map((element) => {
+      if (element[1] == "") {
+        final.push(false);
+      } else {
+        final.push(true);
+      }
+    });
+  });
+
+  if (final.includes(false)) {
+    return false;
+  } else {
+    return true;
+  }
+};

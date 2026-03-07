@@ -6,9 +6,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { handlePreventEmptyField } from "@/lib/utils";
 import { Plus, X } from "lucide-react";
 
-interface DayTimeEntry {
+interface DayTimeEntry extends Record<string, string> {
   day: string;
   startTime: string;
   endTime: string;
@@ -57,6 +58,7 @@ const TIME_OPTIONS = [
 ];
 
 const DayTimePicker = ({ value, onChange }: DayTimePickerProps) => {
+  console.log("Current live class time value:", value);
   const handleAdd = () => {
     onChange([...(value || []), { day: "", startTime: "", endTime: "" }]);
   };
@@ -68,7 +70,7 @@ const DayTimePicker = ({ value, onChange }: DayTimePickerProps) => {
   const handleUpdate = (
     index: number,
     field: keyof DayTimeEntry,
-    val: string
+    val: string,
   ) => {
     const updated = [...value];
     updated[index] = { ...updated[index], [field]: val };
@@ -168,6 +170,7 @@ const DayTimePicker = ({ value, onChange }: DayTimePickerProps) => {
         size="sm"
         onClick={handleAdd}
         className="w-full gap-2 mt-1"
+        disabled={!handlePreventEmptyField<DayTimeEntry>(value)}
       >
         <Plus className="w-4 h-4" />
         Add Schedule

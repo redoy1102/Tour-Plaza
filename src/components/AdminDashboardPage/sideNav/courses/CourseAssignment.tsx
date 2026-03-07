@@ -1,4 +1,4 @@
-import { type Control } from "react-hook-form";
+import { useFieldArray, type Control } from "react-hook-form";
 import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,8 +25,13 @@ interface CourseAssignmentProps {
 }
 
 const CourseAssignment = ({ control, index }: CourseAssignmentProps) => {
+  const {fields, append, remove} = useFieldArray({
+    control, 
+    name: `courseOutline.${index}.assignment`
+  })
+
   return (
-    <div className="space-y-4 p-4 bg-green-50/50 rounded-xl border border-green-100 mt-4">
+    <div className="space-y-4 p-4 bg-blue-50/50 rounded-xl border border-blue-100 mt-4">
       <div className="flex items-center justify-between">
         <h4 className="text-md font-semibold">Assignment</h4>
       </div>

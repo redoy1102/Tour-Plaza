@@ -2,7 +2,7 @@ import { PlusCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useFieldArray } from "react-hook-form";
+import { useFieldArray, useWatch } from "react-hook-form";
 import type { Control } from "react-hook-form";
 // import type { AddCourseFormValue } from "@/schemas/admin/adminSchema";
 import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
@@ -25,6 +25,18 @@ const ClassFields = ({ nextIndex, control }: ClassFieldsProps) => {
     control,
     name: `courseOutline.${nextIndex}.classes`,
   });
+
+  const watchedClasses = useWatch({
+    control,
+    name: `courseOutline.${nextIndex}.classes`,
+  });
+  console.log("Watched classes:", Boolean(watchedClasses));
+  console.log("Number of watched classes:", watchedClasses?.length);
+
+  const canAddClass =
+    !watchedClasses ||
+    watchedClasses.length === 0 ||
+    watchedClasses.every((cls) => cls.title?.trim() && cls.ytVideoUrl?.trim());
 
   return (
     <div className="space-y-4 p-4 bg-gray-50/50 rounded-xl border border-gray-100 mt-2">
@@ -90,6 +102,7 @@ const ClassFields = ({ nextIndex, control }: ClassFieldsProps) => {
         size="sm"
         onClick={() => append({ title: "", ytVideoUrl: "", resources: "" })}
         className="w-full border-dashed"
+        disabled={!canAddClass}
       >
         <PlusCircle className="w-3 h-3 mr-2" /> Add Class
       </Button>
@@ -100,7 +113,20 @@ const ClassFields = ({ nextIndex, control }: ClassFieldsProps) => {
 interface CourseOutlinePageProps {
   control: Control<AddCourseFormValue>;
 }
+
 const CourseOutlinePage = ({ control }: CourseOutlinePageProps) => {
+  const watchedOutline = useWatch({ control, name: "courseOutline" });
+
+  const canAddModule = () => {
+    if (!watchedOutline || watchedOutline.length === 0) return true;
+    return watchedOutline.every((module) => {
+      if (!module.moduleTitle?.trim()) return false;
+      if (!module.classes || module.classes.length === 0) return false;
+      return module.classes.every(
+        (cls) => cls.title?.trim() && cls.ytVideoUrl?.trim(),
+      );
+    });
+  };
   const { fields, append, remove } = useFieldArray({
     control,
     name: "courseOutline",
@@ -127,6 +153,7 @@ const CourseOutlinePage = ({ control }: CourseOutlinePageProps) => {
             })
           }
           className="bg-red-500 hover:bg-red-600"
+          disabled={!canAddModule()}
         >
           Add Module
         </Button>
