@@ -143,13 +143,7 @@ const CourseOutlinePage = ({ control }: CourseOutlinePageProps) => {
             append({
               moduleTitle: "",
               classes: [{ title: "", ytVideoUrl: "", resources: "" }],
-              assignment: {
-                title: "",
-                description: "",
-                instruction: "",
-                dueDate: new Date(),
-                maxMarks: 100,
-              },
+              assignment: [],
             })
           }
           className="bg-red-500 hover:bg-red-600"

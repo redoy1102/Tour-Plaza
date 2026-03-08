@@ -119,19 +119,21 @@ export const addCourseSchema = z.object({
             }),
           )
           .optional(),
-        assignment: z.object({
-          title: titleSchema.nonempty("Assignment title is required"),
-          description: descriptionSchema.nonempty(
-            "Assignment description is required",
-          ),
-          instruction: z.string().min(1, "Instruction cannot be empty"),
+        assignment: z.array(
+          z.object({
+            title: titleSchema.nonempty("Assignment title is required"),
+            description: descriptionSchema.nonempty(
+              "Assignment description is required",
+            ),
+            instruction: z.string().min(1, "Instruction cannot be empty"),
 
-          dueDate: z.date(),
-          maxMarks: z.coerce
-            .number()
-            .min(1, "Max marks must be at least 1")
-            .max(100, "Max marks cannot exceed 100"),
-        }),
+            dueDate: z.date(),
+            maxMarks: z.coerce
+              .number()
+              .min(1, "Max marks must be at least 1")
+              .max(100, "Max marks cannot exceed 100"),
+          }),
+        ),
       }),
     )
     .default([]),

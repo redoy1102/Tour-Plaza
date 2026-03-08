@@ -25,113 +25,134 @@ interface CourseAssignmentProps {
 }
 
 const CourseAssignment = ({ control, index }: CourseAssignmentProps) => {
-  const {fields, append, remove} = useFieldArray({
-    control, 
-    name: `courseOutline.${index}.assignment`
-  })
+  const { fields, append } = useFieldArray({
+    control,
+    name: `courseOutline.${index}.assignment`,
+  });
 
   return (
     <div className="space-y-4 p-4 bg-blue-50/50 rounded-xl border border-blue-100 mt-4">
       <div className="flex items-center justify-between">
-        <h4 className="text-md font-semibold">Assignment</h4>
+        <h4 className="text-md font-semibold">Add Assignment</h4>
+        <Button
+          type="button"
+          onClick={() =>
+            append({
+              title: "",
+              description: "",
+              instruction: "",
+              dueDate: new Date(),
+              maxMarks: 100,
+            })
+          }
+          className="bg-red-500 hover:bg-red-600 cursor-pointer"
+          disabled={fields.length > 0}
+        >
+          Add Assignment
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
-          control={control}
-          name={`courseOutline.${index}.assignment.title`}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Assignment Title</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="Enter assignment title" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      {fields.map((item, k) => (
+        <div
+          key={item.id}
+          className="space-y-3 border-b pb-4 last:border-0 grid grid-cols-1 gap-6 items-center"
+        >
+          <FormField
+            control={control}
+            name={`courseOutline.${index}.assignment.${k}.title`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Assignment Title</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Enter assignment title" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={control}
-          name={`courseOutline.${index}.assignment.maxMarks`}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Max Marks</FormLabel>
-              <FormControl>
-                <Input {...field} type="number" placeholder="100" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
+          <FormField
+            control={control}
+            name={`courseOutline.${index}.assignment.${k}.maxMarks`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Max Marks</FormLabel>
+                <FormControl>
+                  <Input {...field} type="number" placeholder="100" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <FormField
-        control={control}
-        name={`courseOutline.${index}.assignment.description`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Description</FormLabel>
-            <FormControl>
-              <Textarea {...field} placeholder="Assignment description" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+          <FormField
+            control={control}
+            name={`courseOutline.${index}.assignment.${k}.description`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea {...field} placeholder="Assignment description" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <FormField
-        control={control}
-        name={`courseOutline.${index}.assignment.instruction`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Instruction</FormLabel>
-            <FormControl>
-              <Textarea {...field} placeholder="Instruction" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+          <FormField
+            control={control}
+            name={`courseOutline.${index}.assignment.${k}.instruction`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Instruction</FormLabel>
+                <FormControl>
+                  <Textarea {...field} placeholder="Instruction" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <FormField
-        control={control}
-        name={`courseOutline.${index}.assignment.dueDate`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Due Date</FormLabel>
-            <br />
-            <FormControl>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    data-empty={!field.value}
-                    className="data-[empty=true]:text-muted-foreground w-full justify-between text-left font-normal"
-                  >
-                    {field.value ? (
-                      format(field.value, "PPP")
-                    ) : (
-                      <span>Pick a date</span>
-                    )}
-                    <ChevronDownIcon />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-53 p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    initialFocus
-                    className="w-full"
-                  />
-                </PopoverContent>
-              </Popover>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+          <FormField
+            control={control}
+            name={`courseOutline.${index}.assignment.${k}.dueDate`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Due Date</FormLabel>
+                <br />
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        data-empty={!field.value}
+                        className="data-[empty=true]:text-muted-foreground w-full justify-between text-left font-normal"
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <ChevronDownIcon />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-53 p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        initialFocus
+                        className="w-full"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      ))}
     </div>
   );
 };
