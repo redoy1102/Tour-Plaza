@@ -19,7 +19,7 @@ const AdminDashboardLayout = () => {
       }
       if (item.submenu) {
         const subItem = item.submenu.find(
-          (sub) => sub.path === location.pathname
+          (sub) => sub.path === location.pathname,
         );
         if (subItem) {
           return subItem.id;
@@ -42,7 +42,7 @@ const AdminDashboardLayout = () => {
     <div className="min-h-screen flex">
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-40 w-65 border-r border-gray-300 bg-white transform transition-transform duration-300 ease-in-out ${
+        className={`fixed lg:static inset-y-0 left-0 z-40 w-65 border-r border-gray-300 bg-white transform transition-transform duration-300 ease-in-out text-sm ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:-ml-72"
         }`}
       >
@@ -70,7 +70,7 @@ const AdminDashboardLayout = () => {
                     onClick={() =>
                       setExpandedMenu(expandedMenu === item.id ? null : item.id)
                     }
-                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer `}
+                    className={`w-full flex items-center gap-1 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer `}
                   >
                     {item.icon}
                     <span className="font-medium">{item.label}</span>
@@ -92,7 +92,7 @@ const AdminDashboardLayout = () => {
                               closeSidebarOnMobile();
                             }
                           }}
-                          className={`w-full flex items-center gap-4 px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer text-sm ${
+                          className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer text-xs ${
                             activeTab === subItem.id
                               ? "text-primary bg-gray-200 shadow-sm"
                               : "hover:text-gray-600 hover:bg-gray-100"

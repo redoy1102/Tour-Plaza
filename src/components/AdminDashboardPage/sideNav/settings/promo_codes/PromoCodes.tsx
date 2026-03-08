@@ -14,6 +14,7 @@ const PromoCodes = () => {
   const [editPromoCodeId, setEditPromoCodeId] = useState<number | null>(null);
 
   const [dialogOpen, setDialogOpen] = useState(false);
+  
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Check for Alt + N (You can use event.ctrlKey or event.metaKey for Cmd)

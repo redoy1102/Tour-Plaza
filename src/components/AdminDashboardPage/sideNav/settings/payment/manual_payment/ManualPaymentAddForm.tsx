@@ -1,6 +1,6 @@
 import { paymentMethodSchema } from "@/schemas/admin/adminSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import type { PaymentMethodFormValue } from "@/schemas/admin/adminSchema";
 import toast from "react-hot-toast";
 import React, { useMemo } from "react";
@@ -13,10 +13,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Send, X } from "lucide-react";
+import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import RichTextEditor from "@/components/ui/RichTextEditor";
 
-interface PaymentMethodAddFormProps {
+interface ManualPaymentAddFormProps {
   paymentMethods: PaymentMethodFormValue[];
   setPaymentMethods: React.Dispatch<
     React.SetStateAction<PaymentMethodFormValue[]>
@@ -26,24 +27,25 @@ interface PaymentMethodAddFormProps {
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PaymentMethodAddForm = ({
+const ManualPaymentAddForm = ({
   paymentMethods,
   setPaymentMethods,
   editPaymentMethodId,
   handleEditPaymentMethod,
   setDialogOpen,
-}: PaymentMethodAddFormProps) => {
+}: ManualPaymentAddFormProps) => {
   const defaultValues = useMemo(() => {
     if (editPaymentMethodId != null && paymentMethods[editPaymentMethodId]) {
       const paymentMethod = paymentMethods[editPaymentMethodId];
       return {
         name: paymentMethod.name,
-        imageFile: paymentMethod.imageFile,
+        description: paymentMethod.description,
+        // imageFile: paymentMethod.imageFile,
       };
     }
     return {
       name: "",
-      imageFile: undefined,
+      // imageFile: undefined,
     };
   }, [editPaymentMethodId, paymentMethods]);
 
@@ -53,44 +55,44 @@ const PaymentMethodAddForm = ({
   });
 
   // Watch the imageFile field for preview
-  const imagePreview = useWatch({
-    control: form.control,
-    name: "imageFile",
-  });
+  // const imagePreview = useWatch({
+  //   control: form.control,
+  //   name: "imageFile",
+  // });
 
   // Reset form when editPaymentMethodId changes
   React.useEffect(() => {
     form.reset(defaultValues);
   }, [editPaymentMethodId, defaultValues, form]);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      // Validate file size (5MB max)
-      if (file.size > 5000000) {
-        toast.error("Image size must not exceed 5MB");
-        event.target.value = "";
-        return;
-      }
+  // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     // Validate file size (5MB max)
+  //     if (file.size > 5000000) {
+  //       toast.error("Image size must not exceed 5MB");
+  //       event.target.value = "";
+  //       return;
+  //     }
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        form.setValue("imageFile", reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       form.setValue("imageFile", reader.result as string);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
-  const handleRemoveImage = () => {
-    form.setValue("imageFile", undefined);
-  };
+  // const handleRemoveImage = () => {
+  //   form.setValue("imageFile", undefined);
+  // };
 
   const onSubmit = async (data: PaymentMethodFormValue) => {
     if (editPaymentMethodId !== null) {
       setPaymentMethods((prev) =>
         prev.map((paymentMethod, index) =>
-          index === editPaymentMethodId ? data : paymentMethod
-        )
+          index === editPaymentMethodId ? data : paymentMethod,
+        ),
       );
 
       toast.success("Payment method updated successfully!", {
@@ -127,7 +129,26 @@ const PaymentMethodAddForm = ({
               </FormItem>
             )}
           />
+          {/* description */}
           <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description*</FormLabel>
+                <FormControl>
+                  <RichTextEditor
+                    value={field.value || ""}
+                    onChange={(content) => field.onChange(content)}
+                    height={500}
+                    placeholder="Enter course description"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* <FormField
             control={form.control}
             name="imageFile"
             render={() => (
@@ -162,7 +183,7 @@ const PaymentMethodAddForm = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
           <div className="flex items-center gap-2">
             <Button
               type="submit"
@@ -180,4 +201,4 @@ const PaymentMethodAddForm = ({
   );
 };
 
-export default PaymentMethodAddForm;
+export default ManualPaymentAddForm;

@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import Announcements from "@/components/AdminDashboardPage/sideNav/announcements/Announcements";
 import SupportsTickets from "@/components/AdminDashboardPage/sideNav/supports_tickets/SupportsTickets";
-import PaymentMethods from "@/components/AdminDashboardPage/sideNav/settings/payment_methods/paymentMethods";
+import ManualPayment from "@/components/AdminDashboardPage/sideNav/settings/payment/manual_payment/ManualPayment";
 import Instructors from "@/components/AdminDashboardPage/sideNav/team_members/instructors/Instructors";
 import SupportStaff from "@/components/AdminDashboardPage/sideNav/team_members/support_staff/SupportStaff";
 import RolesPermissions from "@/components/AdminDashboardPage/sideNav/settings/roles_permissions/RolesPermissions";
@@ -30,6 +30,8 @@ import PromoCodes from "@/components/AdminDashboardPage/sideNav/settings/promo_c
 import CourseCategory from "@/components/AdminDashboardPage/sideNav/course_category/CourseCategory";
 import Tools from "@/components/AdminDashboardPage/sideNav/settings/tools/Tools";
 import Prerequisites from "@/components/AdminDashboardPage/sideNav/settings/prerequisites/Prerequisites";
+import ManualPaymentHistory from "@/components/AdminDashboardPage/sideNav/settings/payment/manual_payment/ManualPaymentHistory";
+import PaymentGateways from "@/components/AdminDashboardPage/sideNav/settings/payment/payment_gateways/PaymentGateways";
 
 export const menuItems = [
   // dashboard
@@ -124,6 +126,36 @@ export const menuItems = [
       },
     ],
   },
+  // Payment
+  {
+    id: "paymentMethods",
+    label: "Payment",
+    icon: <CreditCard className="w-5 h-5" />,
+    hasSubmenu: true,
+    submenu: [
+      {
+        id: "paymentMethods",
+        label: "Payment Gateways",
+        icon: <CreditCard className="w-5 h-5" />,
+        component: <PaymentGateways />,
+        path: "/admin-dashboard/payment/payment-gateways",
+      },
+      {
+        id: "manualPaymentMethods",
+        label: "Manual Payment Methods",
+        icon: <CreditCard className="w-5 h-5" />,
+        component: <ManualPayment />,
+        path: "/admin-dashboard/payment/manual-payment-methods",
+      },
+      {
+        id: "manualPaymentHistory",
+        label: "Manual Payment History",
+        icon: <CreditCard className="w-5 h-5" />,
+        component: <ManualPaymentHistory />,
+        path: "/admin-dashboard/payment/manual-payment-history",
+      },
+    ],
+  },
   // Settings
   {
     id: "settings",
@@ -144,13 +176,6 @@ export const menuItems = [
         icon: <BadgePercent className="w-5 h-5" />,
         component: <PromoCodes />,
         path: "/admin-dashboard/settings/promo-codes",
-      },
-      {
-        id: "paymentMethods",
-        label: "Payment Methods",
-        icon: <CreditCard className="w-5 h-5" />,
-        component: <PaymentMethods />,
-        path: "/admin-dashboard/settings/payment-methods",
       },
       {
         id: "tools",
@@ -219,8 +244,9 @@ export const supportStaffTableHeader = [
 
 export const paymentMethodsTableHeader = [
   { id: "index", label: "#" },
-  { id: "img", label: "Image" },
+  // { id: "img", label: "Image" },
   { id: "name", label: "Name" },
+  {id: "description", label: "Description" },
   { id: "actions", label: "Actions", align: "right" },
 ];
 

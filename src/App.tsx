@@ -24,7 +24,6 @@ import Enrollments from "./components/AdminDashboardPage/sideNav/enrollments/Enr
 import Courses from "./components/AdminDashboardPage/sideNav/courses/Courses";
 import Students from "./components/AdminDashboardPage/sideNav/students/Students";
 import SupportsTickets from "./components/AdminDashboardPage/sideNav/supports_tickets/SupportsTickets";
-import PaymentMethods from "./components/AdminDashboardPage/sideNav/settings/payment_methods/paymentMethods";
 import Announcements from "./components/AdminDashboardPage/sideNav/announcements/Announcements";
 import Instructors from "./components/AdminDashboardPage/sideNav/team_members/instructors/Instructors";
 import SupportStaff from "./components/AdminDashboardPage/sideNav/team_members/support_staff/SupportStaff";
@@ -36,6 +35,9 @@ import Prerequisites from "@/components/AdminDashboardPage/sideNav/settings/prer
 import AddCourseForm from "./components/AdminDashboardPage/sideNav/courses/AddCourseForm";
 import CourseView from "./components/AdminDashboardPage/sideNav/courses/CourseView";
 import CourseOutlinePage from "./components/AdminDashboardPage/sideNav/courses/CourseOutlinePage";
+import ManualPaymentHistory from "./components/AdminDashboardPage/sideNav/settings/payment/manual_payment/ManualPaymentHistory";
+import ManualPayment from "./components/AdminDashboardPage/sideNav/settings/payment/manual_payment/ManualPayment";
+import PaymentGateways from "./components/AdminDashboardPage/sideNav/settings/payment/payment_gateways/PaymentGateways";
 
 function App() {
   return (
@@ -87,16 +89,25 @@ function App() {
               path="team-members/support-staff"
               element={<SupportStaff />}
             />
+            {/* Payment */}
+            <Route
+              path="payment/payment-gateways"
+              element={<PaymentGateways />}
+            />
+            <Route
+              path="payment/manual-payment-methods"
+              element={<ManualPayment />}
+            />
+            <Route
+              path="payment/manual-payment-history"
+              element={<ManualPaymentHistory />}
+            />
             {/* Settings */}
             <Route
               path="settings/roles-permissions"
               element={<RolesPermissions />}
             />
             <Route path="settings/promo-codes" element={<PromoCodes />} />
-            <Route
-              path="settings/payment-methods"
-              element={<PaymentMethods />}
-            />
             <Route path="settings/tools" element={<Tools />} />
             <Route path="settings/prerequisites" element={<Prerequisites />} />
           </Route>

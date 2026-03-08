@@ -10,9 +10,9 @@ import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { paymentMethodsTableHeader } from "@/data/admin/AdminDashboardMenuData";
 import type { PaymentMethodFormValue } from "@/schemas/admin/adminSchema";
-import ImagePreviewHolder from "../../shared/ImagePreviewHolder";
+// import ImagePreviewHolder from "../../../shared/ImagePreviewHolder";
 
-interface PaymentMethodListsProps {
+interface ManualPaymentListsProps {
   paymentMethods: PaymentMethodFormValue[];
   setPaymentMethods: React.Dispatch<
     React.SetStateAction<PaymentMethodFormValue[]>
@@ -20,11 +20,11 @@ interface PaymentMethodListsProps {
   handleEditPaymentMethod: (paymentMethodId: number | null) => void;
 }
 
-const PaymentMethodLists = ({
+const ManualPaymentLists = ({
   paymentMethods,
   setPaymentMethods,
   handleEditPaymentMethod,
-}: PaymentMethodListsProps) => {
+}: ManualPaymentListsProps) => {
   const handleDelete = (index: number) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
@@ -73,16 +73,24 @@ const PaymentMethodLists = ({
               {paymentMethods.map((paymentMethod, index: number) => (
                 <TableRow key={index}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <ImagePreviewHolder
                       imageSrc={paymentMethod.imageFile}
                       altText={paymentMethod.name}
                       imgWidth={20}
                       imgHeight={10}
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell className="font-medium">
                     {paymentMethod.name}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    <div
+                      className="prose max-w-none"
+                      dangerouslySetInnerHTML={{
+                        __html: paymentMethod.description ?? "",
+                      }}
+                    />
                   </TableCell>
                   <TableCell className="text-right flex items-center justify-end gap-2">
                     <button
@@ -108,4 +116,4 @@ const PaymentMethodLists = ({
   );
 };
 
-export default PaymentMethodLists;
+export default ManualPaymentLists;
