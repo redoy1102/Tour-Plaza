@@ -79,8 +79,13 @@ const PromoCodesList = ({
                     {promoCode.discountPercentage}%
                   </TableCell>
                   <TableCell className="font-medium">
-                    {promoCode.validity
-                      ? formatDateShort(promoCode.validity)
+                    {promoCode.startDate
+                      ? formatDateShort(promoCode.startDate)
+                      : ""}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {promoCode.endDate
+                      ? formatDateShort(promoCode.endDate)
                       : ""}
                   </TableCell>
 

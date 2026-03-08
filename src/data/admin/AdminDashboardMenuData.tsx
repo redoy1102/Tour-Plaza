@@ -194,7 +194,8 @@ export const promoCodesTableHeader = [
   { id: "index", label: "#" },
   { id: "code", label: "Code" },
   { id: "discountPercentage", label: "Discount" },
-  { id: "validity", label: "Validity" },
+  { id: "startDate", label: "Start Date" },
+  { id: "endDate", label: "End Date" },
   { id: "actions", label: "Actions", align: "right" },
 ];
 

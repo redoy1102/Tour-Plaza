@@ -3,6 +3,7 @@ import {
   descriptionSchema,
   imageUploadSchema,
   nameSchema,
+  optionalDate,
   titleSchema,
 } from "../shared.schema";
 
@@ -21,14 +22,16 @@ export const promoCodeSchema = z.object({
     .number()
     .min(1, "Discount must be at least 1%")
     .max(100, "Discount cannot exceed 100%"),
-  validity: z
-    .date()
-    .optional()
-    .refine((date) => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Set time to midnight
-      return !date || date >= today;
-    }, "Valid until date must be today or in the future"),
+  startDate: optionalDate.refine((date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return !date || date >= today;
+  }, "Start date must be today or in the future"),
+  endDate: optionalDate.refine((date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return !date || date >= today;
+  }, "End date must be today or in the future"),
 });
 export type PromoCodeFormValue = z.infer<typeof promoCodeSchema>;
 

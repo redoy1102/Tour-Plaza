@@ -15,14 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { ChevronDownIcon } from "lucide-react";
+import SingleDatePicker from "@/components/shared/SingleDatePicker";
 
 interface PromoCodesFormProps {
   promoCodes: PromoCodeFormValue[];
@@ -47,9 +40,13 @@ const PromoCodesForm = ({
         editPromoCodeId !== null
           ? promoCodes[editPromoCodeId!].discountPercentage
           : 0,
-      validity:
+      startDate:
         editPromoCodeId !== null
-          ? promoCodes[editPromoCodeId!].validity
+          ? promoCodes[editPromoCodeId!].startDate
+          : undefined,
+      endDate:
+        editPromoCodeId !== null
+          ? promoCodes[editPromoCodeId!].endDate
           : undefined,
     },
   });
@@ -58,8 +55,8 @@ const PromoCodesForm = ({
     if (editPromoCodeId !== null) {
       setPromoCodes((prev) =>
         prev.map((promoCode, index) =>
-          index === editPromoCodeId ? data : promoCode
-        )
+          index === editPromoCodeId ? data : promoCode,
+        ),
       );
 
       toast.success("Promo code updated successfully!", {
@@ -81,7 +78,10 @@ const PromoCodesForm = ({
   return (
     <div className="bg-white rounded-3xl border border-gray-200">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-1 md:grid-cols-2 gap-2 items-center space-y-4 p-6"
+        >
           <FormField
             control={form.control}
             name="code"
@@ -115,36 +115,25 @@ const PromoCodesForm = ({
           />
           <FormField
             control={form.control}
-            name="validity"
+            name="startDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Validity (Optional)</FormLabel> <br />
+                <FormLabel>Start Date</FormLabel> <br />
                 <FormControl>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        data-empty={!field.value}
-                        className="data-[empty=true]:text-muted-foreground w-53 justify-between text-left font-normal"
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <ChevronDownIcon />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-53 p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        initialFocus
-                        className="w-full"
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <SingleDatePicker field={field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="endDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>End Date</FormLabel> <br />
+                <FormControl>
+                  <SingleDatePicker field={field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
