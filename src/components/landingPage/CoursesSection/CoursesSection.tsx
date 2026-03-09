@@ -3,22 +3,29 @@ import { ChevronLeft, ChevronRight, MonitorPlay } from "lucide-react";
 import Header from "@/components/shared/Header";
 // import Course from "./Course";
 import { courses } from "@/data/landingPage/courses";
-import { coursePaths } from "@/data/landingPage/coursePaths";
 import CourseCard from "./CourseCard";
+import { useAppSelector } from "@/Redux/hooks";
 
 interface CoursesProps {
   isFeatured?: boolean;
   isFreeCourses?: boolean;
 }
 
-const Courses = ({isFeatured, isFreeCourses}: CoursesProps) => {
+const Courses = ({ isFeatured, isFreeCourses }: CoursesProps) => {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const requestedCourses = isFeatured ? courses.filter(course => course.isFeatured) : isFreeCourses ? courses.filter(course => course.isFreeCourse) : "";
+  const requestedCourses = isFeatured
+    ? courses.filter((course) => course.isFeatured)
+    : isFreeCourses
+    ? courses.filter((course) => course.isFreeCourse)
+    : "";
   // const featuredCourses = courses.filter((course) => course.isFeatured);
+  const categories = useAppSelector((state) => state.categories.items);
+  console.log("All the categories:", categories);
 
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  console.log("Active category:", activeCategory);
 
-  if(!requestedCourses) return null;
+  if (!requestedCourses) return null;
 
   // Scroll handler
   const scroll = (direction: "left" | "right") => {
@@ -39,7 +46,16 @@ const Courses = ({isFeatured, isFreeCourses}: CoursesProps) => {
   return (
     <section className="container mx-auto px-4 md:px-12 xl:px-4 py-16">
       {/* Header */}
-      <Header icon={MonitorPlay} normalText={isFeatured ? "Featured" : "Free"} colorText="Courses" description={isFeatured ? "Explore our top-rated courses and enhance your skills." : "Discover our free courses and start learning today."} />
+      <Header
+        icon={MonitorPlay}
+        normalText={isFeatured ? "Featured" : "Free"}
+        colorText="Courses"
+        description={
+          isFeatured
+            ? "Explore our top-rated courses and enhance your skills."
+            : "Discover our free courses and start learning today."
+        }
+      />
 
       {/* Categories */}
       <div className="mb-10 flex items-center gap-3">
@@ -68,17 +84,17 @@ const Courses = ({isFeatured, isFreeCourses}: CoursesProps) => {
             All Courses
           </button>
 
-          {coursePaths.map((item) => (
+          {categories.map((cat: { id: string; name: string; label: string }) => (
             <button
-              key={item.category}
-              onClick={() => setActiveCategory(item.category)}
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.name)}
               className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm transition ${
-                activeCategory === item.category
+                activeCategory === cat.name
                   ? "bg-secondary text-white"
                   : "text-gray-700"
               }`}
             >
-              {item.label}
+              {cat.label}
             </button>
           ))}
         </div>
@@ -91,7 +107,7 @@ const Courses = ({isFeatured, isFreeCourses}: CoursesProps) => {
           <ChevronRight className="h-6 w-6 lg:h-4 lg:w-4" />
         </button>
       </div>
-          
+
       {/* Course Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {filteredCourses.map((singleCourse, index) => (

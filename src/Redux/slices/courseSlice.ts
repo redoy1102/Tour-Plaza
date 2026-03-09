@@ -19,6 +19,7 @@ const coursesSlice = createSlice({
   reducers: {
     setCourses(state, action: PayloadAction<Course[]>) {
       state.items = action.payload;
+      
     },
     addCourse(state, action: PayloadAction<AddCourseFormValue>) {
       state.items.push({ id: nanoid(), ...action.payload });

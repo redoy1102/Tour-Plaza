@@ -1,7 +1,9 @@
 import "./App.css";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layouts/Layout";
 import { Toaster } from "react-hot-toast";
+import Spinner from "./components/shared/Spinner";
 import StudentLayout from "./components/Layouts/StudentLayout";
 import Home from "@/Pages/Home/Home";
 import AboutPage from "@/Pages/AboutPage/AboutPage";
@@ -40,6 +42,14 @@ import ManualPayment from "./components/AdminDashboardPage/sideNav/settings/paym
 import PaymentGateways from "./components/AdminDashboardPage/sideNav/settings/payment/payment_gateways/PaymentGateways";
 
 function App() {
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  useEffect(() => {
+    setIsAppReady(true);
+  }, []);
+
+  if (!isAppReady) return <Spinner />;
+
   return (
     <>
       <Toaster position="top-center" />

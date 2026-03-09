@@ -22,6 +22,7 @@ const CourseCategoryList = ({
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.categories.items);
   console.log(categories);
+  
 
   const handleDelete = (id: string) => {
     toast((t) => (
@@ -74,6 +75,9 @@ const CourseCategoryList = ({
                 <TableRow key={category.id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell className="font-medium">{category.name}</TableCell>
+                  <TableCell className="font-medium">
+                    {category.label}
+                  </TableCell>
 
                   <TableCell className="text-right flex items-center justify-end gap-2">
                     <button

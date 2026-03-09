@@ -5,6 +5,7 @@ import { createSlice, type PayloadAction, nanoid } from "@reduxjs/toolkit";
 export interface Category {
   id: string;
   name: string;
+  label: string;
 }
 
 interface CategoriesState {
@@ -12,10 +13,7 @@ interface CategoriesState {
 }
 
 const initialState: CategoriesState = {
-  items: [{
-    id: nanoid(),
-    name: "Fuad",
-  }],
+  items: [],
 };
 
 const categoriesSlice = createSlice({

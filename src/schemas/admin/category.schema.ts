@@ -1,9 +1,8 @@
 import * as z from "zod";
+import { nameSchema } from "../shared.schema";
 
 export const categorySchema = z.object({
-  name: z
-    .string()
-    .min(3, "Category name must be at least 3 characters")
-    .max(50),
+  name: nameSchema,
+  label: nameSchema
 });
 export type CategoryFormValue = z.infer<typeof categorySchema>;

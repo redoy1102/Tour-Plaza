@@ -213,6 +213,7 @@ export const announcementTableHeader = [
 export const courseCategoryTableHeader = [
   { id: "index", label: "#" },
   { id: "name", label: "Name" },
+  { id: "label", label: "Label" },
   { id: "actions", label: "Actions", align: "right" },
 ];
 
@@ -247,7 +248,7 @@ export const paymentMethodsTableHeader = [
   { id: "index", label: "#" },
   // { id: "img", label: "Image" },
   { id: "name", label: "Name" },
-  {id: "description", label: "Description" },
+  { id: "description", label: "Description" },
   { id: "actions", label: "Actions", align: "right" },
 ];
 

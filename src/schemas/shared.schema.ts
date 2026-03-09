@@ -11,7 +11,7 @@ export const titleSchema = z
 
 export const nameSchema = z
   .string()
-  .min(2, "Name must be at least 2 characters")
+  .min(1, "Name must be at least 1 character")
   .max(50, "Name cannot exceed 50 characters");
 
 export const roleSchema = z

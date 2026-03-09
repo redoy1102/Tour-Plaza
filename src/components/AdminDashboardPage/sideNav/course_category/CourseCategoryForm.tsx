@@ -33,10 +33,15 @@ const CourseCategoryForm = ({
 
   const form = useForm<CategoryFormValue>({
     resolver: zodResolver(categorySchema),
+    mode: "onBlur",
     defaultValues: {
       name:
         editCategoryId !== null
           ? categories.find((c) => c.id === editCategoryId!)?.name || ""
+          : "",
+      label:
+        editCategoryId !== null
+          ? categories.find((c) => c.id === editCategoryId!)?.label || ""
           : "",
     },
   });
@@ -64,19 +69,26 @@ const CourseCategoryForm = ({
     <div className="bg-white rounded-3xl border border-gray-200">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter category name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {formFields.map((fieldConfig) => (
+            <FormField
+              key={fieldConfig.name}
+              control={form.control}
+              name={fieldConfig.name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{fieldConfig.label}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={`Enter ${fieldConfig.label.toLowerCase()}`}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+
           <div className="flex items-center gap-2">
             <Button
               type="submit"
@@ -93,3 +105,8 @@ const CourseCategoryForm = ({
 };
 
 export default CourseCategoryForm;
+
+const formFields = [
+  { name: "name" as const, label: "Name" },
+  { name: "label" as const, label: "Label (Bangla)" },
+] as const;
