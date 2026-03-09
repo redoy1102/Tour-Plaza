@@ -19,7 +19,9 @@ const AdminDashboardLayout = () => {
       }
       if (item.submenu) {
         const subItem = item.submenu.find(
-          (sub) => sub.path === location.pathname,
+          (sub) =>
+            sub.path === location.pathname ||
+            sub.createButtonPath === location.pathname
         );
         if (subItem) {
           return subItem.id;

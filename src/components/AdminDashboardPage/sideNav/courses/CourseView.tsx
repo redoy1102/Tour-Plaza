@@ -390,22 +390,22 @@ const CourseViewPage = () => {
                             <div className="md:col-span-3 space-y-4">
                               <div className="bg-white p-4 border rounded-xl shadow-sm">
                                 <h5 className="font-bold text-lg text-gray-900 mb-2">
-                                  {module.assignment.title}
+                                  {module.assignment[0].title}
                                 </h5>
                                 <div
                                   className="text-sm text-gray-600 prose prose-sm max-w-none mb-4"
                                   dangerouslySetInnerHTML={{
-                                    __html: module.assignment.description,
+                                    __html: module.assignment[0].description,
                                   }}
                                 />
-                                {module.assignment.instruction && (
+                                {module.assignment[0].instruction && (
                                   <div className="bg-amber-50/50 border border-amber-100 p-3 rounded-lg">
                                     <p className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-2 flex items-center gap-1">
                                       <BookOpen className="w-3 h-3" />
                                       Instructions
                                     </p>
                                     <p className="text-sm text-gray-700 leading-relaxed italic">
-                                      "{module.assignment.instruction}"
+                                      "{module.assignment[0].instruction}"
                                     </p>
                                   </div>
                                 )}
@@ -422,7 +422,7 @@ const CourseViewPage = () => {
                                       Max Marks
                                     </p>
                                     <p className="font-bold text-gray-900">
-                                      {module.assignment.maxMarks}
+                                      {module.assignment[0].maxMarks}
                                     </p>
                                   </div>
                                 </div>
@@ -435,9 +435,9 @@ const CourseViewPage = () => {
                                       Due Date
                                     </p>
                                     <p className="font-bold text-gray-900">
-                                      {module.assignment.dueDate
+                                      {module.assignment[0].dueDate
                                         ? format(
-                                            new Date(module.assignment.dueDate),
+                                            new Date(module.assignment[0].dueDate),
                                             "PPP",
                                           )
                                         : "No Deadline"}

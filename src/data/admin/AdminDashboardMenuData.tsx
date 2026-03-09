@@ -56,6 +56,7 @@ export const menuItems = [
         icon: <BookOpen className="w-5 h-5" />,
         component: <Courses />,
         path: "/admin-dashboard/courses/allCourses",
+        createButtonPath: "/admin-dashboard/courses/addCourse",
       },
       {
         id: "courseCategory",
