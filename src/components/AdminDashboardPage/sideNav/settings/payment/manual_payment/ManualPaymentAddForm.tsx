@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { PaymentMethodFormValue } from "@/schemas/admin/adminSchema";
 import toast from "react-hot-toast";
-import React, { useMemo } from "react";
+import React from "react";
 import {
   Form,
   FormControl,
@@ -16,42 +16,37 @@ import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import RichTextEditor from "@/components/ui/RichTextEditor";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/Redux/hooks";
+import { addPayment, updatePayment } from "@/Redux/slices/paymentSlice";
 
 interface ManualPaymentAddFormProps {
-  paymentMethods: PaymentMethodFormValue[];
-  setPaymentMethods: React.Dispatch<
-    React.SetStateAction<PaymentMethodFormValue[]>
-  >;
-  editPaymentMethodId?: number | null;
-  handleEditPaymentMethod: (paymentMethodId: number | null) => void;
+  editPaymentMethodId?: string | null;
+  handleEditPaymentMethod: (paymentMethodId: string | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ManualPaymentAddForm = ({
-  paymentMethods,
-  setPaymentMethods,
   editPaymentMethodId,
   handleEditPaymentMethod,
   setDialogOpen,
 }: ManualPaymentAddFormProps) => {
-  const defaultValues = useMemo(() => {
-    if (editPaymentMethodId != null && paymentMethods[editPaymentMethodId]) {
-      const paymentMethod = paymentMethods[editPaymentMethodId];
-      return {
-        name: paymentMethod.name,
-        description: paymentMethod.description,
-        // imageFile: paymentMethod.imageFile,
-      };
-    }
-    return {
-      name: "",
-      // imageFile: undefined,
-    };
-  }, [editPaymentMethodId, paymentMethods]);
+  const dispatch = useDispatch();
+  const existingPaymentMethods = useAppSelector(
+    (state) => state.paymentMethods.items,
+  );
+  const existingPaymentMethod = existingPaymentMethods.find(
+    (c) => c.id === editPaymentMethodId,
+  );
 
   const form = useForm<PaymentMethodFormValue>({
     resolver: zodResolver(paymentMethodSchema),
-    defaultValues,
+    defaultValues: {
+      name: existingPaymentMethod ? existingPaymentMethod.name : "",
+      description: existingPaymentMethod
+        ? existingPaymentMethod.description
+        : "",
+    },
   });
 
   // Watch the imageFile field for preview
@@ -62,8 +57,13 @@ const ManualPaymentAddForm = ({
 
   // Reset form when editPaymentMethodId changes
   React.useEffect(() => {
-    form.reset(defaultValues);
-  }, [editPaymentMethodId, defaultValues, form]);
+    form.reset({
+      name: existingPaymentMethod ? existingPaymentMethod.name : "",
+      description: existingPaymentMethod
+        ? existingPaymentMethod.description
+        : "",
+    });
+  }, [editPaymentMethodId, existingPaymentMethod, form]);
 
   // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   const file = event.target.files?.[0];
@@ -89,17 +89,12 @@ const ManualPaymentAddForm = ({
 
   const onSubmit = async (data: PaymentMethodFormValue) => {
     if (editPaymentMethodId !== null) {
-      setPaymentMethods((prev) =>
-        prev.map((paymentMethod, index) =>
-          index === editPaymentMethodId ? data : paymentMethod,
-        ),
-      );
-
+      dispatch(updatePayment({ id: editPaymentMethodId!, data }));
       toast.success("Payment method updated successfully!", {
         id: "edit-payment-method-success",
       });
     } else {
-      setPaymentMethods((prev) => [...prev, data]);
+      dispatch(addPayment(data));
       toast.success("Payment method created successfully!", {
         id: "add-payment-method-success",
       });

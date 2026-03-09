@@ -1,4 +1,3 @@
-import type { PaymentMethodFormValue } from "@/schemas/admin/adminSchema";
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import PageHeader from "../../../shared/PageHeader";
@@ -7,12 +6,7 @@ import ManualPaymentLists from "./ManualPaymentLists";
 import KbdCreateButton from "../../../shared/KbdCreateButton";
 
 const ManualPayment = () => {
-  const [paymentMethods, setPaymentMethods] = useState<
-    PaymentMethodFormValue[]
-  >([]);
-  console.log("All payment methods:", paymentMethods);
-
-  const [editPaymentMethodId, setEditPaymentMethodId] = useState<number | null>(
+  const [editPaymentMethodId, setEditPaymentMethodId] = useState<string | null>(
     null,
   );
 
@@ -31,7 +25,7 @@ const ManualPayment = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const handleEditPaymentMethod = (paymentMethodId: number | null) => {
+  const handleEditPaymentMethod = (paymentMethodId: string | null) => {
     setEditPaymentMethodId(paymentMethodId);
     if (paymentMethodId !== null) {
       setDialogOpen(true);
@@ -53,8 +47,6 @@ const ManualPayment = () => {
           </DialogTrigger>
           <DialogContent>
             <ManualPaymentAddForm
-              paymentMethods={paymentMethods}
-              setPaymentMethods={setPaymentMethods}
               editPaymentMethodId={editPaymentMethodId}
               handleEditPaymentMethod={handleEditPaymentMethod}
               setDialogOpen={setDialogOpen}
@@ -64,8 +56,6 @@ const ManualPayment = () => {
       </div>
 
       <ManualPaymentLists
-        paymentMethods={paymentMethods}
-        setPaymentMethods={setPaymentMethods}
         handleEditPaymentMethod={handleEditPaymentMethod}
       />
     </div>

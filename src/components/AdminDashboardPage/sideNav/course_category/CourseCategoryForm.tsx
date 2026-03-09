@@ -16,6 +16,7 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
 import { updateCategory, addCategory } from "@/Redux/slices/categorySlice";
+import { useEffect } from "react";
 
 interface CourseCategoryFormProps {
   editCategoryId?: string | null;
@@ -30,21 +31,24 @@ const CourseCategoryForm = ({
 }: CourseCategoryFormProps) => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.categories.items);
+  const existCategory = categories.find((c) => c.id === editCategoryId);
 
   const form = useForm<CategoryFormValue>({
     resolver: zodResolver(categorySchema),
     mode: "onBlur",
     defaultValues: {
-      name:
-        editCategoryId !== null
-          ? categories.find((c) => c.id === editCategoryId!)?.name || ""
-          : "",
-      label:
-        editCategoryId !== null
-          ? categories.find((c) => c.id === editCategoryId!)?.label || ""
-          : "",
+      name: existCategory ? existCategory.name : "",
+      label: existCategory ? existCategory.label : "",
     },
   });
+
+  // Sync form values with the selected category when editCategoryId changes
+  useEffect(() => {
+    form.reset({
+      name: existCategory ? existCategory.name : "",
+      label: existCategory ? existCategory.label : "",
+    });
+  }, [editCategoryId, existCategory, form]);
 
   const onSubmit = (data: CategoryFormValue) => {
     if (editCategoryId !== null) {

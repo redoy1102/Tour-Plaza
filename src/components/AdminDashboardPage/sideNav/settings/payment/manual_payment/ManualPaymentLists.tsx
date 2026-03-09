@@ -9,30 +9,29 @@ import {
 import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { paymentMethodsTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import type { PaymentMethodFormValue } from "@/schemas/admin/adminSchema";
+import { useAppSelector } from "@/Redux/hooks";
+import { useDispatch } from "react-redux";
+import { removePayment } from "@/Redux/slices/paymentSlice";
 // import ImagePreviewHolder from "../../../shared/ImagePreviewHolder";
 
 interface ManualPaymentListsProps {
-  paymentMethods: PaymentMethodFormValue[];
-  setPaymentMethods: React.Dispatch<
-    React.SetStateAction<PaymentMethodFormValue[]>
-  >;
-  handleEditPaymentMethod: (paymentMethodId: number | null) => void;
+  handleEditPaymentMethod: (paymentMethodId: string | null) => void;
 }
 
 const ManualPaymentLists = ({
-  paymentMethods,
-  setPaymentMethods,
   handleEditPaymentMethod,
 }: ManualPaymentListsProps) => {
-  const handleDelete = (index: number) => {
+  const dispatch = useDispatch();
+  const paymentMethods = useAppSelector((state) => state.paymentMethods.items);
+
+  const handleDelete = (paymentMethodId: string) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
         <p>Are you sure you want to delete this payment method?</p>
         <div className="flex gap-2">
           <button
             onClick={() => {
-              setPaymentMethods((prev) => prev.filter((_, i) => i !== index));
+              dispatch(removePayment(paymentMethodId));
               toast.success("Payment method deleted successfully!");
               toast.dismiss(t.id);
             }}
@@ -71,7 +70,7 @@ const ManualPaymentLists = ({
             </TableHeader>
             <TableBody>
               {paymentMethods.map((paymentMethod, index: number) => (
-                <TableRow key={index}>
+                <TableRow key={paymentMethod.id}>
                   <TableCell>{index + 1}</TableCell>
                   {/* <TableCell>
                     <ImagePreviewHolder
@@ -94,13 +93,13 @@ const ManualPaymentLists = ({
                   </TableCell>
                   <TableCell className="text-right flex items-center justify-end gap-2">
                     <button
-                      onClick={() => handleEditPaymentMethod(index)}
+                      onClick={() => handleEditPaymentMethod(paymentMethod.id)}
                       className="cursor-pointer"
                     >
                       <SquarePen />
                     </button>
                     <button
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(paymentMethod.id)}
                       className="text-red-500 hover:text-red-700 cursor-pointer"
                     >
                       <Trash />
