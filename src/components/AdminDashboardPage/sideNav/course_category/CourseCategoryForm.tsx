@@ -35,12 +35,14 @@ const CourseCategoryForm = ({
 
   const form = useForm<CategoryFormValue>({
     resolver: zodResolver(categorySchema),
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: {
       name: existCategory ? existCategory.name : "",
       label: existCategory ? existCategory.label : "",
     },
   });
+
+  const { isSubmitting, isDirty } = form.formState;
 
   // Sync form values with the selected category when editCategoryId changes
   useEffect(() => {
@@ -97,9 +99,16 @@ const CourseCategoryForm = ({
             <Button
               type="submit"
               className="gap-2 shadow-lg hover:shadow-xl bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
+              disabled={isSubmitting || (existCategory && !isDirty)}
             >
               <Send className="w-4 h-4" />
-              {editCategoryId !== null ? "Update Category" : "Add Category"}
+              {editCategoryId !== null
+                ? isSubmitting
+                  ? "Updating..."
+                  : "Update Category"
+                : isSubmitting
+                ? "Adding..."
+                : "Add Category"}
             </Button>
           </div>
         </form>

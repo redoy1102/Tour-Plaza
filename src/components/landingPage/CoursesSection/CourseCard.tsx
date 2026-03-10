@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
-import type { Course } from "@/types/courses.interface";
+import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
+
+interface singleCourse extends AddCourseFormValue{
+  id: string
+}
+
 
 interface CourseCardProps {
-  singleCourse: Course;
+  singleCourse: singleCourse;
   index: number;
   closeSearchResultModal?: () => void;
 }
@@ -25,7 +30,7 @@ const CourseCard = ({
         }}
       >
         <img
-          src={singleCourse.imglink}
+          src={singleCourse.bannerImage}
           alt={singleCourse.title}
           className="h-44 w-full object-cover"
         />
@@ -45,11 +50,11 @@ const CourseCard = ({
           </Link>
 
           <p className="mb-2 text-xs text-gray-500">
-            {singleCourse?.durationMonths
-              ? `${singleCourse.durationMonths} মাস | `
+            {singleCourse?.courseDuration
+              ? `${singleCourse.courseDuration} মাস | `
               : ""}
-            {singleCourse?.totalPreRecordedVideos
-              ? `${singleCourse.totalPreRecordedVideos} ভিডিও`
+            {singleCourse?.totalPreRecordedClasses
+              ? `${singleCourse.totalPreRecordedClasses} ভিডিও`
               : ""}
           </p>
 

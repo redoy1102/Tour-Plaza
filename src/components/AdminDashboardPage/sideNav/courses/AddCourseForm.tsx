@@ -13,7 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageHeader from "../shared/PageHeader";
 import CreateButton from "../shared/CreateButton";
@@ -56,9 +55,24 @@ const AddCourseForm = () => {
 
   const editCourse = useMemo(
     () => courses.find((c) => c.id === courseId),
-    [courses, courseId],
+    [courses, courseId]
   );
   console.log(editCourse);
+
+  // allow `any` here because persisted shape can vary; we normalize below
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const transformCourseOutline = (outline: any[]) => {
+    return outline.map((module) => ({
+      ...module,
+      assignment:
+        module.assignment?.map((assignment: any) => ({
+          ...assignment,
+          dueDate: assignment.dueDate
+            ? new Date(assignment.dueDate)
+            : new Date(),
+        })) || [],
+    }));
+  };
 
   const defaultValues = useMemo(
     () => ({
@@ -87,18 +101,26 @@ const AddCourseForm = () => {
       isFeatured: editCourse?.isFeatured ?? true,
       isLiveCourse: editCourse?.isLiveCourse ?? false,
       isPreRecordedCourse: editCourse?.isPreRecordedCourse ?? false,
-      courseOutline: editCourse?.courseOutline ?? [],
+      courseOutline: editCourse?.courseOutline
+        ? transformCourseOutline(editCourse.courseOutline)
+        : [],
     }),
-    [editCourse],
+    [editCourse]
   );
 
   const form = useForm<AddCourseFormValue>({
     resolver: zodResolver(addCourseSchema),
     mode: "onSubmit",
-    reValidateMode: "onChange",
+    reValidateMode: "onBlur",
     defaultValues,
   });
 
+  const { isSubmitting, isDirty } = form.formState;
+  if (isSubmitting) {
+    console.log("Form is submitting...");
+  } else {
+    console.log("Form is not submitting");
+  }
   useEffect(() => {
     form.reset(defaultValues);
   }, [defaultValues, form]);
@@ -135,21 +157,26 @@ const AddCourseForm = () => {
     });
   };
 
-  const onSubmit = (data: AddCourseFormValue) => {
-    if (courseId) {
-      dispatch(updateCourse({ id: courseId, data }));
-      toast.success("Course updated successfully!", {
-        id: "edit-course-success",
-      });
-    } else {
-      dispatch(addCourse(data));
-      toast.success("Course created successfully!", {
-        id: "add-course-success",
-      });
-    }
+  const onSubmit = async (data: AddCourseFormValue) => {
+    try {
+      if (courseId) {
+        dispatch(updateCourse({ id: courseId, data }));
+        toast.success("Course updated successfully!", {
+          id: "edit-course-success",
+        });
+      } else {
+        dispatch(addCourse(data));
+        toast.success("Course created successfully!", {
+          id: "add-course-success",
+        });
+      }
 
-    console.log(data);
-    navigate("/admin-dashboard/courses/allCourses");
+      console.log(data);
+      navigate("/admin-dashboard/courses/allCourses");
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   };
 
   return (
@@ -674,10 +701,22 @@ const AddCourseForm = () => {
             <div className="flex items-center gap-2 mt-12">
               <Button
                 type="submit"
-                className="gap-2 shadow-lg hover:shadow-xl bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
+                disabled={isSubmitting || (courseId && !isDirty)}
+                className={`gap-2 shadow-lg hover:shadow-xl bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl ${
+                  isSubmitting ? "opacity-70 pointer-events-none" : ""
+                }`}
+                aria-busy={isSubmitting}
               >
-                <Send className="w-4 h-4" />
-                {courseId ? "Update Course" : "Add Course"}
+                {isSubmitting && (
+                  <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                )}
+                {courseId
+                  ? isSubmitting
+                    ? "Updating..."
+                    : "Update Course"
+                  : isSubmitting
+                  ? "Saving..."
+                  : "Add Course"}
               </Button>
             </div>
 

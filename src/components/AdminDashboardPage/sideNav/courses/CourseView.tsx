@@ -40,7 +40,7 @@ const CourseViewPage = () => {
   const navigate = useNavigate();
 
   const course = useAppSelector((state) =>
-    state.courses.items.find((c) => c.id === courseId),
+    state.courses.items.find((c) => c.id === courseId)
   );
 
   console.log(course);
@@ -380,7 +380,7 @@ const CourseViewPage = () => {
                       )}
 
                       {/* Assignment Section */}
-                      {module.assignment && (
+                      {module.assignment && module.assignment.length > 0 && (
                         <div className="px-5 py-6 bg-green-50/20 border-t">
                           <h4 className="flex items-center gap-2 font-bold text-gray-800 mb-4">
                             <FileText className="w-4 h-4 text-green-600" />
@@ -437,8 +437,10 @@ const CourseViewPage = () => {
                                     <p className="font-bold text-gray-900">
                                       {module.assignment[0].dueDate
                                         ? format(
-                                            new Date(module.assignment[0].dueDate),
-                                            "PPP",
+                                            new Date(
+                                              module.assignment[0].dueDate
+                                            ),
+                                            "PPP"
                                           )
                                         : "No Deadline"}
                                     </p>

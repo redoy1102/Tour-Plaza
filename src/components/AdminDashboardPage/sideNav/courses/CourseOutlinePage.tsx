@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useFieldArray, useWatch } from "react-hook-form";
+import { useMemo } from "react";
 import type { Control } from "react-hook-form";
 // import type { AddCourseFormValue } from "@/schemas/admin/adminSchema";
 import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
@@ -30,8 +31,8 @@ const ClassFields = ({ nextIndex, control }: ClassFieldsProps) => {
     control,
     name: `courseOutline.${nextIndex}.classes`,
   });
-  console.log("Watched classes:", Boolean(watchedClasses));
-  console.log("Number of watched classes:", watchedClasses?.length);
+  // console.log("Watched classes:", Boolean(watchedClasses));
+  // console.log("Number of watched classes:", watchedClasses?.length);
 
   const canAddClass =
     !watchedClasses ||
@@ -79,7 +80,7 @@ const ClassFields = ({ nextIndex, control }: ClassFieldsProps) => {
               </label>
               <Textarea
                 {...control.register(
-                  `courseOutline.${nextIndex}.classes.${k}.resources`,
+                  `courseOutline.${nextIndex}.classes.${k}.resources`
                 )}
                 placeholder="PDF, Links..."
               />
@@ -117,16 +118,17 @@ interface CourseOutlinePageProps {
 const CourseOutlinePage = ({ control }: CourseOutlinePageProps) => {
   const watchedOutline = useWatch({ control, name: "courseOutline" });
 
-  const canAddModule = () => {
+  const canAddModule = useMemo(() => {
     if (!watchedOutline || watchedOutline.length === 0) return true;
     return watchedOutline.every((module) => {
       if (!module.moduleTitle?.trim()) return false;
       if (!module.classes || module.classes.length === 0) return false;
       return module.classes.every(
-        (cls) => cls.title?.trim() && cls.ytVideoUrl?.trim(),
+        (cls) => cls.title?.trim() && cls.ytVideoUrl?.trim()
       );
     });
-  };
+  }, [watchedOutline]);
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "courseOutline",
@@ -147,7 +149,7 @@ const CourseOutlinePage = ({ control }: CourseOutlinePageProps) => {
             })
           }
           className="bg-red-500 hover:bg-red-600"
-          disabled={!canAddModule()}
+          disabled={!canAddModule}
         >
           Add Module
         </Button>

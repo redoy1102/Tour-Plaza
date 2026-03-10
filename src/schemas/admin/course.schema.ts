@@ -41,7 +41,6 @@ export const addCourseSchema = z.object({
     .max(1000, "Total pre-recorded classes cannot exceed 1000"),
   startDate: z
     .date()
-    .optional()
     .refine((date) => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);

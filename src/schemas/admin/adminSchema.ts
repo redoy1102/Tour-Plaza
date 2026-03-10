@@ -38,7 +38,8 @@ export type PromoCodeFormValue = z.infer<typeof promoCodeSchema>;
 // ----------- Payment Method Schema -----------
 export const paymentMethodSchema = z.object({
   name: nameSchema,
-  description: descriptionSchema.optional(),
+  // allow either a long description or an empty string / undefined
+  description: descriptionSchema.optional().or(z.literal("")),
   // imageFile: imageUploadSchema.optional(),
 });
 export type PaymentMethodFormValue = z.infer<typeof paymentMethodSchema>;

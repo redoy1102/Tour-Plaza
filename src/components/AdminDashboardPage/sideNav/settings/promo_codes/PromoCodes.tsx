@@ -1,4 +1,3 @@
-import type { PromoCodeFormValue } from "@/schemas/admin/adminSchema";
 import { useEffect, useState } from "react";
 // import PageHeader from "../shared/PageHeader";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -8,10 +7,8 @@ import PromoCodesList from "./PromoCodesList";
 import KbdCreateButton from "../../shared/KbdCreateButton";
 
 const PromoCodes = () => {
-  const [promoCodes, setPromoCodes] = useState<PromoCodeFormValue[]>([]);
-  console.log("All promo codes:", promoCodes);
 
-  const [editPromoCodeId, setEditPromoCodeId] = useState<number | null>(null);
+  const [editPromoCodeId, setEditPromoCodeId] = useState<string | null>(null);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   
@@ -30,7 +27,7 @@ const PromoCodes = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const handleEditPromoCode = (promoCodeId: number | null) => {
+  const handleEditPromoCode = (promoCodeId: string | null) => {
     setEditPromoCodeId(promoCodeId);
     if (promoCodeId !== null) {
       setDialogOpen(true);
@@ -52,8 +49,6 @@ const PromoCodes = () => {
           </DialogTrigger>
           <DialogContent>
             <PromoCodesForm
-              promoCodes={promoCodes}
-              setPromoCodes={setPromoCodes}
               editPromoCodeId={editPromoCodeId}
               handleEditPromoCode={handleEditPromoCode}
               setDialogOpen={setDialogOpen}
@@ -63,8 +58,6 @@ const PromoCodes = () => {
       </div>
 
       <PromoCodesList
-        promoCodes={promoCodes}
-        setPromoCodes={setPromoCodes}
         handleEditPromoCode={handleEditPromoCode}
       />
     </div>

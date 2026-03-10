@@ -33,14 +33,15 @@ const ManualPaymentAddForm = ({
 }: ManualPaymentAddFormProps) => {
   const dispatch = useDispatch();
   const existingPaymentMethods = useAppSelector(
-    (state) => state.paymentMethods.items,
+    (state) => state.paymentMethods.items
   );
   const existingPaymentMethod = existingPaymentMethods.find(
-    (c) => c.id === editPaymentMethodId,
+    (c) => c.id === editPaymentMethodId
   );
 
   const form = useForm<PaymentMethodFormValue>({
     resolver: zodResolver(paymentMethodSchema),
+    mode: "onChange",
     defaultValues: {
       name: existingPaymentMethod ? existingPaymentMethod.name : "",
       description: existingPaymentMethod
@@ -48,6 +49,7 @@ const ManualPaymentAddForm = ({
         : "",
     },
   });
+  const { isSubmitting, isDirty } = form.formState;
 
   // Watch the imageFile field for preview
   // const imagePreview = useWatch({
@@ -181,12 +183,19 @@ const ManualPaymentAddForm = ({
           /> */}
           <div className="flex items-center gap-2">
             <Button
+              disabled={
+                isSubmitting || (editPaymentMethodId !== null && !isDirty)
+              }
               type="submit"
               className="gap-2 shadow-lg hover:shadow-xl bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
             >
               <Send className="w-4 h-4" />
               {editPaymentMethodId !== null
-                ? "Update Payment Method"
+                ? isSubmitting
+                  ? "Updating..."
+                  : "Update Payment Method"
+                : isSubmitting
+                ? "Adding..."
                 : "Add Payment Method"}
             </Button>
           </div>

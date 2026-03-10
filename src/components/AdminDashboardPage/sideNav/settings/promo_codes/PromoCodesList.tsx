@@ -12,19 +12,20 @@ import type { PromoCodeFormValue } from "@/schemas/admin/adminSchema";
 import { formatDateShort } from "@/lib/utils";
 import EditButton from "../../shared/EditButton";
 import DeleteButton from "../../shared/DeleteButton";
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import { addPromoCode, updatePromoCode } from "@/Redux/slices/promoCodeSlice";
 
 interface PromoCodesListProps {
-  promoCodes: PromoCodeFormValue[];
-  setPromoCodes: React.Dispatch<React.SetStateAction<PromoCodeFormValue[]>>;
-  handleEditPromoCode: (promoCodeId: number | null) => void;
+  handleEditPromoCode: (promoCodeId: string | null) => void;
 }
 
 const PromoCodesList = ({
-  promoCodes,
-  setPromoCodes,
   handleEditPromoCode,
 }: PromoCodesListProps) => {
-  const handleDelete = (index: number) => {
+  const dispatch = useAppDispatch();
+  const promoCodes = useAppSelector((state) => state.promoCodes.items);
+
+  const handleDelete = (index: string) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
         <p>Are you sure you want to delete this promo code?</p>

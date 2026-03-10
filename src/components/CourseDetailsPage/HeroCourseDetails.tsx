@@ -1,4 +1,4 @@
-import { courses } from "@/data/landingPage/courses";
+// import { courses } from "@/data/landingPage/courses";
 import {
   Star,
   PlayCircle,
@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getIcon } from "@/data/icons";
+import { format } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -25,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "@/Redux/hooks";
 
 interface HeroCourseDetailsProps {
   courseId: string | undefined;
@@ -32,7 +34,8 @@ interface HeroCourseDetailsProps {
 
 const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
   const navigate = useNavigate();
-  const course = courses.find((c) => c.id === Number(courseId));
+  const courses = useAppSelector((state) => state.courses.items);
+  const course = courses.find((c) => c.id === courseId);
   const [selectedPromoCode, setSelectedPromoCode] = useState<string>("");
 
   const handleEnroll = () => {
@@ -55,7 +58,9 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
     priceAfterDiscount - (priceAfterDiscount * promoNumber) / 100;
 
   // Function to parse Bengali date
-  const parseBengaliDate = (dateStr: string): Date | null => {
+  const parseBengaliDate = (dateInput: string | Date): Date | null => {
+    if (dateInput instanceof Date) return dateInput;
+    const dateStr = dateInput as string;
     const parts = dateStr.split(" ");
     if (parts.length < 3) return null;
     const datePart = parts[1];
@@ -104,7 +109,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
     return startDate;
   };
 
-  const startDate = parseBengaliDate(course?.batchStartDate ?? "");
+  const startDate = parseBengaliDate(course?.startDate ?? "");
   const now = new Date();
   const diffTime = startDate ? startDate.getTime() - now.getTime() : 0;
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -120,19 +125,19 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
               {/* Live Course Badge */}
               <div
                 className={`inline-flex items-center gap-2 p-1 bg-red-50 ${
-                  course?.isFreeCourse ? "text-green-500" : "text-red-500"
+                  course?.isLiveCourse ? "text-green-500" : "text-red-500"
                 } px-3 rounded-full text-sm font-semibold`}
               >
                 <Radio className="w-4 h-4" />
-                {course?.isFreeCourse ? "ফ্রি কোর্স" : "লাইভ কোর্স"}
+                {course?.isLiveCourse ? "লাইভ কোর্স" : "প্রি-রেকর্ডেড কোর্স"}
               </div>
               {/* Rating */}
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1 bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded text-sm font-bold">
-                  {course.rating} <Star className="w-4 h-4 fill-current" />
+                  <Star className="w-4 h-4 fill-current" />
                 </div>
                 <span className="text-slate-500 text-sm italic">
-                  ({course.reviews.length} Ratings)
+                  {/* ({course.reviews.length} Ratings) */}5
                 </span>
               </div>
             </div>
@@ -225,10 +230,10 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
               <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
                 <Video className="w-4 h-4 text-emerald-600" />
                 <span>
-                  {course.totalPreRecordedVideos} টি প্রি রেকর্ডেড ভিডিও
+                  {course.totalPreRecordedClasses} টি প্রি রেকর্ডেড ভিডিও
                 </span>
               </div>
-              {!course?.isFreeCourse && (
+              {!course?.isPreRecordedCourse && (
                 <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-md text-sm text-slate-700 shadow-sm">
                   <Calendar className="w-4 h-4 text-emerald-600" />
                   <span>{remainingDays} দিন বাকি</span>
@@ -237,7 +242,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
             </div>
 
             {/* Extra Features */}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 pt-4">
+            {/* <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 pt-4">
               {course?.supports?.map((support, idx) => {
                 const IconComponent = getIcon(support.icon);
                 return (
@@ -250,14 +255,14 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                   </div>
                 );
               })}
-            </div>
+            </div> */}
           </div>
 
           {/* Right Video Preview */}
           <div className="w-full lg:w-2/5 flex flex-col items-center mt-4">
             <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl group cursor-pointer border-4 border-white">
               <img
-                src={course.imglink}
+                src={course.bannerImage}
                 alt={course.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
@@ -275,14 +280,16 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
         </div>
 
         {/* Bottom Stats Bar */}
-        {!course.isFreeCourse && (
+        {!course?.isPreRecordedCourse && (
           <div className="mt-10 bg-white rounded-2xl p-3 md:p-4 shadow border border-slate-100">
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 divide-x divide-slate-100">
               <div className="px-4 space-y-2">
                 <p className="text-slate-400 text-sm font-medium">ব্যাচ শুরু</p>
                 <p className="text-slate-900 md:text-sm font-bold flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-orange-500" />
-                  {course.batchStartDate}
+                  {course.startDate instanceof Date
+                    ? format(course.startDate, "dd/MM/yyyy")
+                    : course.startDate}
                 </p>
               </div>
               <div className="px-4 space-y-2">
@@ -309,7 +316,8 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                   সিট বাকি
                 </p>
                 <p className="text-slate-900 md:text-sm font-bold text-xl">
-                  {course.seatsLeft} টি
+                  {/* {course.seatsLeft} টি */}
+                  10 টি
                 </p>
               </div>
               <div className="px-4 space-y-2 border-none lg:border-solid">
@@ -318,7 +326,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                   ভর্তি চলছে
                 </p>
                 <p className="text-slate-900 md:text-sm font-extrabold text-xl font-bengali text-slate-900">
-                  {course.batch}
+                  {course.batchNumber}
                 </p>
               </div>
             </div>

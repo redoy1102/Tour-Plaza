@@ -2,28 +2,38 @@ import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, MonitorPlay } from "lucide-react";
 import Header from "@/components/shared/Header";
 // import Course from "./Course";
-import { courses } from "@/data/landingPage/courses";
 import CourseCard from "./CourseCard";
 import { useAppSelector } from "@/Redux/hooks";
 
 interface CoursesProps {
   isFeatured?: boolean;
-  isFreeCourses?: boolean;
+  isLiveCourse?: boolean;
+  isPreRecordedCourse?: boolean;
 }
 
-const Courses = ({ isFeatured, isFreeCourses }: CoursesProps) => {
+const Courses = ({
+  isFeatured,
+  isLiveCourse,
+  isPreRecordedCourse,
+}: CoursesProps) => {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const requestedCourses = isFeatured
-    ? courses.filter((course) => course.isFeatured)
-    : isFreeCourses
-    ? courses.filter((course) => course.isFreeCourse)
-    : "";
-  // const featuredCourses = courses.filter((course) => course.isFeatured);
-  const categories = useAppSelector((state) => state.categories.items);
-  console.log("All the categories:", categories);
 
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   console.log("Active category:", activeCategory);
+
+  const courses = useAppSelector((state) => state.courses.items);
+  console.log("All the courses:", courses);
+
+  const categories = useAppSelector((state) => state.categories.items);
+  console.log("All the categories:", categories);
+
+  const requestedCourses = isFeatured
+    ? courses.filter((course) => course.isFeatured)
+    : isLiveCourse
+    ? courses.filter((course) => course.isLiveCourse)
+    : isPreRecordedCourse
+    ? courses.filter((course) => course.isPreRecordedCourse)
+    : [];
 
   if (!requestedCourses) return null;
 
@@ -40,7 +50,7 @@ const Courses = ({ isFeatured, isFreeCourses }: CoursesProps) => {
 
   // Filtered courses
   const filteredCourses = activeCategory
-    ? requestedCourses.filter((course) => course.category === activeCategory)
+    ? requestedCourses.filter((course) => course.categoryId === activeCategory)
     : requestedCourses;
 
   return (
@@ -84,19 +94,21 @@ const Courses = ({ isFeatured, isFreeCourses }: CoursesProps) => {
             All Courses
           </button>
 
-          {categories.map((cat: { id: string; name: string; label: string }) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.name)}
-              className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm transition ${
-                activeCategory === cat.name
-                  ? "bg-secondary text-white"
-                  : "text-gray-700"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+          {categories.map(
+            (cat: { id: string; name: string; label: string }) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm transition ${
+                  activeCategory === cat.id
+                    ? "bg-secondary text-white"
+                    : "text-gray-700"
+                }`}
+              >
+                {cat.label}
+              </button>
+            )
+          )}
         </div>
 
         {/* Right button */}

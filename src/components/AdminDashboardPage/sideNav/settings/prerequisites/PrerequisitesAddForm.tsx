@@ -59,6 +59,8 @@ const PrerequisitesAddForm = ({
     },
   });
 
+  const { isSubmitting, isDirty } = form.formState;
+
   const onSubmit = (data: PrerequisitesFormValue) => {
     if (editPrerequisiteId !== null) {
       dispatch(updatePrerequisite({ id: editPrerequisiteId!, data }));
@@ -126,11 +128,18 @@ const PrerequisitesAddForm = ({
           <div className="flex items-center gap-2">
             <Button
               type="submit"
+              disabled={
+                isSubmitting || (editPrerequisiteId !== null && !isDirty)
+              }
               className="gap-2 shadow-lg hover:shadow-xl bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
             >
               <Send className="w-4 h-4" />
               {editPrerequisiteId !== null
-                ? "Update Prerequisite"
+                ? isSubmitting
+                  ? "Updating..."
+                  : "Update Prerequisite"
+                : isSubmitting
+                ? "Adding..."
                 : "Add Prerequisite"}
             </Button>
           </div>

@@ -54,9 +54,11 @@ const ToolAddForm = ({
   const form = useForm<ToolsFormValue>({
     resolver: zodResolver(toolsSchema),
     defaultValues,
-    mode: "onSubmit",
+    mode: "onChange",
     reValidateMode: "onChange",
   });
+
+  const { isSubmitting, isDirty } = form.formState;
 
   // Watch the imageFile field for preview
   const imagePreview = useWatch({
@@ -189,11 +191,18 @@ const ToolAddForm = ({
           />
           <div className="flex items-center gap-2">
             <Button
+              disabled={isSubmitting || (editToolId !== null && !isDirty)}
               type="submit"
               className="gap-2 shadow-lg hover:shadow-xl bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
             >
               <Send className="w-4 h-4" />
-              {editToolId !== null ? "Update Tool" : "Add Tool"}
+              {editToolId !== null
+                ? isSubmitting
+                  ? "Updating..."
+                  : "Update Tool"
+                : isSubmitting
+                ? "Adding..."
+                : "Add Tool"}
             </Button>
           </div>
         </form>

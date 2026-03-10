@@ -16,54 +16,48 @@ import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SingleDatePicker from "@/components/shared/SingleDatePicker";
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import { addPromoCode, updatePromoCode } from "@/Redux/slices/promoCodeSlice";
 
 interface PromoCodesFormProps {
-  promoCodes: PromoCodeFormValue[];
-  setPromoCodes: React.Dispatch<React.SetStateAction<PromoCodeFormValue[]>>;
-  editPromoCodeId?: number | null;
-  handleEditPromoCode: (promoCodeId: number | null) => void;
+  editPromoCodeId?: string | null;
+  handleEditPromoCode: (promoCodeId: string | null) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PromoCodesForm = ({
-  promoCodes,
-  setPromoCodes,
   editPromoCodeId,
   handleEditPromoCode,
   setDialogOpen,
 }: PromoCodesFormProps) => {
+  const dispatch = useAppDispatch();
+  const promoCodes = useAppSelector((state) => state.promoCodes.items);
+  const existPromoCode = promoCodes.find((p) => p.id === editPromoCodeId);
+
   const form = useForm<PromoCodeFormValue>({
     resolver: zodResolver(promoCodeSchema),
+    mode: "onChange",
     defaultValues: {
-      code: editPromoCodeId !== null ? promoCodes[editPromoCodeId!].code : "",
-      discountPercentage:
-        editPromoCodeId !== null
-          ? promoCodes[editPromoCodeId!].discountPercentage
-          : 0,
-      startDate:
-        editPromoCodeId !== null
-          ? promoCodes[editPromoCodeId!].startDate
-          : undefined,
-      endDate:
-        editPromoCodeId !== null
-          ? promoCodes[editPromoCodeId!].endDate
-          : undefined,
+      code: existPromoCode ? existPromoCode.code : "",
+      discountPercentage: existPromoCode
+        ? existPromoCode.discountPercentage
+        : 0,
+      startDate: existPromoCode ? existPromoCode.startDate : undefined,
+      endDate: existPromoCode ? existPromoCode.endDate : undefined,
     },
   });
 
+  const { isSubmitting, isDirty } = form.formState;
+
   const onSubmit = (data: PromoCodeFormValue) => {
     if (editPromoCodeId !== null) {
-      setPromoCodes((prev) =>
-        prev.map((promoCode, index) =>
-          index === editPromoCodeId ? data : promoCode,
-        ),
-      );
+      dispatch(updatePromoCode({ id: editPromoCodeId!, data }));
 
       toast.success("Promo code updated successfully!", {
         id: "edit-promo-code-success",
       });
     } else {
-      setPromoCodes((prev) => [...prev, data]);
+      dispatch(addPromoCode(data));
       toast.success("Promo code created successfully!", {
         id: "add-promo-code-success",
       });
@@ -143,6 +137,7 @@ const PromoCodesForm = ({
             <Button
               type="submit"
               className="gap-2 shadow-lg hover:shadow-xl bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl"
+              disabled={isSubmitting || (editPromoCodeId !== null && !isDirty)}
             >
               <Send className="w-4 h-4" />
               {editPromoCodeId !== null

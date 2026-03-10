@@ -7,6 +7,7 @@ import instructorsReducer from "./slices/instructorSlice";
 import supportStaffReducer from "./slices/supportStaffSlice";
 import coursesReducer from "./slices/courseSlice";
 import paymentMethodsReducer from "./slices/paymentSlice";
+import promoCodesReducer from "./slices/promoCodeSlice";
 
 import {
   persistStore,
@@ -32,6 +33,7 @@ const persistConfig = {
     "supportStaff",
     "courses",
     "paymentMethods",
+    "promoCodes",
   ],
 };
 
@@ -44,6 +46,7 @@ const rootReducer = combineReducers({
   supportStaff: supportStaffReducer,
   courses: coursesReducer,
   paymentMethods: paymentMethodsReducer,
+  promoCodes: promoCodesReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
