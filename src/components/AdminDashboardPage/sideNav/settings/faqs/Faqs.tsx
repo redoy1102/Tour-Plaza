@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import PageHeader from "../../shared/PageHeader";
-import FaqsForm from "./FaqsForm";
-import FaqsList from "./FaqsList";
+import FaqsForm from "./FaqsForm.tsx";
+import FaqsList from "./FaqsList.tsx";
 import KbdCreateButton from "../../shared/KbdCreateButton";
 
 const Faqs = () => {

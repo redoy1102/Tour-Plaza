@@ -1,16 +1,19 @@
 import { useParams, useSearchParams } from "react-router-dom";
-import { courses } from "@/data/landingPage/courses";
 import { PhoneCall, Lock, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { paymentMethods } from "@/data/landingPage/paymentMethodsData";
+import { useAppSelector } from "@/Redux/hooks";
 
 const PurchasePage = () => {
   const { courseId } = useParams();
+  const courses = useAppSelector((state) => state.courses.items);
+  const promoCodes = useAppSelector((state) => state.promoCodes.items);
+  const paymentMethods = useAppSelector((state) => state.paymentMethods.items);
+
   const [searchParams] = useSearchParams();
   const promoCode = searchParams.get("promo");
 
-  const course = courses.find((c) => c.id === Number(courseId));
+  const course = courses.find((c) => c.id === courseId);
   const [selectedPayment, setSelectedPayment] = useState("bkash");
 
   if (!course) {
@@ -23,16 +26,18 @@ const PurchasePage = () => {
     );
   }
 
-  const priceAfterDiscount = course?.price ? course.price - (course.discount ?? 0) : 0;
+  const priceAfterDiscount = course?.price
+    ? course.price - (course.discount ?? 0)
+    : 0;
   const promoDiscountValue = Number(promoCode) || 0;
   const promoDiscount = promoCode
     ? (priceAfterDiscount * promoDiscountValue) / 100
     : 0;
   const finalPrice = priceAfterDiscount - promoDiscount;
 
-  const appliedPromo = course?.promoCodes ? course.promoCodes.find(
-    (p) => p.value === promoDiscountValue
-  ) : undefined;
+  const appliedPromo = promoCodes
+    ? promoCodes.find((p) => p.discountPercentage === promoDiscountValue)
+    : undefined;
   console.log("appliedPromo", appliedPromo);
 
   return (
@@ -50,7 +55,7 @@ const PurchasePage = () => {
                 <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
                   <div className="w-full md:w-32 h-20 bg-slate-100 rounded-xl overflow-hidden shrink-0">
                     <img
-                      src={course.imglink}
+                      src={course.bannerImage}
                       alt={course.title}
                       className="w-full h-full object-cover"
                     />
@@ -77,7 +82,7 @@ const PurchasePage = () => {
                       <div className="flex items-center gap-2">
                         <div className="flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded text-xs font-bold border border-emerald-100 uppercase">
                           {appliedPromo && (course?.discount || 0) > 0
-                            ? `${appliedPromo.label} & Discount`
+                            ? `${appliedPromo.code} & Discount`
                             : (course?.discount || 0) > 0
                             ? "Discount"
                             : appliedPromo
@@ -144,52 +149,9 @@ const PurchasePage = () => {
                         checked={selectedPayment === method.id}
                         onChange={() => setSelectedPayment(method.id)}
                       />
-
-                      {method.id === "bkash" && (
-                        <div className="flex items-center w-full gap-3">
-                          <img
-                            src={method.image}
-                            alt="bkash"
-                            className="h-10 object-contain"
-                          />
-                        </div>
-                      )}
-
-                      {method.id === "nagad_rocket_visa_master" && (
-                        <div className="flex items-center w-full gap-6 ">
-                          <img
-                            src={method.image}
-                            alt="payment"
-                            className="w-32 h-10 object-contain"
-                          />
-                        </div>
-                      )}
-
-                      {method.id === "india" && (
-                        <div className="flex items-center w-full gap-3">
-                          <img
-                            src={method.image}
-                            alt="india"
-                            className="h-10 object-contain"
-                          />
-                          <span className="font-bold text-slate-700">
-                            {method.label}
-                          </span>
-                        </div>
-                      )}
-
-                      {method.id === "international" && (
-                        <div className="flex items-center w-full gap-3">
-                          <img
-                            src={method.image}
-                            alt="international"
-                            className="h-10 object-contain"
-                          />
-                          <span className="font-bold text-slate-700">
-                            {method.label}
-                          </span>
-                        </div>
-                      )}
+                      <span className="font-bold text-slate-700">
+                        {method.name}
+                      </span>
                     </div>
                   </label>
                 ))}
