@@ -1,14 +1,14 @@
 import { Trash } from "lucide-react";
 
 interface DeleteButtonProps {
-  onDelete: (index: number) => void;
-  index: number;
+  onDelete: (index: string) => void;
+  index?: string;
 }
 
 const DeleteButton = ({ onDelete, index }: DeleteButtonProps) => {
   return (
     <button
-      onClick={() => onDelete(index)}
+      onClick={() => index !== undefined && onDelete(index)}
       className="p-1 bg-red-500 hover:bg-red-600 text-white rounded-md transition cursor-pointer"
       aria-label="Delete tool"
     >

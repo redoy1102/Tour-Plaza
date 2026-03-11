@@ -8,31 +8,28 @@ import {
 } from "@/components/ui/table";
 import toast from "react-hot-toast";
 import { promoCodesTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import type { PromoCodeFormValue } from "@/schemas/admin/adminSchema";
 import { formatDateShort } from "@/lib/utils";
 import EditButton from "../../shared/EditButton";
 import DeleteButton from "../../shared/DeleteButton";
 import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
-import { addPromoCode, updatePromoCode } from "@/Redux/slices/promoCodeSlice";
+import { removePromoCode } from "@/Redux/slices/promoCodeSlice";
 
 interface PromoCodesListProps {
   handleEditPromoCode: (promoCodeId: string | null) => void;
 }
 
-const PromoCodesList = ({
-  handleEditPromoCode,
-}: PromoCodesListProps) => {
+const PromoCodesList = ({ handleEditPromoCode }: PromoCodesListProps) => {
   const dispatch = useAppDispatch();
   const promoCodes = useAppSelector((state) => state.promoCodes.items);
 
-  const handleDelete = (index: string) => {
+  const handleDelete = (promoCodeId: string) => {
     toast((t) => (
       <div className="flex flex-col items-start gap-4">
         <p>Are you sure you want to delete this promo code?</p>
         <div className="flex gap-2">
           <button
             onClick={() => {
-              setPromoCodes((prev) => prev.filter((_, i) => i !== index));
+              dispatch(removePromoCode(promoCodeId));
               toast.success("Promo code deleted successfully!");
               toast.dismiss(t.id);
             }}
@@ -71,7 +68,7 @@ const PromoCodesList = ({
             </TableHeader>
             <TableBody>
               {promoCodes.map((promoCode, index: number) => (
-                <TableRow key={index}>
+                <TableRow key={promoCode.id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell className="font-medium">
                     {promoCode.code}
@@ -91,8 +88,14 @@ const PromoCodesList = ({
                   </TableCell>
 
                   <TableCell className="text-right flex items-center justify-end gap-2">
-                    <EditButton onEdit={handleEditPromoCode} index={index} />
-                    <DeleteButton onDelete={handleDelete} index={index} />
+                    <EditButton
+                      onEdit={handleEditPromoCode}
+                      index={promoCode.id}
+                    />
+                    <DeleteButton
+                      onDelete={handleDelete}
+                      index={promoCode.id}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
