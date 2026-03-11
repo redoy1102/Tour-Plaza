@@ -1,4 +1,4 @@
-import { courses } from "@/data/landingPage/courses";
+import { useAppSelector } from "@/Redux/hooks";
 import { CheckCircle2 } from "lucide-react";
 import { getIcon } from "@/data/icons";
 
@@ -7,9 +7,17 @@ interface PrerequisitesProps {
 }
 
 const Prerequisites = ({ courseId }: PrerequisitesProps) => {
-  const course = courses.find((c) => c.id === Number(courseId));
+  const courses = useAppSelector((state) => state.courses.items);
+  const prerequisites = useAppSelector((state) => state.prerequisites.items);
+  const course = courses.find((c) => c.id === courseId);
 
-  if (!course || !course.prerequisites || course.prerequisites.length === 0) {
+  // build list of prerequisite objects referenced by the course
+  const coursePrereqs =
+    course?.prerequisitesIds?.map((id) =>
+      prerequisites.find((p) => p.id === id)
+    ) || [];
+
+  if (!course || coursePrereqs.length === 0) {
     return null;
   }
 
@@ -45,7 +53,8 @@ const Prerequisites = ({ courseId }: PrerequisitesProps) => {
 
           {/* Right Side: Prerequisite Cards */}
           <div className="w-full md:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {course.prerequisites.map((item, index) => {
+            {coursePrereqs.map((item, index) => {
+              if (!item) return null;
               const IconComponent = getIcon(item.icon);
               return (
                 <div

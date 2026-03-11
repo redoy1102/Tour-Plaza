@@ -20,7 +20,7 @@ const CourseDetails = () => {
         <Tools courseId={courseId} />
         <Prerequisites courseId={courseId} />
         <SuccessStudents courseId={courseId} />
-        <Faq courseId={courseId} />
+        <Faq />
         <StudentReview courseId={courseId} />
       </div>
     </div>

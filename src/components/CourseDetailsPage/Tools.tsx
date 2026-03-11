@@ -1,23 +1,20 @@
-import { courses } from "@/data/landingPage/courses";
+import { useAppSelector } from "@/Redux/hooks";
 
 interface ToolsProps {
   courseId: string | undefined;
 }
 
 const Tools = ({ courseId }: ToolsProps) => {
-  const course = courses.find((c) => c.id === Number(courseId));
+  const courses = useAppSelector((state) => state.courses.items);
+  const tools = useAppSelector((state) => state.tools.items);
+  const course = courses.find((c) => c.id === courseId);
+  const courseTools = course?.toolsIds?.map((toolId) =>
+    tools.find((t) => t.id === toolId)
+  );
 
-  if (!course || !course.toolsList || course.toolsList.length === 0) {
+  if (!course || !courseTools || courseTools.length === 0) {
     return <h1>Loading...</h1>;
   }
-
-  // Duplicate the tools array to create a seamless loop
-  const duplicatedTools = [
-    ...course.toolsList,
-    ...course.toolsList,
-    ...course.toolsList,
-    ...course.toolsList,
-  ];
 
   return (
     <section className="py-20 overflow-hidden bg-white rounded-3xl border border-slate-100 shadow-sm">
@@ -38,13 +35,13 @@ const Tools = ({ courseId }: ToolsProps) => {
 
         {/* Marquee Container */}
         <div className="flex animate-marquee">
-          {duplicatedTools.map((tool, index) => (
+          {courseTools?.map((tool, index) => (
             <div key={index} className="shrink-0 mx-4 group cursor-pointer">
               <div className="bg-slate-50 border border-slate-100 p-3 rounded-2xl transition-all duration-300 group-hover:bg-white group-hover:shadow-xl group-hover:shadow-emerald-100/50 group-hover:-translate-y-2 group-hover:border-emerald-100 flex items-center gap-3">
                 <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 mx-auto border border-white group-hover:border-emerald-50 transition-colors">
                   <img
-                    src={tool.imgLink}
-                    alt={tool.name}
+                    src={tool?.imageFile}
+                    alt={tool && tool?.name}
                     className="max-w-full max-h-full object-contain  transition-all duration-500"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src =
@@ -54,10 +51,10 @@ const Tools = ({ courseId }: ToolsProps) => {
                 </div>
                 <div className="">
                   <h3 className="font-bold text-slate-800 text-lg group-hover:text-emerald-600 transition-colors">
-                    {tool.name}
+                    {tool && tool?.name}
                   </h3>
                   <p className="text-sm text-slate-400 font-medium italic">
-                    {tool.purpose}
+                    {tool && tool?.description}
                   </p>
                 </div>
               </div>

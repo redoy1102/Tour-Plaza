@@ -30,6 +30,7 @@ import PromoCodes from "@/components/AdminDashboardPage/sideNav/settings/promo_c
 import CourseCategory from "@/components/AdminDashboardPage/sideNav/course_category/CourseCategory";
 import Tools from "@/components/AdminDashboardPage/sideNav/settings/tools/Tools";
 import Prerequisites from "@/components/AdminDashboardPage/sideNav/settings/prerequisites/Prerequisites";
+import Faqs from "@/components/AdminDashboardPage/sideNav/settings/faqs/Faqs";
 import ManualPaymentHistory from "@/components/AdminDashboardPage/sideNav/settings/payment/manual_payment/ManualPaymentHistory";
 import PaymentGateways from "@/components/AdminDashboardPage/sideNav/settings/payment/payment_gateways/PaymentGateways";
 
@@ -192,6 +193,13 @@ export const menuItems = [
         component: <Prerequisites />,
         path: "/admin-dashboard/settings/prerequisites",
       },
+      {
+        id: "faqs",
+        label: "FAQs",
+        icon: <VectorSquare className="w-5 h-5" />,
+        component: <Faqs />,
+        path: "/admin-dashboard/settings/faqs",
+      },
     ],
   },
 
@@ -207,6 +215,13 @@ export const announcementTableHeader = [
   { id: "title", label: "Title" },
   { id: "description", label: "Description" },
   { id: "type", label: "Type" },
+  { id: "actions", label: "Actions", align: "right" },
+];
+
+export const faqTableHeader = [
+  { id: "index", label: "#" },
+  { id: "faqTitle", label: "Title" },
+  { id: "faqDescription", label: "Description" },
   { id: "actions", label: "Actions", align: "right" },
 ];
 

@@ -34,6 +34,7 @@ import RolesPermissions from "./components/AdminDashboardPage/sideNav/settings/r
 import CourseCategory from "@/components/AdminDashboardPage/sideNav/course_category/CourseCategory";
 import Tools from "@/components/AdminDashboardPage/sideNav/settings/tools/Tools";
 import Prerequisites from "@/components/AdminDashboardPage/sideNav/settings/prerequisites/Prerequisites";
+import Faqs from "@/components/AdminDashboardPage/sideNav/settings/faqs/Faqs";
 import AddCourseForm from "./components/AdminDashboardPage/sideNav/courses/AddCourseForm";
 import CourseView from "./components/AdminDashboardPage/sideNav/courses/CourseView";
 import CourseOutlinePage from "./components/AdminDashboardPage/sideNav/courses/CourseOutlinePage";
@@ -120,6 +121,7 @@ function App() {
             <Route path="settings/promo-codes" element={<PromoCodes />} />
             <Route path="settings/tools" element={<Tools />} />
             <Route path="settings/prerequisites" element={<Prerequisites />} />
+            <Route path="settings/faqs" element={<Faqs />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

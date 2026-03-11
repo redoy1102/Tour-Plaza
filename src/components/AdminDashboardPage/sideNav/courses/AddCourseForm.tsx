@@ -701,7 +701,7 @@ const AddCourseForm = () => {
             <div className="flex items-center gap-2 mt-12">
               <Button
                 type="submit"
-                disabled={isSubmitting || (courseId && !isDirty)}
+                disabled={isSubmitting || (!!courseId && !isDirty)}
                 className={`gap-2 shadow-lg hover:shadow-xl bg-red-500 hover:bg-red-600 cursor-pointer rounded-xl ${
                   isSubmitting ? "opacity-70 pointer-events-none" : ""
                 }`}

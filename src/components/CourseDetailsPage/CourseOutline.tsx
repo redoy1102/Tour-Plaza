@@ -1,4 +1,3 @@
-import { courses } from "@/data/landingPage/courses";
 import {
   Accordion,
   AccordionContent,
@@ -6,13 +5,15 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Radio, ScrollText, FileQuestion } from "lucide-react";
+import { useAppSelector } from "@/Redux/hooks";
 
 interface CourseOutlineProps {
   courseId: string | undefined;
 }
 
 const CourseOutline = ({ courseId }: CourseOutlineProps) => {
-  const course = courses.find((c) => c.id === Number(courseId));
+  const courses = useAppSelector((state) => state.courses.items);
+  const course = courses.find((c) => c.id === courseId);
 
   if (!course || !course.courseOutline) {
     return null;
@@ -43,85 +44,86 @@ const CourseOutline = ({ courseId }: CourseOutlineProps) => {
       <div className="space-y-4">
         <Accordion type="single" collapsible className="w-full space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4">
-            {Object.entries(course.courseOutline).map(
-              ([week, classes], index) => {
-                const weekNum = week.replace("week", "");
-                const bgClass = colors[index % colors.length];
+            {course.courseOutline.map((module, index) => {
+              const bgClass = colors[index % colors.length];
 
-                return (
-                  <AccordionItem
-                    key={week}
-                    value={week}
-                    className="border-none mb-4"
-                  >
-                    <div className="rounded-xl bg-white shadow-sm overflow-hidden">
-                      <AccordionTrigger className="px-4 py-4 hover:no-underline [&>svg]:mr-4 cursor-pointer">
-                        <div className="flex items-center gap-4 text-left">
-                          {/* Serial number  */}
-                          <div
-                            className={`${bgClass} text-white px-3 py-2 rounded-lg flex flex-col items-center justify-center min-w-17.5`}
-                          >
-                            <span className="text-[10px] uppercase font-bold leading-none">
-                              সপ্তাহ
-                            </span>
-                            <span className="text-lg md:text-xl font-bold">
-                              {toBengaliNumber(weekNum)}
-                            </span>
-                          </div>
-                          {/* Title  */}
-                          <div>
-                            <h3 className="text-md md:text-lg font-bold text-slate-800">
-                              {classes[0]?.title && classes[0].title}
-                            </h3>
-                          </div>
+              return (
+                <AccordionItem
+                  key={index}
+                  value={`module-${index}`}
+                  className="border-none mb-4"
+                >
+                  <div className="rounded-xl bg-white shadow-sm overflow-hidden">
+                    <AccordionTrigger className="px-4 py-4 hover:no-underline [&>svg]:mr-4 cursor-pointer">
+                      <div className="flex items-center gap-4 text-left">
+                        {/* Serial number  */}
+                        <div
+                          className={`${bgClass} text-white px-3 py-2 rounded-lg flex flex-col items-center justify-center min-w-17.5`}
+                        >
+                          <span className="text-[10px] uppercase font-bold leading-none">
+                            মডিউল
+                          </span>
+                          <span className="text-lg md:text-xl font-bold">
+                            {toBengaliNumber(index + 1)}
+                          </span>
                         </div>
-                      </AccordionTrigger>
+                        {/* Title  */}
+                        <div>
+                          <h3 className="text-md md:text-lg font-bold text-slate-800">
+                            {module.moduleTitle}
+                          </h3>
+                        </div>
+                      </div>
+                    </AccordionTrigger>
 
-                      <AccordionContent className="px-3 py-3 border-t border-gray-200 bg-slate-50/50">
-                        <div className="space-y-6">
-                          <div className="flex flex-wrap gap-4 text-sm text-slate-600 font-medium pb-4">
+                    <AccordionContent className="px-3 py-3 border-t border-gray-200 bg-slate-50/50">
+                      <div className="space-y-6">
+                        <div className="flex flex-wrap gap-4 text-sm text-slate-600 font-medium pb-4">
+                          {module.classes && module.classes.length > 0 && (
                             <div className="flex items-center gap-1.5 bg-white border px-3 py-1 rounded-full">
                               <Radio className="w-4 h-4 text-slate-400" />
                               <span>
-                                {toBengaliNumber(classes.length)} live class
+                                {toBengaliNumber(module.classes.length)} টি
+                                ক্লাস
                               </span>
                             </div>
+                          )}
+                          {module.quizzes && module.quizzes.length > 0 && (
                             <div className="flex items-center gap-1.5 bg-white border px-3 py-1 rounded-full">
                               <FileQuestion className="w-4 h-4 text-slate-400" />
-                              <span>১ Quiz</span>
+                              <span>
+                                {toBengaliNumber(module.quizzes.length)} টি কুইজ
+                              </span>
                             </div>
-                            <div className="flex items-center gap-1.5 bg-white border px-3 py-1 rounded-full">
-                              <ScrollText className="w-4 h-4 text-slate-400" />
-                              <span>১ Assignment</span>
-                            </div>
-                          </div>
-
-                          <div className="space-y-6">
-                            {classes.map(
-                              (cls: {
-                                classNo: number;
-                                title: string;
-                                topics: string[];
-                              }) => (
-                                <div key={cls.classNo} className="space-y-3">
-                                  <h4 className="font-bold text-slate-900 flex items-center gap-2">
-                                    Live Class {toBengaliNumber(cls.classNo)}:{" "}
-                                    {cls.title}
-                                  </h4>
-                                  <div className="text-slate-600 text-[15px] leading-relaxed ml-2">
-                                    {cls.topics.join(" | ")}
-                                  </div>
-                                </div>
-                              )
+                          )}
+                          {module.assignment &&
+                            module.assignment.length > 0 && (
+                              <div className="flex items-center gap-1.5 bg-white border px-3 py-1 rounded-full">
+                                <ScrollText className="w-4 h-4 text-slate-400" />
+                                <span>
+                                  {toBengaliNumber(module.assignment.length)} টি
+                                  অ্যাসাইনমেন্ট
+                                </span>
+                              </div>
                             )}
-                          </div>
                         </div>
-                      </AccordionContent>
-                    </div>
-                  </AccordionItem>
-                );
-              }
-            )}
+
+                        <div className="space-y-6">
+                          {module.classes?.map((cls, clsIdx) => (
+                            <div key={clsIdx} className="space-y-3">
+                              <h4 className="font-bold text-slate-900 flex items-center gap-2">
+                                ক্লাস {toBengaliNumber(clsIdx + 1)}: {cls.title}
+                              </h4>
+                              {/* Video link is omitted intentionally */}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </div>
+                </AccordionItem>
+              );
+            })}
           </div>
         </Accordion>
       </div>

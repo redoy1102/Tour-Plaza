@@ -51,3 +51,10 @@ export const toolsSchema = z.object({
   imageFile: imageUploadSchema.optional(),
 });
 export type ToolsFormValue = z.infer<typeof toolsSchema>;
+
+// ----------- FAQ Schema ---------
+export const faqSchema = z.object({
+  faqTitle: z.string().min(2, "Title must be at least 2 characters").max(200),
+  faqDescription: descriptionSchema,
+});
+export type FaqFormValue = z.infer<typeof faqSchema>;

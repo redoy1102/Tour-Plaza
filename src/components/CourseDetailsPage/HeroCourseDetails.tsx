@@ -14,7 +14,6 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getIcon } from "@/data/icons";
 import { format } from "date-fns";
 import {
   Select,
@@ -34,6 +33,8 @@ interface HeroCourseDetailsProps {
 
 const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
   const navigate = useNavigate();
+  // const promoCodes =
+  const promoCodes = useAppSelector((state) => state.promoCodes.items);
   const courses = useAppSelector((state) => state.courses.items);
   const course = courses.find((c) => c.id === courseId);
   const [selectedPromoCode, setSelectedPromoCode] = useState<string>("");
@@ -149,10 +150,12 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
             {/* Description */}
             <p className="text-slate-600 text-md md:text-sm leading-relaxed max-w-2xl">
-              {course.description} এটি একটি সম্পূর্ণ গাইডলাইন যা আপনাকে শূন্য
-              থেকে শুরু করে প্রফেশনাল পর্যায়ে নিয়ে যাবে। পাইথন বর্তমানে AI এবং
-              ডাটা সায়েন্সের প্রধান ভাষা। তাই নিজেকে ভবিষ্যতের জন্য দক্ষ করতে
-              আজই যোগ দিন।
+              <div
+                className="prose max-w-none"
+                dangerouslySetInnerHTML={{
+                  __html: course?.description ?? "",
+                }}
+              />
             </p>
 
             {/* Pricing and Action */}
@@ -193,7 +196,7 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                 </div>
               )}
               {/* Promo Code Selector */}
-              {course?.promoCodes && selectedPromoCode === "" && (
+              {promoCodes && selectedPromoCode === "" && (
                 <Select
                   value={selectedPromoCode}
                   onValueChange={setSelectedPromoCode}
@@ -204,12 +207,12 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
                   <SelectContent>
                     <SelectGroup>
                       {/* <SelectLabel>প্রমো কোড</SelectLabel> */}
-                      {course.promoCodes.map((item) => (
+                      {promoCodes.map((item) => (
                         <SelectItem
-                          key={item.value}
-                          value={item.value.toString()}
+                          key={item.code}
+                          value={item.discountPercentage.toString()}
                         >
-                          {item.label}
+                          {item.code} - {item.discountPercentage}%
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -280,58 +283,85 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
         </div>
 
         {/* Bottom Stats Bar */}
-        {!course?.isPreRecordedCourse && (
-          <div className="mt-10 bg-white rounded-2xl p-3 md:p-4 shadow border border-slate-100">
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 divide-x divide-slate-100">
-              <div className="px-4 space-y-2">
-                <p className="text-slate-400 text-sm font-medium">ব্যাচ শুরু</p>
-                <p className="text-slate-900 md:text-sm font-bold flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-orange-500" />
-                  {course.startDate instanceof Date
-                    ? format(course.startDate, "dd/MM/yyyy")
-                    : course.startDate}
-                </p>
-              </div>
-              <div className="px-4 space-y-2">
-                <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
-                  <Monitor className="w-4 h-4 text-blue-500" />
-                  লাইভ ক্লাস
-                </p>
-                <p className="text-slate-900 md:text-sm font-bold leading-tight">
-                  {course.liveClassTime} (রবি,মঙ্গল,বৃহ)
-                </p>
-              </div>
-              <div className="px-4 space-y-2">
-                <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-emerald-500" />
-                  সাপোর্ট ক্লাস
-                </p>
-                <p className="text-slate-900 md:text-sm font-bold leading-tight">
-                  প্রতিদিন রাত {course.supportClassTime}
-                </p>
-              </div>
-              <div className="px-4 space-y-2 border-none lg:border-solid">
-                <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
-                  <Tag className="w-4 h-4 text-rose-500" />
-                  সিট বাকি
-                </p>
-                <p className="text-slate-900 md:text-sm font-bold text-xl">
-                  {/* {course.seatsLeft} টি */}
-                  10 টি
-                </p>
-              </div>
-              <div className="px-4 space-y-2 border-none lg:border-solid">
-                <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
-                  <Users className="w-4 h-4 text-indigo-500" />
-                  ভর্তি চলছে
-                </p>
-                <p className="text-slate-900 md:text-sm font-extrabold text-xl font-bengali text-slate-900">
-                  {course.batchNumber}
-                </p>
+        <div className="mt-10 bg-white rounded-2xl p-3 md:p-4 shadow border border-slate-100">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 divide-x divide-slate-100">
+            <div className="px-4 space-y-2">
+              <p className="text-slate-400 text-sm font-medium">ব্যাচ শুরু</p>
+              <p className="text-slate-900 md:text-sm font-bold flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-orange-500" />
+                {course.startDate
+                  ? // If it's a string from Redux-Persist, convert it to a Date object first
+                    format(new Date(course.startDate), "dd/MM/yyyy")
+                  : "TBA"}
+              </p>
+            </div>
+            <div className="px-4 space-y-2">
+              <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
+                <Monitor className="w-4 h-4 text-blue-500" />
+                লাইভ ক্লাস
+              </p>
+              <div className="space-y-1">
+                {Array.isArray(course.liveClassTime) &&
+                course.liveClassTime.length > 0 ? (
+                  course.liveClassTime.map((time, idx) => (
+                    <p
+                      key={idx}
+                      className="text-slate-900 text-xs font-bold leading-tight"
+                    >
+                      {time.day}: {time.startTime} - {time.endTime}
+                    </p>
+                  ))
+                ) : (
+                  <p className="text-slate-900 md:text-sm font-bold leading-tight">
+                    TBA
+                  </p>
+                )}
               </div>
             </div>
+            <div className="px-4 space-y-2">
+              <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
+                <Clock className="w-4 h-4 text-emerald-500" />
+                সাপোর্ট ক্লাস
+              </p>
+              <div className="space-y-1">
+                {Array.isArray(course.supportClassTime) &&
+                course.supportClassTime.length > 0 ? (
+                  course.supportClassTime.map((time, idx) => (
+                    <p
+                      key={idx}
+                      className="text-slate-900 text-xs font-bold leading-tight"
+                    >
+                      {time.day}: {time.startTime} - {time.endTime}
+                    </p>
+                  ))
+                ) : (
+                  <p className="text-slate-900 md:text-sm font-bold leading-tight">
+                    TBA
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="px-4 space-y-2 border-none lg:border-solid">
+              <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
+                <Tag className="w-4 h-4 text-rose-500" />
+                সিট বাকি
+              </p>
+              <p className="text-slate-900 md:text-sm font-bold text-xl">
+                {/* {course.seatsLeft} টি */}
+                10 টি
+              </p>
+            </div>
+            <div className="px-4 space-y-2 border-none lg:border-solid">
+              <p className="text-slate-400 text-sm font-medium flex items-center gap-2">
+                <Users className="w-4 h-4 text-indigo-500" />
+                ভর্তি চলছে
+              </p>
+              <p className="text-slate-900 md:text-sm font-extrabold text-xl font-bengali text-slate-900">
+                {course.batchNumber}
+              </p>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );
