@@ -16,7 +16,7 @@ export function formatDateShort(date?: Date | string | null): string {
 }
 
 export const handlePreventEmptyField = <T extends Record<string, string>>(
-  value: T[],
+  value: T[]
 ) => {
   const final: boolean[] = [];
   value.map((item) => {

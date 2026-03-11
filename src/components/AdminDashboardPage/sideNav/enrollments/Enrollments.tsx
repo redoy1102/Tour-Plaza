@@ -1,11 +1,379 @@
+import { useState, useMemo } from "react";
+import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
+import { removeEnrollment } from "@/Redux/slices/enrollmentSlice";
+import type {
+  Enrollment,
+  EnrollmentStatus,
+} from "@/Redux/slices/enrollmentSlice";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Trash2, SquarePen, Search, SlidersHorizontal } from "lucide-react";
+import toast from "react-hot-toast";
+import PageHeader from "../shared/PageHeader";
+import { formatDateShort } from "@/lib/utils";
+import EditEnrollmentDialog from "./EditEnrollmentDialog";
 
+const statusColors: Record<EnrollmentStatus, string> = {
+  active: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  completed: "bg-blue-100 text-blue-700 border-blue-200",
+  cancelled: "bg-red-100 text-red-700 border-red-200",
+};
 
 const Enrollments = () => {
-    return (
-        <div>
-            <h1>Enrollments</h1>
+  const dispatch = useAppDispatch();
+  const enrollments = useAppSelector((state) => state.enrollments.items);
+  const courses = useAppSelector((state) => state.courses.items);
+  const categories = useAppSelector((state) => state.categories.items);
+  const students = useAppSelector((state) => state.student.students);
+
+  const [editEnrollmentId, setEditEnrollmentId] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Filters
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCategory, setFilterCategory] = useState<string>("all");
+  const [filterCourseType, setFilterCourseType] = useState<string>("all");
+  const [filterMinPrice, setFilterMinPrice] = useState<string>("");
+  const [filterMaxPrice, setFilterMaxPrice] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+
+  const filtered = useMemo(() => {
+    return enrollments.filter((enrollment) => {
+      const course = courses.find((c) => c.id === enrollment.courseId);
+      const student = students.find((s) => s.id === enrollment.studentId);
+
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        const matchStudent =
+          student?.name.toLowerCase().includes(q) ||
+          student?.email.toLowerCase().includes(q);
+        const matchCourse = course?.title.toLowerCase().includes(q);
+        if (!matchStudent && !matchCourse) return false;
+      }
+
+      if (filterCategory !== "all" && course?.categoryId !== filterCategory)
+        return false;
+
+      if (filterCourseType === "live" && !course?.isLiveCourse) return false;
+      if (filterCourseType === "recorded" && !course?.isPreRecordedCourse)
+        return false;
+
+      const min = filterMinPrice ? Number(filterMinPrice) : null;
+      const max = filterMaxPrice ? Number(filterMaxPrice) : null;
+      if (min !== null && enrollment.amount < min) return false;
+      if (max !== null && enrollment.amount > max) return false;
+
+      if (filterStatus !== "all" && enrollment.status !== filterStatus)
+        return false;
+
+      return true;
+    });
+  }, [
+    enrollments,
+    courses,
+    students,
+    searchQuery,
+    filterCategory,
+    filterCourseType,
+    filterMinPrice,
+    filterMaxPrice,
+    filterStatus,
+  ]);
+
+  const handleDelete = (enrollment: Enrollment) => {
+    toast((t) => (
+      <div className="flex flex-col items-start gap-3">
+        <p className="text-sm font-medium">এই এনরোলমেন্টটি মুছে ফেলবেন?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              dispatch(removeEnrollment(enrollment.id));
+              toast.success("এনরোলমেন্ট মুছে ফেলা হয়েছে!");
+              toast.dismiss(t.id);
+            }}
+            className="px-3 py-1.5 bg-red-500 text-white text-xs rounded-md hover:bg-red-600 transition"
+          >
+            হ্যাঁ, মুছুন
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-3 py-1.5 bg-gray-200 text-gray-700 text-xs rounded-md hover:bg-gray-300 transition"
+          >
+            বাতিল
+          </button>
         </div>
-    );
+      </div>
+    ));
+  };
+
+  const resetFilters = () => {
+    setSearchQuery("");
+    setFilterCategory("all");
+    setFilterCourseType("all");
+    setFilterMinPrice("");
+    setFilterMaxPrice("");
+    setFilterStatus("all");
+  };
+
+  const hasActiveFilters =
+    searchQuery ||
+    filterCategory !== "all" ||
+    filterCourseType !== "all" ||
+    filterMinPrice ||
+    filterMaxPrice ||
+    filterStatus !== "all";
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-700">
+      <div className="flex items-center justify-between gap-2">
+        <PageHeader>Enrollments</PageHeader>
+        <Badge variant="secondary" className="text-sm px-3 py-1">
+          Total: {enrollments.length}
+        </Badge>
+      </div>
+
+      {/* Filters Bar */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 space-y-3">
+        <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+          <SlidersHorizontal className="w-4 h-4" />
+          Filters
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+          {/* Search */}
+          <div className="relative xl:col-span-2">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Input
+              placeholder="Student / course..."
+              className="pl-9 h-9 text-sm"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {/* Category */}
+          <Select value={filterCategory} onValueChange={setFilterCategory}>
+            <SelectTrigger className="h-9 text-sm">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {categories.map((c) => (
+                <SelectItem key={c.id} value={c.id}>
+                  {c.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Course type */}
+          <Select value={filterCourseType} onValueChange={setFilterCourseType}>
+            <SelectTrigger className="h-9 text-sm">
+              <SelectValue placeholder="Course Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              <SelectItem value="live">Live</SelectItem>
+              <SelectItem value="recorded">Pre-Recorded</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Status */}
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
+            <SelectTrigger className="h-9 text-sm">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="cancelled">Cancelled</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Price range */}
+          <div className="flex items-center gap-1">
+            <Input
+              type="number"
+              placeholder="Min ৳"
+              className="h-9 text-sm w-full"
+              value={filterMinPrice}
+              onChange={(e) => setFilterMinPrice(e.target.value)}
+            />
+            <span className="text-slate-400 text-xs shrink-0">–</span>
+            <Input
+              type="number"
+              placeholder="Max ৳"
+              className="h-9 text-sm w-full"
+              value={filterMaxPrice}
+              onChange={(e) => setFilterMaxPrice(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {hasActiveFilters && (
+          <button
+            onClick={resetFilters}
+            className="text-xs text-red-500 hover:underline"
+          >
+            Reset filters
+          </button>
+        )}
+      </div>
+
+      {/* Table */}
+      {filtered.length === 0 ? (
+        <p className="text-slate-500 text-sm py-8 text-center">
+          No enrollments found.
+        </p>
+      ) : (
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-slate-50">
+                <TableHead className="w-10">#</TableHead>
+                <TableHead>Student</TableHead>
+                <TableHead>Course</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filtered.map((enrollment, index) => {
+                const course = courses.find(
+                  (c) => c.id === enrollment.courseId
+                );
+                const student = students.find(
+                  (s) => s.id === enrollment.studentId
+                );
+                const category = categories.find(
+                  (c) => c.id === course?.categoryId
+                );
+                return (
+                  <TableRow
+                    key={enrollment.id}
+                    className="hover:bg-slate-50/50"
+                  >
+                    <TableCell className="text-slate-400 text-xs">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-medium text-sm text-slate-800">
+                        {student?.name ?? "—"}
+                      </div>
+                      <div className="text-xs text-slate-400">
+                        {student?.email ?? enrollment.studentId}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-sm font-medium text-slate-700 max-w-48 truncate">
+                      {course?.title ?? "—"}
+                    </TableCell>
+                    <TableCell className="text-xs text-slate-500">
+                      {category?.name ?? "—"}
+                    </TableCell>
+                    <TableCell>
+                      {course?.isLiveCourse ? (
+                        <Badge
+                          variant="outline"
+                          className="text-xs border-orange-200 text-orange-600"
+                        >
+                          Live
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant="outline"
+                          className="text-xs border-blue-200 text-blue-600"
+                        >
+                          Recorded
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-sm font-semibold">
+                      ৳{enrollment.amount.toLocaleString()}
+                    </TableCell>
+                    <TableCell>
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border ${
+                          statusColors[enrollment.status]
+                        }`}
+                      >
+                        {enrollment.status}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-xs text-slate-500">
+                      {formatDateShort(enrollment.enrolledAt)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => {
+                            setEditEnrollmentId(enrollment.id);
+                            setDialogOpen(true);
+                          }}
+                          className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition cursor-pointer"
+                          aria-label="Edit enrollment"
+                        >
+                          <SquarePen className="w-3 h-3" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(enrollment)}
+                          className="p-1 bg-red-500 hover:bg-red-600 text-white rounded-md transition cursor-pointer"
+                          aria-label="Delete enrollment"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+
+      {/* Edit Dialog */}
+      <Dialog
+        open={dialogOpen}
+        onOpenChange={(open) => {
+          setDialogOpen(open);
+          if (!open) setEditEnrollmentId(null);
+        }}
+      >
+        <DialogContent className="max-w-md">
+          {editEnrollmentId && (
+            <EditEnrollmentDialog
+              enrollmentId={editEnrollmentId}
+              setDialogOpen={(open) => {
+                setDialogOpen(open);
+                if (!open) setEditEnrollmentId(null);
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
 };
 
 export default Enrollments;

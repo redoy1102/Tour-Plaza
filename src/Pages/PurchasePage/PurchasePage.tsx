@@ -1,14 +1,19 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { PhoneCall, Lock, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useAppSelector } from "@/Redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
+import { addEnrollment } from "@/Redux/slices/enrollmentSlice";
+import toast from "react-hot-toast";
 
 const PurchasePage = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { courseId } = useParams();
   const courses = useAppSelector((state) => state.courses.items);
   const promoCodes = useAppSelector((state) => state.promoCodes.items);
   const paymentMethods = useAppSelector((state) => state.paymentMethods.items);
+  const currentStudent = useAppSelector((state) => state.student.currentStudent);
 
   const [searchParams] = useSearchParams();
   const promoCode = searchParams.get("promo");
@@ -38,7 +43,24 @@ const PurchasePage = () => {
   const appliedPromo = promoCodes
     ? promoCodes.find((p) => p.discountPercentage === promoDiscountValue)
     : undefined;
-  console.log("appliedPromo", appliedPromo);
+
+  const handlePayment = () => {
+    if (!currentStudent) {
+      toast.error("পেমেন্ট করতে প্রথমে লগইন করুন!");
+      return;
+    }
+    if (!courseId) return;
+    dispatch(
+      addEnrollment({
+        studentId: currentStudent.id,
+        courseId,
+        amount: finalPrice,
+        status: "active",
+      })
+    );
+    toast.success("পেমেন্ট সফল হয়েছে! কোর্সে ভর্তি হয়েছেন।");
+    navigate("/student/my-courses");
+  };
 
   return (
     <div className="container mx-auto px-4 md:px-12 xl:px-4 py-16">
@@ -167,7 +189,10 @@ const PurchasePage = () => {
                   </span>
                 </div>
 
-                <Button className="w-full h-14 bg-primary hover:bg-red-500 text-white text-md font-black rounded-xl shadow-lg shadow-red-200 transition-all flex items-center justify-center gap-2 group cursor-pointer">
+                <Button
+                  className="w-full h-14 bg-primary hover:bg-red-500 text-white text-md font-black rounded-xl shadow-lg shadow-red-200 transition-all flex items-center justify-center gap-2 group cursor-pointer"
+                  onClick={handlePayment}
+                >
                   পেমেন্ট সম্পন্ন করি
                   <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                 </Button>
