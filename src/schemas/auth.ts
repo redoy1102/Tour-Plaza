@@ -10,7 +10,7 @@ export type AuthFormValues = z.infer<typeof authSchema>;
 export const profileSchema = z.object({
   name: z.string().min(2, "নাম কমপক্ষে ২ অক্ষরের হতে হবে"),
   email: z.string().email("সঠিক ইমেইল দিন"),
-  phone: z.string().min(10, "ফোন নাম্বার কমপক্ষে ১০ অক্ষরের হতে হবে"),
+  phone: z.string().optional(),
   address: z
     .string()
     .min(5, "ঠিকানা কমপক্ষে ৫ অক্ষরের হতে হবে")

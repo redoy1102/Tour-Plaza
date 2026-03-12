@@ -31,9 +31,14 @@ export function AuthSheet({ className }: { className?: string }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const students = useAppSelector((state) => state.student.students);
+  const token = useAppSelector((state) => state.student.token);
   const currentStudent = useAppSelector(
-    (state) => state.student.currentStudent
+    (state) => state.student.currentStudent,
   );
+
+  if(currentStudent && token){
+    console.log("Already logged in:", currentStudent, token);
+  }
 
   const form = useForm<AuthFormValues>({
     resolver: zodResolver(authSchema),
@@ -65,11 +70,12 @@ export function AuthSheet({ className }: { className?: string }) {
           name: student.name,
           email: student.email,
           token,
-        })
+        }),
       );
       toast.success("লগইন সফল হয়েছে!");
       setSheetOpen(false);
       form.reset();
+      navigate("/student");
     } else {
       // ── Sign-up flow ──
       const existing = students.find((s) => s.email === values.email);
@@ -91,12 +97,12 @@ export function AuthSheet({ className }: { className?: string }) {
           email: values.email,
           passwordHash: btoa(values.password),
           token,
-        })
+        }),
       );
       toast.success("অ্যাকাউন্ট তৈরি সফল হয়েছে!");
       setSheetOpen(false);
       form.reset();
-      navigate("/");
+      navigate("/student");
     }
   }
 
@@ -135,7 +141,7 @@ export function AuthSheet({ className }: { className?: string }) {
           variant="outline"
           className={cn(
             "rounded-full px-6 flex items-center gap-2 group bg-primary text-white cursor-pointer",
-            className
+            className,
           )}
         >
           <User className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />

@@ -11,13 +11,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useAppSelector } from "@/Redux/hooks";
 
 const Profile = () => {
+  const currentStudent = useAppSelector(
+    (state) => state.student.currentStudent,
+  );
+  const { id, name, email } = currentStudent || { id: "", name: "", email: "" };
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: name || "",
+      email: email || "",
       phone: "",
       address: "",
     },
@@ -37,8 +42,8 @@ const Profile = () => {
           <div className="w-32 h-32 rounded-full bg-gray-200 border-4 border-gray-300 flex items-center justify-center mb-4 overflow-hidden">
             <User className="w-16 h-16 text-gray-500" />
           </div>
-          <h2 className="text-xl font-bold text-black">তানভীর আহমেদ</h2>
-          <p className="text-gray-500 text-sm">স্টুডেন্ট আইডি: #১২৩৪৫</p>
+          <h2 className="text-xl font-bold text-black">{name}</h2>
+          <p className="text-gray-500 text-sm">স্টুডেন্ট আইডি: #{id}</p>
           <Button className="mt-6 w-full bg-primary hover:bg-red-500 text-white cursor-pointer">
             ছবি পরিবর্তন করুন
           </Button>
@@ -60,7 +65,7 @@ const Profile = () => {
                           {...field}
                           type="text"
                           className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-black/50 transition-colors"
-                          placeholder="তানভীর আহমেদ"
+                          placeholder="আপনার নাম"
                         />
                       </FormControl>
                       <FormMessage />
@@ -80,7 +85,7 @@ const Profile = () => {
                           {...field}
                           type="email"
                           className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-black/50 transition-colors"
-                          placeholder="tanvir@example.com"
+                          placeholder="আপনার ইমেইল ঠিকানা"
                         />
                       </FormControl>
                       <FormMessage />
@@ -128,12 +133,14 @@ const Profile = () => {
                   )}
                 />
               </div>
+              <Button
+                type="submit"
+                className="bg-primary hover:bg-red-500 text-white cursor-pointer px-8 mt-4"
+              >
+                প্রোফাইল আপডেট করুন
+              </Button>
             </form>
           </Form>
-
-          <Button className="bg-primary hover:bg-red-500 text-white cursor-pointer px-8 mt-4">
-            প্রোফাইল আপডেট করুন
-          </Button>
         </div>
       </div>
     </div>

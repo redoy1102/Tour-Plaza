@@ -41,7 +41,7 @@ const studentSlice = createSlice({
         email: string;
         passwordHash: string;
         token: string;
-      }>
+      }>,
     ) {
       const { id, name, email, passwordHash, token } = action.payload;
       const newStudent: Student = {
@@ -63,7 +63,7 @@ const studentSlice = createSlice({
         name: string;
         email: string;
         token: string;
-      }>
+      }>,
     ) {
       const { studentId, name, email, token } = action.payload;
       state.currentStudent = { id: studentId, name, email };
@@ -77,7 +77,7 @@ const studentSlice = createSlice({
 
     updateStudentInList(
       state,
-      action: PayloadAction<Partial<Student> & { id: string }>
+      action: PayloadAction<Partial<Student> & { id: string }>,
     ) {
       const index = state.students.findIndex((s) => s.id === action.payload.id);
       if (index !== -1) {
@@ -91,5 +91,21 @@ export const { signUp, login, logout, updateStudentInList } =
   studentSlice.actions;
 
 export const nanoidUtil = nanoid;
+
+// helper selector that decodes the token and returns the user's role string
+// (or null if there is no token / role).  Usage:
+//   const role = useAppSelector(selectStudentRole);
+// The token is a mock JWT encoded by `generateMockToken` so we can reuse the
+// same decoder here.
+import { decodeMockToken } from "@/lib/jwt";
+import type { RootState } from "../store";
+
+export const selectStudentRole = (state: RootState): string | null => {
+  const token = state.student.token;
+  if (!token) return null;
+  const payload = decodeMockToken(token);
+  if (!payload) return null;
+  return (payload.role as string) || null;
+};
 
 export default studentSlice.reducer;

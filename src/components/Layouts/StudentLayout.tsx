@@ -3,6 +3,9 @@ import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import { X, Menu, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { menuItems } from "@/data/student/StudentDashboardMenuData";
+import { logout } from "@/Redux/slices/studentSlice";
+import toast from "react-hot-toast";
+import { useAppDispatch } from "@/Redux/hooks";
 
 const StudentLayout = () => {
   const location = useLocation();
@@ -10,6 +13,7 @@ const StudentLayout = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
 
   // Determine activeTab based on current path
   const getActiveTab = () => {
@@ -19,7 +23,7 @@ const StudentLayout = () => {
       }
       if (item.submenu) {
         const subItem = item.submenu.find(
-          (sub) => sub.path === location.pathname
+          (sub) => sub.path === location.pathname,
         );
         if (subItem) {
           return subItem.id;
@@ -116,6 +120,8 @@ const StudentLayout = () => {
                 <button
                   onClick={() => {
                     if (item.id === "logOut") {
+                      dispatch(logout());
+                      toast.success("লগআউট সফল হয়েছে!");
                       navigate("/");
                     } else if (item.path) {
                       navigate(item.path);
