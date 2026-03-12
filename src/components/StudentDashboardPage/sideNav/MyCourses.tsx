@@ -1,140 +1,116 @@
 import { BookOpen, Calendar, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "@/Redux/hooks";
+import type { Course as CourseType } from "@/Redux/slices/courseSlice";
+import type {
+  ClassRecords,
+  Lesson as LessonType,
+  Quiz as QuizType,
+  Assignment as AssignmentType,
+} from "@/types/classRecords";
 
 const MyCourses = () => {
   const navigate = useNavigate();
-  const enrolledCourses = [
-    {
-      id: 1,
-      title: "ফুল স্ট্যাক ওয়েব ডেভেলপমেন্ট উইথ পাইথন ও রিয়্যাক্ট",
-      batch: "ব্যাচ ১০",
-      startDate: "১০ জানুয়ারি, ২০২৪",
-      status: "Running",
-      image: "/landingPage/courses/js.webp",
-      classRecords: {
-        week1: [
-          // Class - 1
-          {
-            classNo: 1,
-            title: "HTML পরিচিতি",
-            videoUrl: "/public/student/classRecords/week_1Class_1.mp4",
-            
-            duration: "49:13 minute",
-            completed: true,
-          },    
-          // Class - 2
-          {
-            classNo: 2,
-            title: "CSS বেসিক",
-            // videoUrl: "/public/student/classRecords/week_1Class_2.mp4",
-            ytVideo: "https://youtu.be/Fzs9LTB1XCs?si=1F6cCqgmDWNgKm-A",
-            duration: "49:13 minute",
-            completed: true,
-          },
-          // Quizzes for Week 1
-          {
-            quizzes: [
-              {
-                question: "HTML এর পূর্ণরূপ কি?",
-                options: [
-                  "Hyper Text Markup Language",
-                  "Home Tool Markup Language",
-                  "Hyperlinks and Text Markup Language",
-                ],
-                answer: ["Hyper Text Markup Language"],
-              },
-              {
-                question: "HTML এ কোন ট্যাগ দিয়ে প্যারাগ্রাফ তৈরি করা হয়?",
-                options: ["<p>", "<h1>", "<div>"],
-                answer: ["<p>"],
-              },
-              {
-                question: "HTML এ কোন ট্যাগ দিয়ে লিস্ট তৈরি করা হয়?",
-                options: ["<ul>", "<ol>", "<li>"],
-                answer: ["<ul>", "<ol>"],
-              },
-              {
-                question: "HTML এ কোন ট্যাগ দিয়ে লিস্ট তৈরি করা হয়?",
-                options: ["<ul>", "<ol>", "<li>"],
-                answer: ["<ul>", "<ol>"],
-              },
-            ],
-          },
-          // Assignment for Week 1
-          {
-            assignment: {
-              title: "HTML বেসিক অ্যাসাইনমেন্ট",
-              description:
-                "একটি ওয়েবপেজ তৈরি করুন যেখানে HTML এর বেসিক ট্যাগগুলো ব্যবহার করা হয়েছে।",
-              instructions: [
-                "আপনার ওয়েবপেজে একটি হেডার, একটি প্যারাগ্রাফ, এবং একটি লিস্ট অন্তর্ভুক্ত করুন।",
-                "আপনার কোড GitHub এ আপলোড করুন এবং লিঙ্কটি এখানে শেয়ার করুন।",
-              ],
-              dueDate: "2026-02-20",
-              maxMarks: 100,
-            },
-          },
-        ],
-        week2: [
-          {
-            classNo: 3,
-            title: "JavaScript বেসিক",
-            videoUrl: "/public/student/classRecords/week_2Class_1.mp4",
-            duration: "29:55 minute",
+
+  const currentStudent = useAppSelector(
+    (state) => state.student.currentStudent,
+  );
+  const enrollments = useAppSelector((state) => state.enrollments.items);
+  const allCourses = useAppSelector((state) => state.courses.items);
+
+  // build a list of course objects supplemented with enrollment data
+  // helper to convert the admin-defined outline into runtime class records
+  const buildRecords = (course: CourseType): ClassRecords | undefined => {
+    if (!course.courseOutline) return undefined;
+    const records: ClassRecords = {};
+    course.courseOutline.forEach((mod, idx) => {
+      const weekKey = `week${idx + 1}`;
+      const items: Array<
+        LessonType | { quizzes: QuizType[] } | { assignment: AssignmentType }
+      > = [];
+
+      // classes/lessons
+      if (mod.classes) {
+        mod.classes.forEach((cls, cIdx) => {
+          items.push({
+            classNo: cIdx + 1,
+            title: cls.title,
+            // Set video URL - ytVideo field is used for both YouTube and other URLs
+            ytVideo: cls.ytVideoUrl,
+            duration: "",
             completed: false,
-          },
-          {
-            classNo: 4,
-            title: "DOM",
-            videoUrl: "/public/student/classRecords/week_2Class_2.mp4",
-            duration: "28:08 minute",
-            completed: false,
-          },
-        ],
-        week3: [
-          {
-            classNo: 1,
-            title: "HTML পরিচিতি",
-            videoUrl: "/public/student/classRecords/week_1Class_1.mp4",
-            duration: "49:13 minute",
-            completed: false,
-          },
-          {
-            classNo: 2,
-            title: "CSS বেসিক",
-            videoUrl: "/public/student/classRecords/week_1Class_2.mp4",
-            duration: "49:13 minute",
-            completed: false,
-          },
-        ],
-        week4: [
-          {
-            classNo: 3,
-            title: "JavaScript বেসিক",
-            videoUrl: "/public/student/classRecords/week_2Class_1.mp4",
-            duration: "29:55 minute",
-            completed: false,
-          },
-          {
-            classNo: 4,
-            title: "DOM",
-            videoUrl: "/public/student/classRecords/week_2Class_2.mp4",
-            duration: "28:08 minute",
-            completed: false,
-          },
-        ],
-      },
-    },
-    {
-      id: 2,
-      title: "ফুল স্ট্যাক ওয়েব ডেভেলপমেন্ট উইথ MERN",
-      batch: "ব্যাচ ১০",
-      startDate: "১০ জানুয়ারি, ২০২৪",
-      status: "Running",
-      image: "/landingPage/courses/js.webp",
-    },
-  ];
+            resources: cls.resources,
+          });
+        });
+      }
+
+      // quizzes attached to module
+      if (mod.quizzes && mod.quizzes.length > 0) {
+        const converted: QuizType[] = mod.quizzes.map((q) => {
+          const opts = [
+            q.options.opt1,
+            q.options.opt2,
+            q.options.opt3,
+            q.options.opt4,
+          ];
+          let ansText: string[] = [];
+          if (q.answer) {
+            const num = Number(q.answer.replace("opt", "")) - 1;
+            if (num >= 0 && num < opts.length) ansText = [opts[num]];
+          }
+          return {
+            question: q.question,
+            options: opts,
+            answer: ansText,
+          };
+        });
+        items.push({ quizzes: converted });
+      }
+
+      // assignment (only first one shown in admin UI)
+      if (mod.assignment && mod.assignment.length > 0) {
+        const a = mod.assignment[0];
+        const assignmentObj: AssignmentType = {
+          title: a.title,
+          description: a.description,
+          instructions: a.instruction ? [a.instruction] : [],
+          dueDate: a.dueDate
+            ? typeof a.dueDate === "string"
+              ? a.dueDate
+              : a.dueDate.toISOString()
+            : "",
+          maxMarks: a.maxMarks,
+        };
+        items.push({ assignment: assignmentObj });
+      }
+
+      records[weekKey] = items;
+    });
+    return records;
+  };
+
+  const enrolledCourses: Array<CourseType & { status?: string }> =
+    currentStudent && enrollments.length > 0
+      ? enrollments
+          .filter((e) => e.studentId === currentStudent.id)
+          .map((e) => {
+            const course = allCourses.find(
+              (c) => String(c.id) === String(e.courseId),
+            );
+            if (!course) return null;
+            const withRecords: CourseType & { status?: string } = {
+              ...course,
+              status: e.status,
+              ...(buildRecords(course)
+                ? { classRecords: buildRecords(course) }
+                : {}),
+            } as CourseType & { status?: string };
+
+            return withRecords;
+          })
+          .filter((c): c is CourseType & { status?: string } => c !== null)
+      : [];
 
   return (
     <div className="space-y-8">
@@ -144,7 +120,7 @@ const MyCourses = () => {
         </h1>
         <div className="flex items-center gap-2 text-sm ">
           <div className="w-4 h-4 rounded-full bg-emerald-600 animate-pulse" />
-          ১টি কোর্স রানিং
+          {enrolledCourses.length} টি কোর্স রানিং
         </div>
       </div>
 
@@ -156,7 +132,7 @@ const MyCourses = () => {
           >
             <div className="w-full md:w-48 h-32 rounded-xl overflow-hidden bg-gray-200 shrink-0">
               <img
-                src={course.image}
+                src={course.bannerImage}
                 alt={course.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
@@ -180,11 +156,16 @@ const MyCourses = () => {
               <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-sky-500" />
-                  <span>{course.batch}</span>
+                  <span>ব্যাচ {course.batchNumber}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-sky-500" />
-                  <span>শুরু: {course.startDate}</span>
+                  <span>
+                    শুরু:{" "}
+                    {course.startDate
+                      ? new Date(course.startDate).toLocaleDateString()
+                      : "-"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -192,8 +173,14 @@ const MyCourses = () => {
             <div className="flex items-center">
               <Button
                 onClick={() => {
+                  // ``course`` comes from redux and doesn't officially have a
+                  // ``classRecords`` field, but some legacy objects may include it
+                  // so we try to forward it.  ``VideoClass`` already handles
+                  // undefined values.
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const records = (course as any).classRecords;
                   navigate("/video-player", {
-                    state: { classRecords: course.classRecords },
+                    state: { classRecords: records },
                   });
                 }}
                 className="w-full md:w-auto bg-primary hover:bg-red-500 text-white font-bold px-8 cursor-pointer"

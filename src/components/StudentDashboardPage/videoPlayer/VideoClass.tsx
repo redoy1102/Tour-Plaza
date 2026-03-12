@@ -1,49 +1,33 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CheckCircle2, PlayCircle, Clock, Link } from "lucide-react";
+import {
+  CheckCircle2,
+  PlayCircle,
+  Clock,
+  Link,
+  ChevronLeft,
+} from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-// import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import NoClassRecords from "../NoClassRecords";
-// import { Input } from "@/components/ui/input";
-
-interface Lesson {
-  classNo: number;
-  title: string;
-  videoUrl?: string;
-  ytVideo?: string;
-  duration: string;
-  completed: boolean;
-}
+import type {
+  Lesson,
+  Quiz,
+  Assignment,
+  ClassRecords,
+} from "@/types/classRecords"; // import { Input } from "@/components/ui/input";
+import { getYouTubeEmbedUrl } from "@/lib/utils";
 
 interface SelectedVideo {
   title: string;
   url: string | undefined;
   type: "local" | "youtube";
 }
-
-export interface Quiz {
-  question: string;
-  options: string[];
-  answer: string[];
-}
-
-export interface Assignment {
-  title: string;
-  description: string;
-  instructions: string[];
-  dueDate: string;
-  maxMarks: number;
-}
-
-type ClassRecords = Record<
-  string,
-  (Lesson | { quizzes: Quiz[] } | { assignment: Assignment })[]
->;
 
 const VideoClass = () => {
   const location = useLocation();
@@ -59,22 +43,41 @@ const VideoClass = () => {
   // Set initial selected video to the first lesson of the first week
   const firstWeekKey = Object.keys(classRecords || {})[0];
 
-  const firstLesson = classRecords?.[firstWeekKey]?.[0];
-  console.log("First lesson:", firstLesson);
+  // Find the first actual lesson (not quiz or assignment)
+  let firstLesson: Lesson | undefined;
+  for (const week of Object.values(classRecords || {})) {
+    for (const item of week) {
+      if ("title" in item) {
+        firstLesson = item as Lesson;
+        break;
+      }
+    }
+    if (firstLesson) break;
+  }
 
-  const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>(
-    firstLesson && ("videoUrl" in firstLesson || "ytVideo" in firstLesson)
-      ? {
-          title: firstLesson.title,
-          url: firstLesson.ytVideo || firstLesson.videoUrl,
-          type: firstLesson.ytVideo ? "youtube" : "local",
-        }
-      : {
-          title: "",
-          url: "",
-          type: "local",
-        }
-  );
+  console.log("First lesson found:", firstLesson);
+
+  const isYouTubeUrl = (url?: string) => {
+    if (!url) return false;
+    return /(?:youtube\.com\/|youtu\.be\/)/.test(url);
+  };
+
+  const [selectedVideo, setSelectedVideo] = useState<SelectedVideo>(() => {
+    if (!firstLesson) {
+      return { title: "", url: "", type: "local" };
+    }
+    const url = firstLesson.ytVideo || firstLesson.videoUrl || "";
+    const youtube = isYouTubeUrl(url);
+    return {
+      title: firstLesson.title,
+      url,
+      type: youtube ? "youtube" : "local",
+    };
+  });
+
+  const [selectedResources, setSelectedResources] = useState<
+    string | undefined
+  >(firstLesson?.resources);
 
   const getWeekTitle = (weekKey: string) => {
     switch (weekKey) {
@@ -91,11 +94,15 @@ const VideoClass = () => {
     }
   };
 
-  const getYouTubeEmbedUrl = (url: string | undefined) => {
-    if (!url) return "";
-    const videoId = url.split("/").pop()?.split("?")[0];
-    return `https://www.youtube.com/embed/${videoId}`;
-  };
+  // export const getYouTubeEmbedUrl = (url: string | undefined) => {
+  //   if (!url) return "";
+  //   // support multiple YouTube URL formats (youtu.be, watch?v=, embed)
+  //   const reg =
+  //     /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
+  //   const match = url.match(reg);
+  //   const id = match ? match[1] : url.split("/").pop()?.split("?")[0] || "";
+  //   return id ? `https://www.youtube.com/embed/${id}` : "";
+  // };
 
   if (!classRecords) {
     return (
@@ -107,7 +114,17 @@ const VideoClass = () => {
     <div className="min-h-screen bg-white text-black flex flex-col lg:flex-row overflow-hidden pt-10">
       {/* Main Content - Video Player */}
       <div className="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
-        <div className="max-w-5xl mx-auto w-full">
+        <div className="max-w-5xl mx-auto w-full space-y-6">
+          <div className="flex items-center">
+            <Button
+              onClick={() => navigate("/student/my-courses")}
+              className="px-3 rounded-md flex items-center gap-2 cursor-pointer"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              ফিরে যান
+            </Button>
+          </div>
+
           <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-300 group">
             {selectedVideo.type === "youtube" ? (
               <iframe
@@ -127,6 +144,15 @@ const VideoClass = () => {
               />
             )}
           </div>
+
+          {selectedResources && (
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+              <h3 className="text-lg font-semibold mb-2">Resources</h3>
+              <p className="text-sm text-gray-700 whitespace-pre-line">
+                {selectedResources}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -167,7 +193,7 @@ const VideoClass = () => {
                           lesson:
                             | Lesson
                             | { quizzes: Quiz[] }
-                            | { assignment: Assignment }
+                            | { assignment: Assignment },
                         ) => {
                           if ("quizzes" in lesson) {
                             return (
@@ -220,11 +246,20 @@ const VideoClass = () => {
                               <button
                                 key={lesson.classNo}
                                 onClick={() => {
+                                  const url =
+                                    lesson.ytVideo || lesson.videoUrl || "";
                                   setSelectedVideo({
                                     title: lesson.title,
-                                    url: lesson.ytVideo || lesson.videoUrl,
-                                    type: lesson.ytVideo ? "youtube" : "local",
+                                    url,
+                                    type: isYouTubeUrl(url)
+                                      ? "youtube"
+                                      : "local",
                                   });
+                                  setSelectedResources(
+                                    "resources" in lesson
+                                      ? lesson.resources
+                                      : undefined,
+                                  );
                                 }}
                                 className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item ${
                                   selectedVideo.title === lesson.title
@@ -283,7 +318,7 @@ const VideoClass = () => {
                               </button>
                             );
                           }
-                        }
+                        },
                       )}
                     </div>
                   </AccordionContent>

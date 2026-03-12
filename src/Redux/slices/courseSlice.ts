@@ -1,8 +1,12 @@
 import type { AddCourseFormValue } from "@/schemas/admin/course.schema";
 import { createSlice, type PayloadAction, nanoid } from "@reduxjs/toolkit";
 
+import type { ClassRecords } from "@/types/classRecords";
+
 export interface Course extends AddCourseFormValue {
   id: string;
+  // optional videos/quizzes/assignments structure used by student views
+  classRecords?: ClassRecords;
 }
 
 interface CoursesState {
@@ -19,14 +23,13 @@ const coursesSlice = createSlice({
   reducers: {
     setCourses(state, action: PayloadAction<Course[]>) {
       state.items = action.payload;
-      
     },
     addCourse(state, action: PayloadAction<AddCourseFormValue>) {
       state.items.push({ id: nanoid(), ...action.payload });
     },
     updateCourse(
       state,
-      action: PayloadAction<{ id: string; data: AddCourseFormValue }>
+      action: PayloadAction<{ id: string; data: AddCourseFormValue }>,
     ) {
       const { id, data } = action.payload;
       const index = state.items.findIndex((c) => c.id === id);

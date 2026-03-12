@@ -26,6 +26,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/Redux/hooks";
+import { getYouTubeEmbedUrl } from "@/lib/utils";
 
 interface HeroCourseDetailsProps {
   courseId: string | undefined;
@@ -263,21 +264,28 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
 
           {/* Right Video Preview */}
           <div className="w-full lg:w-2/5 flex flex-col items-center mt-4">
-            <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl group cursor-pointer border-4 border-white">
-              <img
+            <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl group cursor-pointer">
+              {/* <img
                 src={course.bannerImage}
                 alt={course.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              /> */}
+              <iframe
+                src={getYouTubeEmbedUrl(course?.bannerVideoLink)}
+                title={course?.title}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
               />
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+              {/* <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                 <div className="bg-white/90 p-5 rounded-full shadow-lg transform transition-transform group-hover:scale-110">
                   <PlayCircle className="w-12 h-12 text-rose-500 fill-rose-500/20" />
                 </div>
-              </div>
-              <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-medium">
+              </div> */}
+              {/* <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white rounded-xl flex items-center gap-2 text-sm font-medium">
                 <PlayCircle className="w-5 h-5 text-orange-400" />
                 ক্লিক করে দেখে নিন কোর্সের ডেমো ক্লাস
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

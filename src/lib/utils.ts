@@ -16,7 +16,7 @@ export function formatDateShort(date?: Date | string | null): string {
 }
 
 export const handlePreventEmptyField = <T extends Record<string, string>>(
-  value: T[]
+  value: T[],
 ) => {
   const final: boolean[] = [];
   value.map((item) => {
@@ -36,4 +36,14 @@ export const handlePreventEmptyField = <T extends Record<string, string>>(
   } else {
     return true;
   }
+};
+
+export const getYouTubeEmbedUrl = (url: string | undefined) => {
+  if (!url) return "";
+  // support multiple YouTube URL formats (youtu.be, watch?v=, embed)
+  const reg =
+    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
+  const match = url.match(reg);
+  const id = match ? match[1] : url.split("/").pop()?.split("?")[0] || "";
+  return id ? `https://www.youtube.com/embed/${id}` : "";
 };
