@@ -1,7 +1,7 @@
 // import { courses } from "@/data/landingPage/courses";
 import {
   Star,
-  PlayCircle,
+
   Calendar,
   Users,
   Clock,

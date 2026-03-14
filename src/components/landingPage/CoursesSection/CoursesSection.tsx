@@ -30,10 +30,10 @@ const Courses = ({
   const requestedCourses = isFeatured
     ? courses.filter((course) => course.isFeatured)
     : isLiveCourse
-    ? courses.filter((course) => course.isLiveCourse)
-    : isPreRecordedCourse
-    ? courses.filter((course) => course.isPreRecordedCourse)
-    : [];
+      ? courses.filter((course) => course.isLiveCourse)
+      : isPreRecordedCourse
+        ? courses.filter((course) => course.isPreRecordedCourse)
+        : [];
 
   if (!requestedCourses) return null;
 
@@ -58,12 +58,16 @@ const Courses = ({
       {/* Header */}
       <Header
         icon={MonitorPlay}
-        normalText={isFeatured ? "Featured" : "Free"}
+        normalText={
+          isFeatured ? "Featured" : isLiveCourse ? "Live" : "Pre-recorded"
+        }
         colorText="Courses"
         description={
           isFeatured
             ? "Explore our top-rated courses and enhance your skills."
-            : "Discover our free courses and start learning today."
+            : isLiveCourse
+              ? "Join our live courses and interact with instructors in real-time."
+              : "Access our pre-recorded courses and learn at your own pace."
         }
       />
 
@@ -107,7 +111,7 @@ const Courses = ({
               >
                 {cat.label}
               </button>
-            )
+            ),
           )}
         </div>
 

@@ -12,7 +12,7 @@ const Faq = () => {
   const bengaliNumbers = ["১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
 
   return (
-    <section className="pb-16">
+    <section className="pb-16 mt-6">
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="text-center mb-16">
           <h2 className="text-2xl md:text-3xl lg:text-5xl font-black text-slate-800 font-bengali inline-block relative px-4">
