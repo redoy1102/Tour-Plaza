@@ -14,6 +14,12 @@ export const nameSchema = z
   .min(1, "Name must be at least 1 character")
   .max(50, "Name cannot exceed 50 characters");
 
+export const emailSchema = z.string().email("Invalid email address");
+
+export const phoneSchema = z
+  .string()
+  .regex(/^\d{11}$/, "Phone number must contain exactly 11 digits");
+
 export const roleSchema = z
   .string()
   .min(2, "Role must be at least 2 characters")

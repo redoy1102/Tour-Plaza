@@ -36,15 +36,23 @@ export function AuthSheet({ className }: { className?: string }) {
     (state) => state.student.currentStudent,
   );
 
-  if(currentStudent && token){
+  if (currentStudent && token) {
     console.log("Already logged in:", currentStudent, token);
   }
 
   const form = useForm<AuthFormValues>({
     resolver: zodResolver(authSchema),
     mode: "onChange",
-    defaultValues: { name: "", email: "", password: "" },
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
+
+  const { isDirty } = form.formState;
 
   function onSubmit(values: AuthFormValues) {
     if (isLogin) {
@@ -62,6 +70,7 @@ export function AuthSheet({ className }: { className?: string }) {
         id: student.id,
         email: student.email,
         name: student.name,
+        phone: student.phone,
         role: "student",
       });
       dispatch(
@@ -69,6 +78,7 @@ export function AuthSheet({ className }: { className?: string }) {
           studentId: student.id,
           name: student.name,
           email: student.email,
+          phone: student.phone,
           token,
         }),
       );
@@ -86,15 +96,17 @@ export function AuthSheet({ className }: { className?: string }) {
       const id = nanoid();
       const token = generateMockToken({
         id,
+        name: values.name,
         email: values.email,
-        name: values.name ?? "",
+        phone: values.phone,
         role: "student",
       });
       dispatch(
         signUp({
           id,
-          name: values.name ?? "",
+          name: values.name,
           email: values.email,
+          phone: values.phone,
           passwordHash: btoa(values.password),
           token,
         }),
@@ -189,6 +201,26 @@ export function AuthSheet({ className }: { className?: string }) {
                 )}
               />
 
+              {!isLogin && (
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>ফোন</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="tel"
+                          placeholder="01XXXXXXXXX"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
               <FormField
                 control={form.control}
                 name="password"
@@ -220,10 +252,44 @@ export function AuthSheet({ className }: { className?: string }) {
                 )}
               />
 
+              {!isLogin && (
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>পাসওয়ার্ড নিশ্চিতকরণ</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword((p) => !p)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                          >
+                            {showPassword ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
               <Button
                 type="submit"
                 variant="outline"
                 className="w-full bg-primary text-white mt-4 cursor-pointer hover:bg-primary/90"
+                disabled={!isDirty}
               >
                 {isLogin ? "লগইন" : "রেজিস্ট্রেশন করুন"}
               </Button>

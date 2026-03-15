@@ -7,6 +7,7 @@ export interface Student {
   id: string;
   name: string;
   email: string;
+  phone: string;
   passwordHash: string; // btoa(password) — dev mock, NOT production-safe
   createdAt: string;
 }
@@ -15,6 +16,7 @@ export interface CurrentStudent {
   id: string;
   name: string;
   email: string;
+  phone: string;
 }
 
 interface StudentState {
@@ -39,34 +41,36 @@ const studentSlice = createSlice({
         id: string;
         name: string;
         email: string;
+        phone: string;
         passwordHash: string;
         token: string;
       }>,
     ) {
-      const { id, name, email, passwordHash, token } = action.payload;
+      const { id, name, email, phone, passwordHash, token } = action.payload;
       const newStudent: Student = {
         id,
         name,
         email,
+        phone,
         passwordHash,
         createdAt: new Date().toISOString(),
       };
       state.students.push(newStudent);
-      state.currentStudent = { id, name, email };
+      state.currentStudent = { id, name, email, phone };
       state.token = token;
     },
-
     login(
       state,
       action: PayloadAction<{
         studentId: string;
         name: string;
         email: string;
+        phone: string;
         token: string;
       }>,
     ) {
-      const { studentId, name, email, token } = action.payload;
-      state.currentStudent = { id: studentId, name, email };
+      const { studentId, name, email, phone, token } = action.payload;
+      state.currentStudent = { id: studentId, name, email, phone };
       state.token = token;
     },
 
