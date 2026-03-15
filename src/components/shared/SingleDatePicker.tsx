@@ -9,11 +9,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 
 interface SingleDatePickerProps {
-    field: {
-        value: Date | undefined;
-        onChange: (date: Date | undefined) => void;
-    };
-    }
+  field: {
+    value: Date | undefined;
+    onChange: (date: Date | undefined) => void;
+  };
+}
 
 const SingleDatePicker = ({ field }: SingleDatePickerProps) => {
   return (

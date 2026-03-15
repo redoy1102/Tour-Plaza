@@ -24,6 +24,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import LandingPageButton from "@/components/shared/LandingPageButton";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -121,10 +122,15 @@ const AdminDashboard = () => {
     <div className="space-y-6 animate-in fade-in duration-700">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 font-sans">
-          Admin Overview
-        </h1>
-        <div className="text-sm text-gray-500">Welcome back, Admin</div>
+        <div className="flex items-center gap-4">
+          <LandingPageButton />
+          <h1 className="text-xl md:text-3xl font-bold tracking-tight text-gray-900 font-sans">
+            Admin Overview
+          </h1>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="text-sm text-gray-500">Welcome back, Admin</div>
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -194,7 +200,7 @@ const AdminDashboard = () => {
 
       {/* Recent enrollments */}
       <div className="p-6 bg-white rounded-xl border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-semibold mb-4">Recent Enrolments</h3>
+        <h3 className="text-lg font-semibold mb-4">Recent Enrollments</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 uppercase text-xs">

@@ -49,9 +49,9 @@ const AdminDashboardLayout = () => {
         }`}
       >
         {/* Dashboard Sidebar */}
-        <div className="p-6 flex items-center justify-between border-b border-gray-300">
+        <div className="p-4 flex items-center justify-between border-b border-gray-300">
           <h2 className="text-xl font-bold tracking-tight text-gray-900">
-            Admin Dashboard
+            Dashboard
           </h2>
           <Button
             variant="ghost"
@@ -155,7 +155,7 @@ const AdminDashboardLayout = () => {
         </div>
 
         {/* Component is rendering from here */}
-        <div className="p-4 md:p-8 max-w-7xl mx-auto">
+        <div className="p-4 md:px-8 md:py-4 max-w-7xl mx-auto">
           <Outlet />
         </div>
       </main>
