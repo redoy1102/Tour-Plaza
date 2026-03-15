@@ -173,10 +173,6 @@ const MyCourses = () => {
             <div className="flex items-center">
               <Button
                 onClick={() => {
-                  // ``course`` comes from redux and doesn't officially have a
-                  // ``classRecords`` field, but some legacy objects may include it
-                  // so we try to forward it.  ``VideoClass`` already handles
-                  // undefined values.
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const records = (course as any).classRecords;
                   navigate("/video-player", {
@@ -197,7 +193,10 @@ const MyCourses = () => {
             <h3 className="text-gray-600 font-medium">
               আপনি এখনও কোন কোর্সে এনরোল করেননি।
             </h3>
-            <Button className="mt-4 bg-transparent border border-gray-300 text-gray-600 hover:text-black hover:bg-gray-100">
+            <Button
+              onClick={() => navigate("/")}
+              className="mt-4 bg-transparent border border-gray-300 text-gray-600 hover:text-black hover:bg-gray-100 cursor-pointer"
+            >
               সব কোর্স দেখুন
             </Button>
           </div>

@@ -3,13 +3,20 @@ import PasswordUpdate from "@/components/StudentDashboardPage/sideNav/settings/P
 import MyCourses from "@/components/StudentDashboardPage/sideNav/MyCourses";
 import LoginHistory from "@/components/StudentDashboardPage/sideNav/settings/LoginHistory";
 import Dashboard from "@/components/StudentDashboardPage/sideNav/dashboard/Dashboard";
-import { User, Lock, BookOpen, MonitorSmartphone, LogOut } from "lucide-react";
+import {
+  User,
+  Lock,
+  BookOpen,
+  MonitorSmartphone,
+  LogOut,
+  LayoutDashboard,
+} from "lucide-react";
 
 export const menuItems = [
   {
     id: "dashboard",
     label: "ড্যাশবোর্ড",
-    icon: <User className="w-5 h-5" />,
+    icon: <LayoutDashboard className="w-5 h-5" />,
     component: <Dashboard />,
     path: "/student",
   },

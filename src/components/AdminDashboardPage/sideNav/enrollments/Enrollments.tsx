@@ -14,7 +14,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -261,13 +260,13 @@ const Enrollments = () => {
             <TableBody>
               {filtered.map((enrollment, index) => {
                 const course = courses.find(
-                  (c) => c.id === enrollment.courseId
+                  (c) => c.id === enrollment.courseId,
                 );
                 const student = students.find(
-                  (s) => s.id === enrollment.studentId
+                  (s) => s.id === enrollment.studentId,
                 );
                 const category = categories.find(
-                  (c) => c.id === course?.categoryId
+                  (c) => c.id === course?.categoryId,
                 );
                 return (
                   <TableRow

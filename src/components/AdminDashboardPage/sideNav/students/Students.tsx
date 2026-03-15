@@ -21,10 +21,11 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Search, Users, BookOpen } from "lucide-react";
+import { Search, Users, BookOpen, SquarePen } from "lucide-react";
 import toast from "react-hot-toast";
 import PageHeader from "../shared/PageHeader";
 import { formatDateShort } from "@/lib/utils";
+import CopyButton from "@/components/shared/CopyButton";
 
 const Students = () => {
   const dispatch = useAppDispatch();
@@ -41,7 +42,7 @@ const Students = () => {
     const q = searchQuery.toLowerCase();
     return students.filter(
       (s) =>
-        s.name.toLowerCase().includes(q) || s.email.toLowerCase().includes(q)
+        s.name.toLowerCase().includes(q) || s.email.toLowerCase().includes(q),
     );
   }, [students, searchQuery]);
 
@@ -65,10 +66,18 @@ const Students = () => {
         id: editStudent.id,
         name: editName.trim(),
         email: editEmail.trim(),
-      })
+      }),
     );
     toast.success("Student updated successfully!");
     setEditStudent(null);
+  };
+
+  const [copied, setCopied] = useState<string | null>(null);
+  const handleCopy = (email: string) => {
+    navigator.clipboard.writeText(email);
+    setCopied(email);
+    toast.success("Email copied!");
+    setTimeout(() => setCopied(null), 2000);
   };
 
   return (
@@ -136,7 +145,17 @@ const Students = () => {
                       </div>
                     </TableCell>
                     <TableCell className="text-sm text-slate-500">
-                      {student.email}
+                      <div className="flex items-center gap-3 group">
+                        <span className="font-medium text-slate-600">
+                          {student.email}
+                        </span>
+
+                        <CopyButton
+                          copied={copied}
+                          onCopy={handleCopy}
+                          targetCopy={student.email}
+                        />
+                      </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1.5">
@@ -158,9 +177,9 @@ const Students = () => {
                     <TableCell className="text-right">
                       <button
                         onClick={() => openEdit(student)}
-                        className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-md transition cursor-pointer"
+                        className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition cursor-pointer"
                       >
-                        Edit
+                        <SquarePen className="w-3 h-3" />
                       </button>
                     </TableCell>
                   </TableRow>

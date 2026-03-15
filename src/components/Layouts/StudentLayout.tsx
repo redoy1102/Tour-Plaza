@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
-import { X, Menu, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { menuItems } from "@/data/student/StudentDashboardMenuData";
 import { logout } from "@/Redux/slices/studentSlice";
 import toast from "react-hot-toast";
 import { useAppDispatch } from "@/Redux/hooks";
+import LayoutSidebarHeader from "./LayoutSidebarHeader";
 
 const StudentLayout = () => {
   const location = useLocation();
@@ -50,20 +51,10 @@ const StudentLayout = () => {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:-ml-72"
         }`}
       >
-        {/* Dashboard Sidebar */}
-        <div className="p-4 flex items-center justify-between border-b border-gray-300">
-          <h2 className="text-xl font-bold tracking-tight text-gray-900">
-            ড্যাশবোর্ড
-          </h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden "
-            onClick={() => setIsSidebarOpen(false)}
-          >
-            <X className="w-6 h-6" />
-          </Button>
-        </div>
+        <LayoutSidebarHeader
+          setIsSidebarOpen={setIsSidebarOpen}
+          label="ড্যাশবোর্ড"
+        />
 
         <nav className="p-4 space-y-2">
           {menuItems.map((item) => (

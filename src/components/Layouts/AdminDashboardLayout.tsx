@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
-import { X, Menu, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { menuItems } from "@/data/admin/AdminDashboardMenuData";
+import LayoutSidebarHeader from "./LayoutSidebarHeader";
 
 const AdminDashboardLayout = () => {
   const location = useLocation();
@@ -21,7 +22,7 @@ const AdminDashboardLayout = () => {
         const subItem = item.submenu.find(
           (sub) =>
             sub.path === location.pathname ||
-            sub.createButtonPath === location.pathname
+            sub.createButtonPath === location.pathname,
         );
         if (subItem) {
           return subItem.id;
@@ -48,20 +49,10 @@ const AdminDashboardLayout = () => {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:-ml-72"
         }`}
       >
-        {/* Dashboard Sidebar */}
-        <div className="p-4 flex items-center justify-between border-b border-gray-300">
-          <h2 className="text-xl font-bold tracking-tight text-gray-900">
-            Dashboard
-          </h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden "
-            onClick={() => setIsSidebarOpen(false)}
-          >
-            <X className="w-6 h-6" />
-          </Button>
-        </div>
+        <LayoutSidebarHeader
+          setIsSidebarOpen={setIsSidebarOpen}
+          label="Dashboard"
+        />
 
         <nav className="p-4 space-y-2">
           {menuItems.map((item) => (
@@ -94,7 +85,7 @@ const AdminDashboardLayout = () => {
                               closeSidebarOnMobile();
                             }
                           }}
-                          className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer text-xs ${
+                          className={`flex items-center gap-1 px-4 py-3 rounded-lg transition-all duration-200 cursor-pointer text-xs ${
                             activeTab === subItem.id
                               ? "text-primary bg-gray-200 shadow-sm"
                               : "hover:text-gray-600 hover:bg-gray-100"
