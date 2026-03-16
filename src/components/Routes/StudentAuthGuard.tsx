@@ -1,5 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "@/Redux/hooks";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 // Simple guard that checks whether a student is logged in; if not, redirect to
 // the landing/home page.  Wrap this around any route subtree that should be
@@ -8,6 +10,14 @@ const StudentAuthGuard = () => {
   const currentStudent = useAppSelector(
     (state) => state.student.currentStudent,
   );
+
+  useEffect(() => {
+    if (!currentStudent) {
+      toast.error("এই পৃষ্ঠাটি দেখতে লগইন করুন!", {
+        id: "auth-guard-warning",
+      });
+    }
+  }, [currentStudent]);
 
   if (!currentStudent) {
     // user not logged in; kick them to the home page

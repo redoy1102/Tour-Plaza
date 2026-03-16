@@ -15,13 +15,20 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { authSchema, type AuthFormValues } from "@/schemas/auth";
 import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
 import { signUp, login, logout } from "@/Redux/slices/studentSlice";
 import { generateMockToken } from "@/lib/jwt";
 import { nanoid } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import {
+  loginSchema,
+  type LoginFormValues,
+} from "@/schemas/auth.schema/login.schema";
+import {
+  signupSchema,
+  type SignupFormValues,
+} from "@/schemas/auth.schema/signup.schema";
 
 export function AuthSheet({ className }: { className?: string }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -40,9 +47,21 @@ export function AuthSheet({ className }: { className?: string }) {
     console.log("Already logged in:", currentStudent, token);
   }
 
-  const form = useForm<AuthFormValues>({
-    resolver: zodResolver(authSchema),
+  // Separate forms for login and signup
+  const loginForm = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
     mode: "onChange",
+    shouldUnregister: true,
+    defaultValues: {
+      email: "admin@gmail.com",
+      password: "admin@gmail.com",
+    },
+  });
+
+  const signupForm = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
+    mode: "onChange",
+    shouldUnregister: true,
     defaultValues: {
       name: "",
       email: "",
@@ -52,70 +71,68 @@ export function AuthSheet({ className }: { className?: string }) {
     },
   });
 
-  const { isDirty } = form.formState;
-
-  function onSubmit(values: AuthFormValues) {
-    if (isLogin) {
-      // ── Login flow ──
-      const student = students.find((s) => s.email === values.email);
-      if (!student) {
-        toast.error("এই ইমেইলে কোনো অ্যাকাউন্ট নেই!");
-        return;
-      }
-      if (btoa(values.password) !== student.passwordHash) {
-        toast.error("পাসওয়ার্ড ভুল!");
-        return;
-      }
-      const token = generateMockToken({
-        id: student.id,
-        email: student.email,
+  function onLoginSubmit(values: LoginFormValues) {
+    console.log("Login form submitted with values:", values);
+    const student = students.find((s) => s.email === values.email);
+    if (!student) {
+      toast.error("এই ইমেইলে কোনো অ্যাকাউন্ট নেই!");
+      return;
+    }
+    if (btoa(values.password) !== student.passwordHash) {
+      toast.error("পাসওয়ার্ড ভুল!");
+      return;
+    }
+    const token = generateMockToken({
+      id: student.id,
+      email: student.email,
+      name: student.name,
+      phone: student.phone,
+      role: "student",
+    });
+    dispatch(
+      login({
+        studentId: student.id,
         name: student.name,
+        email: student.email,
         phone: student.phone,
-        role: "student",
-      });
-      dispatch(
-        login({
-          studentId: student.id,
-          name: student.name,
-          email: student.email,
-          phone: student.phone,
-          token,
-        }),
-      );
-      toast.success("লগইন সফল হয়েছে!");
-      setSheetOpen(false);
-      form.reset();
-      navigate("/student");
-    } else {
-      // ── Sign-up flow ──
-      const existing = students.find((s) => s.email === values.email);
-      if (existing) {
-        toast.error("এই ইমেইল ইতিমধ্যে রেজিস্টার করা আছে!");
-        return;
-      }
-      const id = nanoid();
-      const token = generateMockToken({
+        token,
+      }),
+    );
+    toast.success("লগইন সফল হয়েছে!");
+    setSheetOpen(false);
+    loginForm.reset();
+    navigate("/student");
+  }
+
+  function onSignupSubmit(values: SignupFormValues) {
+    console.log("Signup form submitted with values:", values);
+    const existing = students.find((s) => s.email === values.email);
+    if (existing) {
+      toast.error("এই ইমেইল ইতিমধ্যে রেজিস্টার করা আছে!");
+      return;
+    }
+    const id = nanoid();
+    const token = generateMockToken({
+      id,
+      name: values.name,
+      email: values.email,
+      phone: values.phone,
+      role: "student",
+    });
+    dispatch(
+      signUp({
         id,
         name: values.name,
         email: values.email,
         phone: values.phone,
-        role: "student",
-      });
-      dispatch(
-        signUp({
-          id,
-          name: values.name,
-          email: values.email,
-          phone: values.phone,
-          passwordHash: btoa(values.password),
-          token,
-        }),
-      );
-      toast.success("অ্যাকাউন্ট তৈরি সফল হয়েছে!");
-      setSheetOpen(false);
-      form.reset();
-      navigate("/student");
-    }
+        passwordHash: btoa(values.password),
+        token,
+      }),
+    );
+    toast.success("অ্যাকাউন্ট তৈরি সফল হয়েছে!");
+    setSheetOpen(false);
+    signupForm.reset();
+    navigate("/student");
   }
 
   // ── Already logged in: show user pill + logout ──
@@ -164,12 +181,82 @@ export function AuthSheet({ className }: { className?: string }) {
       <SheetContent className="w-100 sm:w-135">
         <Header isLogin={isLogin} />
 
-        <div className="py-8">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              {!isLogin && (
+        <div className="py-8" key={isLogin ? "login" : "signup"}>
+          {isLogin ? (
+            // ── Login Form ──
+            <Form {...loginForm} key="login-form">
+              <form
+                onSubmit={loginForm.handleSubmit(onLoginSubmit)}
+                className="space-y-4"
+              >
                 <FormField
-                  control={form.control}
+                  control={loginForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>ইমেইল</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="example@gmail.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={loginForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>পাসওয়ার্ড</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword((p) => !p)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                          >
+                            {showPassword ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  variant="outline"
+                  className="w-full bg-primary text-white mt-4 cursor-pointer hover:bg-primary/90"
+                  disabled={!loginForm.formState.isDirty}
+                >
+                  লগইন
+                </Button>
+              </form>
+            </Form>
+          ) : (
+            // ── Signup Form ──
+            <Form {...signupForm} key="signup-form">
+              <form
+                onSubmit={signupForm.handleSubmit(onSignupSubmit)}
+                className="space-y-4"
+              >
+                <FormField
+                  control={signupForm.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
@@ -181,29 +268,27 @@ export function AuthSheet({ className }: { className?: string }) {
                     </FormItem>
                   )}
                 />
-              )}
 
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>ইমেইল</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="example@gmail.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {!isLogin && (
                 <FormField
-                  control={form.control}
+                  control={signupForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>ইমেইল</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="example@gmail.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={signupForm.control}
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
@@ -219,42 +304,40 @@ export function AuthSheet({ className }: { className?: string }) {
                     </FormItem>
                   )}
                 />
-              )}
 
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>পাসওয়ার্ড</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          type={showPassword ? "text" : "password"}
-                          placeholder="••••••••"
-                          {...field}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword((p) => !p)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                        >
-                          {showPassword ? (
-                            <EyeOff className="w-4 h-4" />
-                          ) : (
-                            <Eye className="w-4 h-4" />
-                          )}
-                        </button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {!isLogin && (
                 <FormField
-                  control={form.control}
+                  control={signupForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>পাসওয়ার্ড</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword((p) => !p)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                          >
+                            {showPassword ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={signupForm.control}
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
@@ -283,26 +366,28 @@ export function AuthSheet({ className }: { className?: string }) {
                     </FormItem>
                   )}
                 />
-              )}
 
-              <Button
-                type="submit"
-                variant="outline"
-                className="w-full bg-primary text-white mt-4 cursor-pointer hover:bg-primary/90"
-                disabled={!isDirty}
-              >
-                {isLogin ? "লগইন" : "রেজিস্ট্রেশন করুন"}
-              </Button>
-            </form>
-          </Form>
+                <Button
+                  type="submit"
+                  variant="outline"
+                  className="w-full bg-primary text-white mt-4 cursor-pointer hover:bg-primary/90"
+                  disabled={!signupForm.formState.isDirty}
+                >
+                  রেজিস্ট্রেশন করুন
+                </Button>
+              </form>
+            </Form>
+          )}
 
           <div className="text-center mt-4">
             <p className="text-sm text-muted-foreground">
               {isLogin ? "অ্যাকাউন্ট নেই?" : "ইতিমধ্যে অ্যাকাউন্ট আছে?"}{" "}
               <button
                 onClick={() => {
+                  setShowPassword(false); // Reset password visibility
+                  loginForm.reset();
+                  signupForm.reset();
                   setIsLogin(!isLogin);
-                  form.reset();
                 }}
                 className="text-primary font-semibold hover:underline"
               >

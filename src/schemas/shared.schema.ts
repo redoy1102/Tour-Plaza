@@ -18,7 +18,7 @@ export const emailSchema = z.string().email("Invalid email address");
 
 export const phoneSchema = z
   .string()
-  .regex(/^\d{11}$/, "Phone number must contain exactly 11 digits");
+  .regex(/^(?:\+88|88)?(01[3-9]\d{8})$/, "Invalid phone number format");
 
 export const roleSchema = z
   .string()

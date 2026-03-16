@@ -59,7 +59,9 @@ function App() {
             <Route path="contact" element={<ContactPage />} />
             <Route path="courses" element={<AllCoursesPage />} />
             <Route path="courses/:courseId" element={<CourseDetails />} />
-            <Route path="purchase/:courseId" element={<PurchasePage />} />
+            <Route element={<StudentAuthGuard />}>
+              <Route path="purchase/:courseId" element={<PurchasePage />} />
+            </Route>
           </Route>
 
           {/* Student Routes (protected) */}
