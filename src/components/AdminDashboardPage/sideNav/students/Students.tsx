@@ -30,12 +30,14 @@ import CopyButton from "@/components/shared/CopyButton";
 const Students = () => {
   const dispatch = useAppDispatch();
   const students = useAppSelector((state) => state.student.students);
+  console.log("Students from Redux:", students);
   const enrollments = useAppSelector((state) => state.enrollments.items);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [editStudent, setEditStudent] = useState<Student | null>(null);
   const [editName, setEditName] = useState("");
   const [editEmail, setEditEmail] = useState("");
+  const [editPhone, setEditPhone] = useState("");
 
   const filtered = useMemo(() => {
     if (!searchQuery.trim()) return students;
@@ -49,35 +51,46 @@ const Students = () => {
   const getEnrollmentCount = (studentId: string) =>
     enrollments.filter((e) => e.studentId === studentId).length;
 
+  const [copied, setCopied] = useState<string | null>(null);
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(text);
+    toast.success("Copied to clipboard!");
+    setTimeout(() => setCopied(null), 2000);
+  };
+
   const openEdit = (student: Student) => {
     setEditStudent(student);
     setEditName(student.name);
     setEditEmail(student.email);
+    setEditPhone(student.phone);
   };
 
   const handleSaveEdit = () => {
     if (!editStudent) return;
-    if (!editName.trim() || !editEmail.trim()) {
-      toast.error("Name and email cannot be empty.");
+    if (!editName.trim() || !editEmail.trim() || !editPhone.trim()) {
+      toast.error("Name, email, and phone cannot be empty.");
       return;
     }
+    if (!/^\S+@\S+\.\S+$/.test(editEmail.trim())) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    if (!/^\+?\d{7,15}$/.test(editPhone.trim())) {
+      toast.error("Please enter a valid phone number.");
+      return;
+    }
+
     dispatch(
       updateStudentInList({
         id: editStudent.id,
         name: editName.trim(),
         email: editEmail.trim(),
+        phone: editPhone.trim(),
       }),
     );
     toast.success("Student updated successfully!");
     setEditStudent(null);
-  };
-
-  const [copied, setCopied] = useState<string | null>(null);
-  const handleCopy = (email: string) => {
-    navigator.clipboard.writeText(email);
-    setCopied(email);
-    toast.success("Email copied!");
-    setTimeout(() => setCopied(null), 2000);
   };
 
   return (
@@ -121,6 +134,7 @@ const Students = () => {
                 <TableHead className="w-10">#</TableHead>
                 <TableHead>Student</TableHead>
                 <TableHead>Email</TableHead>
+                <TableHead>Phone</TableHead>
                 <TableHead>Enrolled Courses</TableHead>
                 <TableHead>Joined</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
@@ -155,6 +169,21 @@ const Students = () => {
                           onCopy={handleCopy}
                           targetCopy={student.email}
                         />
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-sm text-slate-500">
+                      <div className="flex items-center gap-2 group">
+                        <span className="font-medium text-slate-600">
+                          {student.phone}
+                        </span>
+
+                        {student.phone && (
+                          <CopyButton
+                            copied={copied}
+                            onCopy={handleCopy}
+                            targetCopy={student.phone}
+                          />
+                        )}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -201,7 +230,7 @@ const Students = () => {
           <DialogHeader>
             <DialogTitle>Edit Student</DialogTitle>
             <DialogDescription>
-              Update the student's name or email address.
+              Update the student's name, email, or phone number.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
@@ -223,6 +252,18 @@ const Students = () => {
                 value={editEmail}
                 onChange={(e) => setEditEmail(e.target.value)}
                 placeholder="Email address"
+                className="h-10"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-sm font-medium text-slate-700">
+                Phone
+              </Label>
+              <Input
+                type="tel"
+                value={editPhone}
+                onChange={(e) => setEditPhone(e.target.value)}
+                placeholder="Phone number"
                 className="h-10"
               />
             </div>
