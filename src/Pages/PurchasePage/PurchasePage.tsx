@@ -12,11 +12,15 @@ const PurchasePage = () => {
   const { courseId } = useParams();
   const courses = useAppSelector((state) => state.courses.items);
   const promoCodes = useAppSelector((state) => state.promoCodes.items);
+  console.log("Available Promo Codes:", promoCodes);
   const paymentMethods = useAppSelector((state) => state.paymentMethods.items);
-  const currentStudent = useAppSelector((state) => state.student.currentStudent);
+  const currentStudent = useAppSelector(
+    (state) => state.student.currentStudent,
+  );
 
   const [searchParams] = useSearchParams();
   const promoCode = searchParams.get("promo");
+  console.log("Applied Promo Code from URL:", promoCode);
 
   const course = courses.find((c) => c.id === courseId);
   const [selectedPayment, setSelectedPayment] = useState("bkash");
@@ -34,7 +38,8 @@ const PurchasePage = () => {
   const priceAfterDiscount = course?.price
     ? course.price - (course.discount ?? 0)
     : 0;
-  const promoDiscountValue = Number(promoCode) || 0;
+  const promoDiscountValue =
+    promoCodes.find((p) => p.code === promoCode)?.discountPercentage || 0;
   const promoDiscount = promoCode
     ? (priceAfterDiscount * promoDiscountValue) / 100
     : 0;
@@ -56,7 +61,7 @@ const PurchasePage = () => {
         courseId,
         amount: finalPrice,
         status: "active",
-      })
+      }),
     );
     toast.success("পেমেন্ট সফল হয়েছে! কোর্সে ভর্তি হয়েছেন।");
     navigate("/student/my-courses");
@@ -106,10 +111,10 @@ const PurchasePage = () => {
                           {appliedPromo && (course?.discount || 0) > 0
                             ? `${appliedPromo.code} & Discount`
                             : (course?.discount || 0) > 0
-                            ? "Discount"
-                            : appliedPromo
-                            ? "Promo Code"
-                            : ""}
+                              ? "Discount"
+                              : appliedPromo
+                                ? "Promo Code"
+                                : ""}
                         </div>
                         <span className="text-sm">অ্যাপ্লাইড</span>
                       </div>

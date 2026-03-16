@@ -1,7 +1,6 @@
 // import { courses } from "@/data/landingPage/courses";
 import {
   Star,
-
   Calendar,
   Users,
   Clock,
@@ -12,21 +11,29 @@ import {
   Monitor,
   Video,
   X,
+  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/Redux/hooks";
 import { getYouTubeEmbedUrl } from "@/lib/utils";
+import {
+  searchPromoCodeSchema,
+  type SearchPromoCodeFormValue,
+} from "@/schemas/admin/promoCode.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
 
 interface HeroCourseDetailsProps {
   courseId: string | undefined;
@@ -39,11 +46,66 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
   const courses = useAppSelector((state) => state.courses.items);
   const course = courses.find((c) => c.id === courseId);
   const [selectedPromoCode, setSelectedPromoCode] = useState<string>("");
+  // const { register, getValues, reset } = useForm();
 
   const handleEnroll = () => {
     const promoQuery = selectedPromoCode ? `?promo=${selectedPromoCode}` : "";
     navigate(`/purchase/${courseId}${promoQuery}`);
   };
+
+  // promo code submission logic
+  const form = useForm<SearchPromoCodeFormValue>({
+    resolver: zodResolver(searchPromoCodeSchema),
+    mode: "onChange",
+    defaultValues: {
+      code: "",
+    },
+  });
+  const { isSubmitting, isDirty } = form.formState;
+
+  const onSubmit = (data: SearchPromoCodeFormValue) => {
+    const inputPromoCode = data.code;
+    const isPromoCodeExist = promoCodes.find((p) => p.code === inputPromoCode);
+    if (isPromoCodeExist) {
+      setSelectedPromoCode(isPromoCodeExist.code);
+      toast.success("Promo code applied successfully!", {
+        duration: 3000,
+      });
+    } else {
+      toast.error("Invalid promo code", {
+        duration: 3000,
+      });
+    }
+
+    form.reset();
+  };
+
+  const [placeholder, setPlaceholder] = useState("");
+  const fullText = "welcome25"; // আপনি যা টাইপ করাতে চান
+
+  useEffect(() => {
+    let index = 0;
+    let isDeleting = false;
+
+    const type = () => {
+      const currentText = fullText.substring(0, index);
+      setPlaceholder(currentText);
+
+      if (!isDeleting && index < fullText.length) {
+        index++;
+        setTimeout(type, 150); // টাইপিং স্পিড
+      } else if (isDeleting && index > 0) {
+        index--;
+        setTimeout(type, 120); // ডিলিটিং স্পিড
+      } else {
+        // বিরতি দিয়ে আবার শুরু করা
+        isDeleting = !isDeleting;
+        setTimeout(type, 1000);
+      }
+    };
+
+    type();
+  }, []);
 
   if (!course) {
     return <div className="py-20 text-center">কোর্স পাওয়া যায়নি।</div>;
@@ -54,7 +116,8 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
     : 0;
   console.log("Price after discount:", priceAfterDiscount);
 
-  const promoNumber = selectedPromoCode ? parseInt(selectedPromoCode, 10) : 0;
+  const promo = promoCodes.find((p) => p.code === selectedPromoCode);
+  const promoNumber = promo ? promo.discountPercentage : 0;
 
   const finalPrice =
     priceAfterDiscount - (priceAfterDiscount * promoNumber) / 100;
@@ -160,65 +223,92 @@ const HeroCourseDetails = ({ courseId }: HeroCourseDetailsProps) => {
             </p>
 
             {/* Pricing and Action */}
-            <div className="flex flex-wrap items-center gap-4 py-4">
+            {/* Pricing and Action Section */}
+            <div className="flex flex-wrap items-center gap-6 py-6 border-y border-slate-100 my-4">
+              {/* Batch Admission Button */}
               <Button
                 onClick={handleEnroll}
-                className="bg-[#FFC107] hover:bg-[#FFC107]/90 text-slate-900 font-bold px-4 py-3 lg:px-6 lg:py-5 xl:px-8 xl:py-6 rounded-lg text-lg flex items-center gap-2"
+                className="bg-[#FFC107] hover:bg-[#FFC107]/90 text-slate-900 font-bold h-12 px-8 rounded-xl text-lg flex items-center gap-2 transition-transform active:scale-95"
               >
                 ব্যাচে ভর্তি হোন <ArrowRight className="w-5 h-5" />
               </Button>
 
+              {/* Price Display */}
               {course?.price && (
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl md:text-2xl font-black text-slate-900">
-                    ৳{finalPrice}
-                  </span>
-                  {finalPrice < course.price && (
-                    <span className="text-lg text-slate-400 line-through">
-                      ৳{course.price}
+                <div className="flex flex-col justify-center">
+                  <div className="flex items-baseline gap-2 h-7">
+                    <span className="text-3xl font-black text-slate-900">
+                      ৳{finalPrice}
                     </span>
-                  )}
+                    {finalPrice < course.price && (
+                      <span className="text-lg text-slate-400 line-through">
+                        ৳{course.price}
+                      </span>
+                    )}
+                  </div>
                 </div>
               )}
 
+              {/* Applied Promo Code Display (Fixed Height to match input) */}
               {selectedPromoCode && (
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1 text-emerald-600 text-sm font-semibold">
-                    <CheckCircle className="w-4 h-4" /> প্রোমো অ্যাপ্লাইড
-                  </span>
-                  <Button
-                    size="sm"
-                    className="bg-emerald-100 hover:bg-emerald-200 text-emerald-600 cursor-pointer"
+                <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-100 h-12 px-4 rounded-xl">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5 text-emerald-600" />
+                    <span className="text-emerald-700 font-bold text-sm uppercase tracking-tight">
+                      {selectedPromoCode} Applied
+                    </span>
+                  </div>
+                  <button
                     onClick={() => setSelectedPromoCode("")}
+                    className="ml-2 p-1 hover:bg-emerald-100 rounded-full text-emerald-600 transition-colors cursor-pointer"
+                    title="Remove Promo"
                   >
-                    <X />
-                    Promo
-                  </Button>
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
               )}
-              {/* Promo Code Selector */}
+
+              {/* Promo Code Input Group */}
               {promoCodes && selectedPromoCode === "" && (
-                <Select
-                  value={selectedPromoCode}
-                  onValueChange={setSelectedPromoCode}
-                >
-                  <SelectTrigger className="w-full max-w-48">
-                    <SelectValue placeholder="প্রমো কোড" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {/* <SelectLabel>প্রমো কোড</SelectLabel> */}
-                      {promoCodes.map((item) => (
-                        <SelectItem
-                          key={item.code}
-                          value={item.discountPercentage.toString()}
-                        >
-                          {item.code} - {item.discountPercentage}%
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <div className="flex-1 min-w-[280px] max-w-[320px]">
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                      <FormField
+                        control={form.control}
+                        name="code"
+                        render={({ field }) => (
+                          <FormItem className="space-y-0">
+                            <div className="flex -space-x-px shadow-sm rounded-lg overflow-hidden group">
+                              <FormControl>
+                                <Input
+                                  // placeholder="প্রোমো কোড"
+                                  placeholder={placeholder}
+                                  className="h-11 rounded-none rounded-l-lg border-slate-200 focus-visible:ring-0 focus-visible:border-slate-400 focus-visible:ring-offset-0 transition-all placeholder:text-slate-400"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <Button
+                                type="submit"
+                                disabled={isSubmitting || !isDirty}
+                                className="h-11 mt-1 rounded-none rounded-r-lg bg-slate-900 hover:bg-black text-white px-5 font-semibold transition-colors disabled:opacity-50 cursor-pointer"
+                              >
+                                {isSubmitting ? (
+                                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white" />
+                                ) : (
+                                  <Search className="w-4 h-4" />
+                                )}
+                              </Button>
+                            </div>
+                            {/* Fixed Error Message positioning */}
+                            <div className="h-0 relative">
+                              <FormMessage className="text-[11px] absolute top-1 left-1 font-medium" />
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </form>
+                  </Form>
+                </div>
               )}
             </div>
 
