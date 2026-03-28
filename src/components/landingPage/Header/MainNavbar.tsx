@@ -16,18 +16,18 @@ const MainNavbar = () => {
   const navigate = useNavigate();
   return (
     <header className="w-full bg-white sticky top-0 z-50 shadow-sm">
-      <div className="mx-auto flex h-17 max-w-7xl items-center justify-between px-4">
+      <div className="mx-auto flex h-22 max-w-7xl items-center justify-between px-4">
         {/* Left: Logo */}
         <div className="flex items-center gap-4">
           <Link
             to="/"
-            className="w-32 md:w-40 lg:w-48"
+            className="w-32 md:w-40"
             onClick={() => window.scrollTo(0, 0)}
           >
             <img
               src="/logo.webp"
               alt="eManager IT Logo"
-              className="w-full h-15"
+              className="w-full"
             />
           </Link>
           <div className="hidden xl:flex">
