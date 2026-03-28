@@ -2,10 +2,10 @@ export const navBarMenus = [
   // আমাদের কোর্সসমূহ
   {
     label: "কোর্সসমূহ",
+    link: "/courses",
     subMenus: [
-      { label: "সব কোর্স", link: "/courses" },
       { label: "ওয়েব ডেভেলপমেন্ট", link: "/courses?category=webDevelopment" },
-      { label: "গ্রাফিক ডিজাইন", link: "/courses?category=graphicDesign" },
+      { label: "গ্রাফিক্স ডিজাইন", link: "/courses?category=graphicsDesign" },
       {
         label: "ডিজিটাল মার্কেটিং",
         link: "/courses?category=digitalMarketing",

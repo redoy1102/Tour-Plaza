@@ -9,10 +9,11 @@ import {
 import SearchBar from "./SearchBar";
 import { navBarMenus } from "@/data/landingPage/navBarData";
 import MobileNavbar from "./MobileNavBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthSheet } from "./Auth/AuthSection";
 
 const MainNavbar = () => {
+  const navigate = useNavigate();
   return (
     <header className="w-full bg-white sticky top-0 z-50 shadow-sm">
       <div className="mx-auto flex h-17 max-w-7xl items-center justify-between px-4">
@@ -41,7 +42,10 @@ const MainNavbar = () => {
               {navBarMenus.map((navItem, index) => {
                 return navItem.subMenus && navItem.subMenus.length > 0 ? (
                   <NavigationMenuItem className="relative" key={index}>
-                    <NavigationMenuTrigger>
+                    <NavigationMenuTrigger
+                      className="cursor-pointer"
+                      onClick={() => navItem.link && navigate(navItem.link)}
+                    >
                       {navItem.label}
                     </NavigationMenuTrigger>
 

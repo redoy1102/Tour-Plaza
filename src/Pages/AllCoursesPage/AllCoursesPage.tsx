@@ -1,21 +1,38 @@
 import Header from "@/components/shared/Header";
 import { PlaySquare } from "lucide-react";
-import { courses } from "@/data/landingPage/courses";
+// import { courses } from "@/data/landingPage/courses";
 import CourseCard from "@/components/landingPage/CoursesSection/CourseCard";
 import { useSearchParams } from "react-router-dom";
 import { useMemo } from "react";
+import { useAppSelector } from "@/Redux/hooks";
+import { toCamelCase } from "@/lib/toCamelCase";
 
 const AllCoursesPage = () => {
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get("category");
+  const courses = useAppSelector((state) => state.courses.items);
+  const categories = useAppSelector((state) => state.categories.items);
+
+  console.log("All courses from Redux:", courses);
+
+  const categoryIdToCamelCaseName = useMemo(() => {
+    const map: Record<string, string> = {};
+    categories.forEach((category) => {
+      map[category.id] = toCamelCase(category.name || "");
+    });
+    return map;
+  }, [categories]);
 
   // Filter courses based on category parameter
   const filteredCourses = useMemo(() => {
     if (!categoryParam) {
       return courses;
     }
-    return courses.filter((course) => course.category === categoryParam);
-  }, [categoryParam]);
+    return courses.filter(
+      (course) =>
+        categoryIdToCamelCaseName[course.categoryId] === categoryParam,
+    );
+  }, [categoryParam, courses, categoryIdToCamelCaseName]);
 
   // Get category title for header
   const getCategoryTitle = () => {
