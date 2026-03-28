@@ -109,7 +109,10 @@ const VideoClass = () => {
   const course = courseName
     ? findCourseBySlug(courseName, allCourses)
     : undefined;
-  const classRecords = course ? buildRecords(course) : undefined;
+  const classRecords =
+    course && "courseOutline" in course
+      ? buildRecords(course as Course)
+      : undefined;
   console.log("Course:", course);
   console.log("Class records:", classRecords);
 
@@ -179,7 +182,7 @@ const VideoClass = () => {
   //   return id ? `https://www.youtube.com/embed/${id}` : "";
   // };
 
-  if (!classRecords) {
+  if (!classRecords || Object.keys(classRecords).length === 0) {
     return (
       <NoClassRecords backToMyCourses={() => navigate("/student/my-courses")} />
     );
@@ -201,21 +204,13 @@ const VideoClass = () => {
           </div>
 
           <div className="relative aspect-video w-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-300 group">
-            {selectedVideo.type === "youtube" ? (
+            {selectedVideo.type === "youtube" && (
               <iframe
                 src={getYouTubeEmbedUrl(selectedVideo.url)}
                 title={selectedVideo.title}
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-              />
-            ) : (
-              <video
-                key={selectedVideo.url}
-                src={selectedVideo.url}
-                controls
-                className="w-full h-full"
-                poster="/landingPage/courses/js.webp"
               />
             )}
           </div>
