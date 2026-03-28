@@ -6,15 +6,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Filter } from "lucide-react";
-import { performanceData } from "@/data/student/dashboardData";
 import LandingPageButton from "@/components/shared/LandingPageButton";
 
 interface HeaderProps {
   selectedWeek: string;
   setSelectedWeek: (value: string) => void;
+  performanceData: { week: string }[];
 }
 
-const Header = ({ selectedWeek, setSelectedWeek }: HeaderProps) => {
+const Header = ({
+  selectedWeek,
+  setSelectedWeek,
+  performanceData,
+}: HeaderProps) => {
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div className="flex items-center gap-4">

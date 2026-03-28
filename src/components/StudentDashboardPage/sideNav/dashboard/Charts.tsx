@@ -7,13 +7,23 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { performanceData } from "@/data/student/dashboardData";
 import { Minimize, Expand } from "lucide-react";
 import { useState } from "react";
-const Charts = () => {
-  const [weeklyProgressData, setWeeklyProgressData] = useState(
-    performanceData.slice(0, 5)
-  );
+
+interface ChartsProps {
+  performanceData: {
+    week: string;
+    quiz: number;
+    assignment: number;
+    videoProgress: number;
+  }[];
+}
+
+const Charts = ({ performanceData }: ChartsProps) => {
+  const [showAll, setShowAll] = useState(false);
+  const weeklyProgressData = showAll
+    ? performanceData
+    : performanceData.slice(0, 5);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -128,21 +138,22 @@ const Charts = () => {
             </div>
           ))}
 
-          {weeklyProgressData.length === performanceData.length ? (
-            <button
-              className="w-full py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-center gap-1 mt-4 cursor-pointer"
-              onClick={() => setWeeklyProgressData(performanceData.slice(0, 5))}
-            >
-              ছোট করুন <Minimize className="w-4 h-4" />
-            </button>
-          ) : (
-            <button
-              className="w-full py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-center gap-1 mt-4 cursor-pointer"
-              onClick={() => setWeeklyProgressData(performanceData)}
-            >
-              সব দেখুন <Expand className="w-4 h-4" />
-            </button>
-          )}
+          {performanceData.length > 5 &&
+            (showAll ? (
+              <button
+                className="w-full py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-center gap-1 mt-4 cursor-pointer"
+                onClick={() => setShowAll(false)}
+              >
+                ছোট করুন <Minimize className="w-4 h-4" />
+              </button>
+            ) : (
+              <button
+                className="w-full py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-center gap-1 mt-4 cursor-pointer"
+                onClick={() => setShowAll(true)}
+              >
+                সব দেখুন <Expand className="w-4 h-4" />
+              </button>
+            ))}
         </div>
       </div>
     </div>

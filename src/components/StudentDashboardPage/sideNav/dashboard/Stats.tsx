@@ -1,6 +1,6 @@
 import {
-  TrendingUp,
-  TrendingDown,
+  // TrendingUp,
+  // TrendingDown,
   BookOpen,
   FileText,
   Trophy,
@@ -26,7 +26,7 @@ const Stats = ({ currentStats }: StatsProps) => {
           <div className="p-2 bg-amber-50 rounded-lg">
             <Trophy className="w-6 h-6 text-amber-500" />
           </div>
-          {currentStats.totalObtainedMarks > 700 ? (
+          {/* {currentStats.totalObtainedMarks > 700 ? (
             <span className="flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
               <TrendingUp className="w-3 h-3" /> +৫%
             </span>
@@ -34,12 +34,12 @@ const Stats = ({ currentStats }: StatsProps) => {
             <span className="flex items-center gap-1 text-xs font-medium text-rose-600 bg-rose-50 px-2 py-1 rounded-full">
               <TrendingDown className="w-3 h-3" /> -২%
             </span>
-          )}
+          )} */}
         </div>
         <p className="text-sm text-gray-500 font-medium">মোট প্রাপ্ত নম্বর</p>
         <h3 className="text-2xl font-bold text-gray-900">
           {currentStats.totalObtainedMarks}{" "}
-          <span className="text-sm font-normal text-gray-400">/ {currentStats.totalMarks}</span>
+          {/* <span className="text-sm font-normal text-gray-400">/ {currentStats.totalMarks}</span> */}
         </h3>
       </div>
 

@@ -35,6 +35,8 @@ const VideoClass = () => {
   const { courseName } = useParams<{ courseName: string }>();
   const navigate = useNavigate();
   const allCourses = useAppSelector((state) => state.courses.items);
+  const currentStudent = useAppSelector((s) => s.student.currentStudent);
+  const enrollments = useAppSelector((s) => s.enrollments.items);
 
   // Helper function to build class records (moved from MyCourses)
   const buildRecords = (course: Course): ClassRecords | undefined => {
@@ -113,6 +115,11 @@ const VideoClass = () => {
     course && "courseOutline" in course
       ? buildRecords(course as Course)
       : undefined;
+
+  // Find the student's enrollment for this course to check submission status
+  const enrollment = enrollments.find(
+    (e) => e.studentId === currentStudent?.id && e.courseId === course?.id,
+  );
   console.log("Course:", course);
   console.log("Class records:", classRecords);
 
@@ -266,6 +273,9 @@ const VideoClass = () => {
                             | { assignment: Assignment },
                         ) => {
                           if ("quizzes" in lesson) {
+                            const quizSubmitted = !!enrollment?.quizMarks?.some(
+                              (m) => m.quizWeekId === weekKey,
+                            );
                             return (
                               <button
                                 key={lesson.quizzes[0].question}
@@ -286,9 +296,18 @@ const VideoClass = () => {
                                     Quiz - {lesson.quizzes.length} Questions
                                   </p>
                                 </div>
+                                {quizSubmitted && (
+                                  <div className="p-1.5 rounded-lg bg-emerald-500/10">
+                                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
+                                  </div>
+                                )}
                               </button>
                             );
                           } else if ("assignment" in lesson) {
+                            const assignmentSubmitted =
+                              !!enrollment?.assignmentMarks?.some(
+                                (m) => m.assignmentWeekId === weekKey,
+                              );
                             return (
                               <button
                                 key={lesson.assignment.title}
@@ -315,6 +334,11 @@ const VideoClass = () => {
                                     Assignment - {lesson.assignment.title}
                                   </p>
                                 </div>
+                                {assignmentSubmitted && (
+                                  <div className="p-1.5 rounded-lg bg-emerald-500/10">
+                                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
+                                  </div>
+                                )}
                               </button>
                             );
                           } else {
