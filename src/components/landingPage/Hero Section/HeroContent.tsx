@@ -1,5 +1,5 @@
 import CourseSeeBtn from "@/lib/CourseSeeBtn";
-import EnrollNowBtn from "@/lib/EnrollNowBtn";
+// import EnrollNowBtn from "@/lib/EnrollNowBtn";
 
 const HeroContent = () => {
   return (
@@ -30,7 +30,7 @@ const HeroContent = () => {
 
       <div className="flex flex-col md:flex-row md:items-center md:gap-4 gap-3">
         <CourseSeeBtn />
-        <EnrollNowBtn />
+        {/* <EnrollNowBtn /> */}
       </div>
     </div>
   );

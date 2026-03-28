@@ -9,6 +9,7 @@ import type {
   Quiz as QuizType,
   Assignment as AssignmentType,
 } from "@/types/classRecords";
+import { createSlug } from "@/lib/utils";
 
 const MyCourses = () => {
   const navigate = useNavigate();
@@ -173,11 +174,8 @@ const MyCourses = () => {
             <div className="flex items-center">
               <Button
                 onClick={() => {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  const records = (course as any).classRecords;
-                  navigate("/video-player", {
-                    state: { classRecords: records },
-                  });
+                  const courseSlug = createSlug(course.title);
+                  navigate(`/student/video-player/${courseSlug}`);
                 }}
                 className="w-full md:w-auto bg-primary hover:bg-red-500 text-white font-bold px-8 cursor-pointer"
               >

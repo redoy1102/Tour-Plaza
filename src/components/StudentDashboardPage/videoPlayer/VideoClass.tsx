@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   CheckCircle2,
   PlayCircle,
@@ -20,8 +20,10 @@ import type {
   Quiz,
   Assignment,
   ClassRecords,
-} from "@/types/classRecords"; // import { Input } from "@/components/ui/input";
-import { getYouTubeEmbedUrl } from "@/lib/utils";
+} from "@/types/classRecords";
+import { getYouTubeEmbedUrl, findCourseBySlug } from "@/lib/utils";
+import { useAppSelector } from "@/Redux/hooks";
+import type { Course } from "@/Redux/slices/courseSlice";
 
 interface SelectedVideo {
   title: string;
@@ -30,29 +32,102 @@ interface SelectedVideo {
 }
 
 const VideoClass = () => {
-  const location = useLocation();
+  const { courseName } = useParams<{ courseName: string }>();
   const navigate = useNavigate();
-  const classRecords: ClassRecords | undefined = location.state?.classRecords;
-  console.log("Received class records:", classRecords);
-  console.log("Week1 from VideoClass:", classRecords?.week1);
-  console.log("Week1 length from VideoClass:", classRecords?.week1?.length);
-  classRecords?.week1?.forEach((item, index) => {
-    console.log(`Week1[${index}]:`, item);
-  });
+  const allCourses = useAppSelector((state) => state.courses.items);
+
+  // Helper function to build class records (moved from MyCourses)
+  const buildRecords = (course: Course): ClassRecords | undefined => {
+    if (!course.courseOutline) return undefined;
+    const records: ClassRecords = {};
+    course.courseOutline.forEach((mod, idx) => {
+      const weekKey = `week${idx + 1}`;
+      const items: Array<
+        Lesson | { quizzes: Quiz[] } | { assignment: Assignment }
+      > = [];
+
+      // classes/lessons
+      if (mod.classes) {
+        mod.classes.forEach((cls, cIdx) => {
+          items.push({
+            classNo: cIdx + 1,
+            title: cls.title,
+            ytVideo: cls.ytVideoUrl,
+            duration: "",
+            completed: false,
+            resources: cls.resources,
+          });
+        });
+      }
+
+      // quizzes attached to module
+      if (mod.quizzes && mod.quizzes.length > 0) {
+        const converted: Quiz[] = mod.quizzes.map((q) => {
+          const opts = [
+            q.options.opt1,
+            q.options.opt2,
+            q.options.opt3,
+            q.options.opt4,
+          ];
+          let ansText: string[] = [];
+          if (q.answer) {
+            const num = Number(q.answer.replace("opt", "")) - 1;
+            if (num >= 0 && num < opts.length) ansText = [opts[num]];
+          }
+          return {
+            question: q.question,
+            options: opts,
+            answer: ansText,
+          };
+        });
+        items.push({ quizzes: converted });
+      }
+
+      // assignment (only first one shown in admin UI)
+      if (mod.assignment && mod.assignment.length > 0) {
+        const a = mod.assignment[0];
+        const assignmentObj: Assignment = {
+          title: a.title,
+          description: a.description,
+          instructions: a.instruction ? [a.instruction] : [],
+          dueDate: a.dueDate
+            ? typeof a.dueDate === "string"
+              ? a.dueDate
+              : a.dueDate.toISOString()
+            : "",
+          maxMarks: a.maxMarks,
+        };
+        items.push({ assignment: assignmentObj });
+      }
+
+      records[weekKey] = items;
+    });
+    return records;
+  };
+
+  // Get the course and build class records from URL parameter
+  const course = courseName
+    ? findCourseBySlug(courseName, allCourses)
+    : undefined;
+  const classRecords = course ? buildRecords(course) : undefined;
+  console.log("Course:", course);
+  console.log("Class records:", classRecords);
 
   // Set initial selected video to the first lesson of the first week
   const firstWeekKey = Object.keys(classRecords || {})[0];
 
   // Find the first actual lesson (not quiz or assignment)
   let firstLesson: Lesson | undefined;
-  for (const week of Object.values(classRecords || {})) {
-    for (const item of week) {
-      if ("title" in item) {
-        firstLesson = item as Lesson;
-        break;
+  if (classRecords) {
+    for (const week of Object.values(classRecords)) {
+      for (const item of week) {
+        if ("title" in item) {
+          firstLesson = item as Lesson;
+          break;
+        }
       }
+      if (firstLesson) break;
     }
-    if (firstLesson) break;
   }
 
   console.log("First lesson found:", firstLesson);
@@ -111,7 +186,7 @@ const VideoClass = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col lg:flex-row overflow-hidden pt-10">
+    <div className="min-h-screen bg-white text-black flex flex-col lg:flex-row overflow-hidden">
       {/* Main Content - Video Player */}
       <div className="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
         <div className="max-w-5xl mx-auto w-full space-y-6">

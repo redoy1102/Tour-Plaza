@@ -47,3 +47,24 @@ export const getYouTubeEmbedUrl = (url: string | undefined) => {
   const id = match ? match[1] : url.split("/").pop()?.split("?")[0] || "";
   return id ? `https://www.youtube.com/embed/${id}` : "";
 };
+
+// Convert course title to URL-friendly slug
+export const createSlug = (title: string): string => {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "") // remove special characters
+    .replace(/\s+/g, "-") // replace spaces with hyphens
+    .replace(/-+/g, "-"); // remove multiple hyphens
+};
+
+// Decode slug back to find course by title match
+export const findCourseBySlug = (
+  slug: string,
+  courses: Array<{ id: string; title: string }>,
+) => {
+  const decodedSlug = decodeURIComponent(slug);
+  return courses.find(
+    (course) => createSlug(course.title) === createSlug(decodedSlug),
+  );
+};
