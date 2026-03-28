@@ -72,13 +72,13 @@ function App() {
               <Route path="profile" element={<Profile />} />
               <Route path="password" element={<PasswordUpdate />} />
               <Route path="login-history" element={<LoginHistory />} />
-              <Route path="assignment" element={<Assignment />} />
+              <Route path="assignment/:courseName" element={<Assignment />} />
               <Route path="video-player/:courseName" element={<VideoClass />} />
             </Route>
 
             {/* standalone student-related pages */}
 
-            <Route path="quiz" element={<Quizzes />} />
+            <Route path="quiz/:courseName" element={<Quizzes />} />
 
             {/* Admin Routes  */}
             <Route path="/admin-dashboard" element={<AdminDashboardLayout />}>

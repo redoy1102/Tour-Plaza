@@ -270,8 +270,8 @@ const VideoClass = () => {
                               <button
                                 key={lesson.quizzes[0].question}
                                 onClick={() => {
-                                  navigate("/quiz", {
-                                    state: { quizzes: lesson.quizzes },
+                                  navigate(`/quiz/${courseName}`, {
+                                    state: { quizzes: lesson.quizzes, weekKey },
                                   });
                                 }}
                                 className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item hover:bg-gray-100 text-gray-600 hover:text-gray-800 cursor-pointer`}
@@ -293,9 +293,15 @@ const VideoClass = () => {
                               <button
                                 key={lesson.assignment.title}
                                 onClick={() => {
-                                  navigate("/student/assignment", {
-                                    state: { assignment: lesson.assignment },
-                                  });
+                                  navigate(
+                                    `/student/assignment/${courseName}`,
+                                    {
+                                      state: {
+                                        assignment: lesson.assignment,
+                                        weekKey,
+                                      },
+                                    },
+                                  );
                                 }}
                                 className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item hover:bg-gray-100 text-gray-600 hover:text-gray-800 cursor-pointer`}
                               >

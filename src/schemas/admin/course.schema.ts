@@ -40,12 +40,12 @@ export const addCourseSchema = z.object({
     .min(0, "Total pre-recorded classes cannot be negative")
     .max(1000, "Total pre-recorded classes cannot exceed 1000"),
   startDate: z
-    .date()
-    .refine((date) => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return !date || date >= today;
-    }, "Valid until date must be today or in the future"),
+    .date(),
+    // .refine((date) => {
+    //   const today = new Date();
+    //   today.setHours(0, 0, 0, 0);
+    //   return !date || date >= today;
+    // }, "Valid until date must be today or in the future"),
   totalSeat: z.coerce
     .number()
     .min(1, "There must be at least 1 seat")

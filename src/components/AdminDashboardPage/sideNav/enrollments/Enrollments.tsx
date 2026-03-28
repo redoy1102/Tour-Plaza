@@ -23,11 +23,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Trash2, SquarePen, Search, SlidersHorizontal } from "lucide-react";
+import {
+  Trash2,
+  SquarePen,
+  Search,
+  SlidersHorizontal,
+  FileText,
+  Zap,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import PageHeader from "../shared/PageHeader";
 import { formatDateShort } from "@/lib/utils";
 import EditEnrollmentDialog from "./EditEnrollmentDialog";
+import AssignmentSubmissionsDialog from "./AssignmentSubmissionsDialog";
+import { QuizSubmissionsDialog } from "./QuizSubmissionsDialog";
 
 const statusColors: Record<EnrollmentStatus, string> = {
   active: "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -44,6 +53,11 @@ const Enrollments = () => {
 
   const [editEnrollmentId, setEditEnrollmentId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [submissionsEnrollmentId, setSubmissionsEnrollmentId] = useState<
+    string | null
+  >(null);
+  const [quizSubmissionsEnrollmentId, setQuizSubmissionsEnrollmentId] =
+    useState<string | null>(null);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -324,6 +338,38 @@ const Enrollments = () => {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
+                        {/* Submissions button */}
+                        <button
+                          onClick={() =>
+                            setSubmissionsEnrollmentId(enrollment.id)
+                          }
+                          className="relative p-1 bg-violet-500 hover:bg-violet-600 text-white rounded-md transition cursor-pointer"
+                          aria-label="View submissions"
+                          title="Assignment Submissions"
+                        >
+                          <FileText className="w-3 h-3" />
+                          {(enrollment.assignmentMarks?.length ?? 0) > 0 && (
+                            <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full bg-amber-400 text-[9px] font-bold text-black flex items-center justify-center leading-none">
+                              {enrollment.assignmentMarks!.length}
+                            </span>
+                          )}
+                        </button>
+                        {/* Quiz submissions button */}
+                        <button
+                          onClick={() =>
+                            setQuizSubmissionsEnrollmentId(enrollment.id)
+                          }
+                          className="relative p-1 bg-teal-500 hover:bg-teal-600 text-white rounded-md transition cursor-pointer"
+                          aria-label="View quiz submissions"
+                          title="Quiz Submissions"
+                        >
+                          <Zap className="w-3 h-3" />
+                          {(enrollment.quizMarks?.length ?? 0) > 0 && (
+                            <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full bg-amber-400 text-[9px] font-bold text-black flex items-center justify-center leading-none">
+                              {enrollment.quizMarks!.length}
+                            </span>
+                          )}
+                        </button>
                         <button
                           onClick={() => {
                             setEditEnrollmentId(enrollment.id);
@@ -371,6 +417,66 @@ const Enrollments = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Assignment Submissions Dialog */}
+      <Dialog
+        open={!!submissionsEnrollmentId}
+        onOpenChange={(open) => {
+          if (!open) setSubmissionsEnrollmentId(null);
+        }}
+      >
+        <DialogContent className="max-w-lg">
+          {submissionsEnrollmentId &&
+            (() => {
+              const enrollment = enrollments.find(
+                (e) => e.id === submissionsEnrollmentId,
+              );
+              const course = courses.find((c) => c.id === enrollment?.courseId);
+              const student = students.find(
+                (s) => s.id === enrollment?.studentId,
+              );
+              // Build maxMarksByWeek from course outline
+              const maxMarksByWeek: Record<string, number> = {};
+              course?.courseOutline?.forEach((mod, idx) => {
+                const weekKey = `week${idx + 1}`;
+                if (mod.assignment && mod.assignment.length > 0) {
+                  maxMarksByWeek[weekKey] = mod.assignment[0].maxMarks ?? 100;
+                }
+              });
+              return (
+                <AssignmentSubmissionsDialog
+                  enrollmentId={submissionsEnrollmentId}
+                  studentName={student?.name ?? "অজানা শিক্ষার্থী"}
+                  courseName={course?.title ?? "অজানা কোর্স"}
+                  assignmentMarks={enrollment?.assignmentMarks ?? []}
+                  maxMarksByWeek={maxMarksByWeek}
+                />
+              );
+            })()}
+        </DialogContent>
+      </Dialog>
+
+      {/* Quiz Submissions Dialog */}
+      {quizSubmissionsEnrollmentId &&
+        (() => {
+          const enrollment = enrollments.find(
+            (e) => e.id === quizSubmissionsEnrollmentId,
+          );
+          const course = courses.find((c) => c.id === enrollment?.courseId);
+          const student = students.find((s) => s.id === enrollment?.studentId);
+          return (
+            <QuizSubmissionsDialog
+              open={!!quizSubmissionsEnrollmentId}
+              onOpenChange={(open: boolean) => {
+                if (!open) setQuizSubmissionsEnrollmentId(null);
+              }}
+              enrollmentId={quizSubmissionsEnrollmentId}
+              studentName={student?.name ?? "অজানা শিক্ষার্থী"}
+              courseName={course?.title ?? "অজানা কোর্স"}
+              quizMarks={enrollment?.quizMarks ?? []}
+            />
+          );
+        })()}
     </div>
   );
 };
