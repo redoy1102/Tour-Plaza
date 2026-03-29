@@ -6,7 +6,9 @@ import { Outlet } from "react-router-dom";
 const Layout = () => {
   return (
     <div>
-      <TopBar />
+      <div className="hidden md:block">
+        <TopBar />
+      </div>
       <MainNavbar />
       <Outlet />
       <FooterSection />
