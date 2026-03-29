@@ -4,11 +4,15 @@ import { Menu, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { menuItems } from "@/data/admin/AdminDashboardMenuData";
 import LayoutSidebarHeader from "./LayoutSidebarHeader";
+import toast from "react-hot-toast";
+import { logout } from "@/Redux/slices/studentSlice";
+import { useAppDispatch } from "@/Redux/hooks";
 
 const AdminDashboardLayout = () => {
   const location = useLocation();
   // console.log("Current Path:", location.pathname);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
 
@@ -105,7 +109,30 @@ const AdminDashboardLayout = () => {
                 <button
                   onClick={() => {
                     if (item.id === "logOut") {
-                      navigate("/");
+                      toast((t) => (
+                        <div className="flex flex-col items-start gap-4">
+                          <p>Are you sure you want to logout?</p>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => {
+                                dispatch(logout());
+                                toast.success("Logged out successfully!");
+                                toast.dismiss(t.id);
+                                navigate("/");
+                              }}
+                              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                            >
+                              Yes, Logout
+                            </button>
+                            <button
+                              onClick={() => toast.dismiss(t.id)}
+                              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ));
                     } else if (item.path) {
                       navigate(item.path);
                     }

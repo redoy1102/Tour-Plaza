@@ -152,8 +152,29 @@ export function AuthSheet({ className }: { className?: string }) {
           size="icon"
           className="rounded-full cursor-pointer"
           onClick={() => {
-            dispatch(logout());
-            toast.success("লগআউট সফল হয়েছে!");
+            toast((t) => (
+              <div className="flex flex-col items-start gap-4">
+                <p>আপনি কি সত্যিই লগআউট করতে চান?</p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      dispatch(logout());
+                      toast.success("লগআউট সফল হয়েছে!");
+                      toast.dismiss(t.id);
+                    }}
+                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                  >
+                    হ্যাঁ, লগআউট
+                  </button>
+                  <button
+                    onClick={() => toast.dismiss(t.id)}
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition"
+                  >
+                    বাতিল
+                  </button>
+                </div>
+              </div>
+            ));
           }}
           title="Logout"
         >

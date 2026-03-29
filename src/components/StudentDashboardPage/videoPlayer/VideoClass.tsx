@@ -6,6 +6,7 @@ import {
   Clock,
   Link,
   ChevronLeft,
+  ShieldOff,
 } from "lucide-react";
 import {
   Accordion,
@@ -192,6 +193,29 @@ const VideoClass = () => {
   if (!classRecords || Object.keys(classRecords).length === 0) {
     return (
       <NoClassRecords backToMyCourses={() => navigate("/student/my-courses")} />
+    );
+  }
+
+  if (enrollment && (enrollment.accessEnabled ?? true) === false) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-5 p-8">
+        <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center">
+          <ShieldOff className="w-8 h-8 text-red-500" />
+        </div>
+        <h1 className="text-2xl font-bold text-slate-800">
+          অ্যাক্সেস সাস্পেন্ড হয়েছে
+        </h1>
+        <p className="text-slate-500 text-center max-w-md">
+          আপনার এই কোর্সের অ্যাক্সেস সাময়িকভাবে সাস্পেন্ড করা হয়েছে। বিস্তারিত
+          জানার জন্য আদমিনের সাথে যোগাযোগ করুন।
+        </p>
+        <Button
+          onClick={() => navigate("/student/my-courses")}
+          className="bg-primary hover:bg-red-500 text-white cursor-pointer"
+        >
+          আমার কোর্সসমূহে ফিরে যান
+        </Button>
+      </div>
     );
   }
 

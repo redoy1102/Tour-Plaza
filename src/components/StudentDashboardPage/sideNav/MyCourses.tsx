@@ -94,7 +94,10 @@ const MyCourses = () => {
   const enrolledCourses: Array<CourseType & { status?: string }> =
     currentStudent && enrollments.length > 0
       ? enrollments
-          .filter((e) => e.studentId === currentStudent.id)
+          .filter(
+            (e) =>
+              e.studentId === currentStudent.id && (e.accessEnabled ?? true),
+          )
           .map((e) => {
             const course = allCourses.find(
               (c) => String(c.id) === String(e.courseId),
@@ -152,8 +155,16 @@ const MyCourses = () => {
               <div className="flex-1 space-y-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 text-[10px] font-bold rounded uppercase tracking-wider border border-emerald-500/20">
-                      {course.status}
+                    <span
+                      className={`px-2 py-0.5 text-[10px] font-bold rounded uppercase tracking-wider border ${
+                        course.status === "completed"
+                          ? "bg-blue-500/10 text-blue-600 border-blue-500/20"
+                          : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                      }`}
+                    >
+                      {course.status === "completed"
+                        ? "Completed"
+                        : "In Progress"}
                     </span>
                     <span className="text-gray-600 text-xs flex items-center gap-1">
                       <Clock className="w-3 h-3" /> সময় ৮ মাস

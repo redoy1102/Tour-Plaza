@@ -29,7 +29,7 @@ import toast from "react-hot-toast";
 
 const editEnrollmentSchema = z.object({
   studentId: z.string().min(1, "Please select a student"),
-  status: z.enum(["active", "completed", "cancelled"]),
+  status: z.enum(["inProgress", "completed"]),
 });
 type EditEnrollmentFormValue = z.infer<typeof editEnrollmentSchema>;
 
@@ -51,7 +51,8 @@ const EditEnrollmentDialog = ({
     resolver: zodResolver(editEnrollmentSchema),
     defaultValues: {
       studentId: enrollment?.studentId ?? "",
-      status: enrollment?.status ?? "active",
+      status:
+        (enrollment?.status as "inProgress" | "completed") ?? "inProgress",
     },
   });
 
@@ -121,9 +122,8 @@ const EditEnrollmentDialog = ({
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inProgress">In Progress</SelectItem>
                       <SelectItem value="completed">Completed</SelectItem>
-                      <SelectItem value="cancelled">Cancelled</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>

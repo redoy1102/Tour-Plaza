@@ -29,7 +29,10 @@ import {
   type AssignmentFormValues,
 } from "@/schemas/assignment";
 import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
-import { submitAssignment } from "@/Redux/slices/enrollmentSlice";
+import {
+  submitAssignment,
+  autoCompleteEnrollment,
+} from "@/Redux/slices/enrollmentSlice";
 import { findCourseBySlug } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -123,6 +126,20 @@ const Assignment = () => {
         enrollmentId: enrollment.id,
         assignmentWeekId: weekKey,
         submissionLink: values.githubLink,
+      }),
+    ); // Auto-complete enrollment if all assignments & quizzes submitted
+    const totalAssignmentWeeks =
+      course?.courseOutline?.filter(
+        (m) => m.assignment && m.assignment.length > 0,
+      ).length ?? 0;
+    const totalQuizWeeks =
+      course?.courseOutline?.filter((m) => m.quizzes && m.quizzes.length > 0)
+        .length ?? 0;
+    dispatch(
+      autoCompleteEnrollment({
+        enrollmentId: enrollment.id,
+        totalAssignmentWeeks,
+        totalQuizWeeks,
       }),
     );
     toast.success("অ্যাসাইনমেন্ট সফলভাবে জমা দেওয়া হয়েছে!");

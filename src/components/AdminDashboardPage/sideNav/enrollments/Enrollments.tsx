@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
-import { removeEnrollment } from "@/Redux/slices/enrollmentSlice";
+import { removeEnrollment, toggleAccess } from "@/Redux/slices/enrollmentSlice";
 import type {
   Enrollment,
   EnrollmentStatus,
@@ -23,13 +23,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
+import { DateRangePicker } from "@/components/ui/date-range-picker";
+import type { DateRange } from "react-day-picker";
 import {
   Trash2,
   SquarePen,
   Search,
-  SlidersHorizontal,
   FileText,
   Zap,
+  Eye,
+  CheckCircle2,
+  Clock3,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import PageHeader from "../shared/PageHeader";
@@ -37,11 +42,22 @@ import { formatDateShort } from "@/lib/utils";
 import EditEnrollmentDialog from "./EditEnrollmentDialog";
 import AssignmentSubmissionsDialog from "./AssignmentSubmissionsDialog";
 import { QuizSubmissionsDialog } from "./QuizSubmissionsDialog";
+import ViewEnrollmentDialog from "./ViewEnrollmentDialog";
 
-const statusColors: Record<EnrollmentStatus, string> = {
-  active: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  completed: "bg-blue-100 text-blue-700 border-blue-200",
-  cancelled: "bg-red-100 text-red-700 border-red-200",
+const statusConfig: Record<
+  EnrollmentStatus,
+  { label: string; className: string; icon: React.ReactNode }
+> = {
+  inProgress: {
+    label: "In Progress",
+    className: "bg-amber-100 text-amber-700 border-amber-200",
+    icon: <Clock3 className="w-3 h-3" />,
+  },
+  completed: {
+    label: "Completed",
+    className: "bg-blue-100 text-blue-700 border-blue-200",
+    icon: <CheckCircle2 className="w-3 h-3" />,
+  },
 };
 
 const Enrollments = () => {
@@ -53,6 +69,8 @@ const Enrollments = () => {
 
   const [editEnrollmentId, setEditEnrollmentId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [viewEnrollmentId, setViewEnrollmentId] = useState<string | null>(null);
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [submissionsEnrollmentId, setSubmissionsEnrollmentId] = useState<
     string | null
   >(null);
@@ -63,8 +81,9 @@ const Enrollments = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterCourseType, setFilterCourseType] = useState<string>("all");
-  const [filterMinPrice, setFilterMinPrice] = useState<string>("");
-  const [filterMaxPrice, setFilterMaxPrice] = useState<string>("");
+  const [filterDateRange, setFilterDateRange] = useState<DateRange | undefined>(
+    undefined,
+  );
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
   const filtered = useMemo(() => {
@@ -88,10 +107,16 @@ const Enrollments = () => {
       if (filterCourseType === "recorded" && !course?.isPreRecordedCourse)
         return false;
 
-      const min = filterMinPrice ? Number(filterMinPrice) : null;
-      const max = filterMaxPrice ? Number(filterMaxPrice) : null;
-      if (min !== null && enrollment.amount < min) return false;
-      if (max !== null && enrollment.amount > max) return false;
+      if (filterDateRange?.from) {
+        const from = new Date(filterDateRange.from);
+        from.setHours(0, 0, 0, 0);
+        if (new Date(enrollment.enrolledAt) < from) return false;
+      }
+      if (filterDateRange?.to) {
+        const to = new Date(filterDateRange.to);
+        to.setHours(23, 59, 59, 999);
+        if (new Date(enrollment.enrolledAt) > to) return false;
+      }
 
       if (filterStatus !== "all" && enrollment.status !== filterStatus)
         return false;
@@ -105,8 +130,7 @@ const Enrollments = () => {
     searchQuery,
     filterCategory,
     filterCourseType,
-    filterMinPrice,
-    filterMaxPrice,
+    filterDateRange,
     filterStatus,
   ]);
 
@@ -140,8 +164,7 @@ const Enrollments = () => {
     setSearchQuery("");
     setFilterCategory("all");
     setFilterCourseType("all");
-    setFilterMinPrice("");
-    setFilterMaxPrice("");
+    setFilterDateRange(undefined);
     setFilterStatus("all");
   };
 
@@ -149,8 +172,7 @@ const Enrollments = () => {
     searchQuery ||
     filterCategory !== "all" ||
     filterCourseType !== "all" ||
-    filterMinPrice ||
-    filterMaxPrice ||
+    filterDateRange?.from ||
     filterStatus !== "all";
 
   return (
@@ -164,13 +186,13 @@ const Enrollments = () => {
 
       {/* Filters Bar */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 space-y-3">
-        <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+        {/* <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
           <SlidersHorizontal className="w-4 h-4" />
           Filters
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+        </div> */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
           {/* Search */}
-          <div className="relative xl:col-span-2">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
               placeholder="Student / course..."
@@ -182,7 +204,7 @@ const Enrollments = () => {
 
           {/* Category */}
           <Select value={filterCategory} onValueChange={setFilterCategory}>
-            <SelectTrigger className="h-9 text-sm">
+            <SelectTrigger className="h-9 text-sm mt-1">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
@@ -195,18 +217,6 @@ const Enrollments = () => {
             </SelectContent>
           </Select>
 
-          {/* Course type */}
-          <Select value={filterCourseType} onValueChange={setFilterCourseType}>
-            <SelectTrigger className="h-9 text-sm">
-              <SelectValue placeholder="Course Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="live">Live</SelectItem>
-              <SelectItem value="recorded">Pre-Recorded</SelectItem>
-            </SelectContent>
-          </Select>
-
           {/* Status */}
           <Select value={filterStatus} onValueChange={setFilterStatus}>
             <SelectTrigger className="h-9 text-sm">
@@ -214,28 +224,16 @@ const Enrollments = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="inProgress">In Progress</SelectItem>
               <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
             </SelectContent>
           </Select>
-
-          {/* Price range */}
-          <div className="flex items-center gap-1">
-            <Input
-              type="number"
-              placeholder="Min ৳"
-              className="h-9 text-sm w-full"
-              value={filterMinPrice}
-              onChange={(e) => setFilterMinPrice(e.target.value)}
-            />
-            <span className="text-slate-400 text-xs shrink-0">–</span>
-            <Input
-              type="number"
-              placeholder="Max ৳"
-              className="h-9 text-sm w-full"
-              value={filterMaxPrice}
-              onChange={(e) => setFilterMaxPrice(e.target.value)}
+          <div className="">
+            <DateRangePicker
+              value={filterDateRange}
+              onChange={setFilterDateRange}
+              align="start"
+              className="sm:col-span-2"
             />
           </div>
         </div>
@@ -267,6 +265,7 @@ const Enrollments = () => {
                 <TableHead>Type</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Access</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -282,6 +281,9 @@ const Enrollments = () => {
                 const category = categories.find(
                   (c) => c.id === course?.categoryId,
                 );
+                const sc =
+                  statusConfig[enrollment.status] ?? statusConfig.inProgress;
+                const accessEnabled = enrollment.accessEnabled ?? true;
                 return (
                   <TableRow
                     key={enrollment.id}
@@ -326,18 +328,49 @@ const Enrollments = () => {
                     </TableCell>
                     <TableCell>
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border ${
-                          statusColors[enrollment.status]
-                        }`}
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold border ${sc.className}`}
                       >
-                        {enrollment.status}
+                        {sc.icon}
+                        {sc.label}
                       </span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Switch
+                          checked={accessEnabled}
+                          onCheckedChange={() =>
+                            dispatch(toggleAccess(enrollment.id))
+                          }
+                          title={
+                            accessEnabled ? "Revoke access" : "Grant access"
+                          }
+                        />
+                        {/* <span
+                          className={`text-xs font-medium ${
+                            accessEnabled ? "text-emerald-600" : "text-red-500"
+                          }`}
+                        >
+                          {accessEnabled ? "On" : "Off"}
+                        </span> */}
+                      </div>
                     </TableCell>
                     <TableCell className="text-xs text-slate-500">
                       {formatDateShort(enrollment.enrolledAt)}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
+                        {/* View button */}
+                        <button
+                          onClick={() => {
+                            setViewEnrollmentId(enrollment.id);
+                            setViewDialogOpen(true);
+                          }}
+                          className="p-1 bg-slate-500 hover:bg-slate-600 text-white rounded-md transition cursor-pointer"
+                          aria-label="View enrollment"
+                          title="View Details"
+                        >
+                          <Eye className="w-3 h-3" />
+                        </button>
                         {/* Submissions button */}
                         <button
                           onClick={() =>
@@ -396,6 +429,21 @@ const Enrollments = () => {
           </Table>
         </div>
       )}
+
+      {/* View Dialog */}
+      <Dialog
+        open={viewDialogOpen}
+        onOpenChange={(open) => {
+          setViewDialogOpen(open);
+          if (!open) setViewEnrollmentId(null);
+        }}
+      >
+        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+          {viewEnrollmentId && (
+            <ViewEnrollmentDialog enrollmentId={viewEnrollmentId} />
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Edit Dialog */}
       <Dialog

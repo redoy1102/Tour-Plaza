@@ -60,7 +60,7 @@ const PurchasePage = () => {
         studentId: currentStudent.id,
         courseId,
         amount: finalPrice,
-        status: "active",
+        status: "inProgress",
       }),
     );
     toast.success("পেমেন্ট সফল হয়েছে! কোর্সে ভর্তি হয়েছেন।");

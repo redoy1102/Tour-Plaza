@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction, nanoid } from "@reduxjs/toolkit";
 
-export type EnrollmentStatus = "active" | "completed" | "cancelled";
+export type EnrollmentStatus = "inProgress" | "completed";
 
 export interface AssignmentMark {
   id: string;
@@ -27,6 +27,7 @@ export interface Enrollment {
   enrolledAt: string; // ISO date string
   status: EnrollmentStatus;
   amount: number;
+  accessEnabled?: boolean; // admin can revoke course access
   assignmentMarks?: AssignmentMark[];
   quizMarks?: QuizMark[];
 }
@@ -50,7 +51,9 @@ const enrollmentSlice = createSlice({
       state.items.push({
         id: nanoid(),
         enrolledAt: new Date().toISOString(),
+        accessEnabled: true,
         ...action.payload,
+        status: "inProgress",
       });
     },
 
@@ -70,6 +73,42 @@ const enrollmentSlice = createSlice({
 
     removeEnrollment(state, action: PayloadAction<string>) {
       state.items = state.items.filter((e) => e.id !== action.payload);
+    },
+
+    toggleAccess(state, action: PayloadAction<string>) {
+      const enrollment = state.items.find((e) => e.id === action.payload);
+      if (enrollment) {
+        enrollment.accessEnabled = !(enrollment.accessEnabled ?? true);
+      }
+    },
+
+    autoCompleteEnrollment(
+      state,
+      action: PayloadAction<{
+        enrollmentId: string;
+        totalAssignmentWeeks: number;
+        totalQuizWeeks: number;
+      }>,
+    ) {
+      const enrollment = state.items.find(
+        (e) => e.id === action.payload.enrollmentId,
+      );
+      if (!enrollment) return;
+      const { totalAssignmentWeeks, totalQuizWeeks } = action.payload;
+      const submittedAssignments = enrollment.assignmentMarks?.length ?? 0;
+      const submittedQuizzes = enrollment.quizMarks?.length ?? 0;
+      const assignmentsDone =
+        totalAssignmentWeeks === 0 ||
+        submittedAssignments >= totalAssignmentWeeks;
+      const quizzesDone =
+        totalQuizWeeks === 0 || submittedQuizzes >= totalQuizWeeks;
+      if (
+        assignmentsDone &&
+        quizzesDone &&
+        (totalAssignmentWeeks > 0 || totalQuizWeeks > 0)
+      ) {
+        enrollment.status = "completed";
+      }
     },
 
     submitAssignment(
@@ -172,6 +211,8 @@ export const {
   addEnrollment,
   updateEnrollment,
   removeEnrollment,
+  toggleAccess,
+  autoCompleteEnrollment,
   submitAssignment,
   gradeAssignment,
   submitQuiz,

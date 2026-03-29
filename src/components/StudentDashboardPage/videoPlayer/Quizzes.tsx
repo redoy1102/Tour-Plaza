@@ -11,7 +11,10 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
-import { submitQuiz } from "@/Redux/slices/enrollmentSlice";
+import {
+  submitQuiz,
+  autoCompleteEnrollment,
+} from "@/Redux/slices/enrollmentSlice";
 import { findCourseBySlug } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -100,6 +103,20 @@ const Quizzes = () => {
           quizWeekId: weekKey,
           score,
           totalQuestions: quizzes.length,
+        }),
+      ); // Auto-complete enrollment if all quizzes & assignments submitted
+      const totalAssignmentWeeks =
+        course?.courseOutline?.filter(
+          (m) => m.assignment && m.assignment.length > 0,
+        ).length ?? 0;
+      const totalQuizWeeks =
+        course?.courseOutline?.filter((m) => m.quizzes && m.quizzes.length > 0)
+          .length ?? 0;
+      dispatch(
+        autoCompleteEnrollment({
+          enrollmentId: enrollment.id,
+          totalAssignmentWeeks,
+          totalQuizWeeks,
         }),
       );
       toast.success("কুইজ সফলভাবে জমা দেওয়া হয়েছে!");
