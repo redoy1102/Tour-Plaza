@@ -5,6 +5,27 @@ import Header from "@/components/shared/Header";
 import CourseCard from "./CourseCard";
 import { useAppSelector } from "@/Redux/hooks";
 
+const LeftRightButton = ({
+  direction,
+  scroll,
+}: {
+  direction: "left" | "right";
+  scroll: (direction: "left" | "right") => void;
+}) => {
+  return (
+    <button
+      onClick={() => scroll(direction)}
+      className="flex h-6 w-6 lg:h-9 lg:w-9 shrink-0 items-center justify-center rounded-full border cursor-pointer"
+    >
+      {direction === "left" ? (
+        <ChevronLeft className="h-6 w-6 lg:h-4 lg:w-4" />
+      ) : (
+        <ChevronRight className="h-6 w-6 lg:h-4 lg:w-4" />
+      )}
+    </button>
+  );
+};
+
 interface CoursesProps {
   isFeatured?: boolean;
   isLiveCourse?: boolean;
@@ -74,12 +95,7 @@ const Courses = ({
       {/* Categories */}
       <div className="mb-10 flex items-center gap-3">
         {/* Left button */}
-        <button
-          onClick={() => scroll("left")}
-          className="flex h-6 w-6 lg:h-9 lg:w-9 shrink-0 items-center justify-center rounded-full border"
-        >
-          <ChevronLeft className="h-6 w-6 lg:h-4 lg:w-4" />
-        </button>
+        <LeftRightButton direction="left" scroll={scroll} />
 
         {/* Slider */}
         <div
@@ -89,7 +105,7 @@ const Courses = ({
           {/* All */}
           <button
             onClick={() => setActiveCategory(null)}
-            className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm transition ${
+            className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm transition cursor-pointer ${
               activeCategory === null
                 ? "bg-secondary text-white"
                 : "text-gray-700 "
@@ -103,7 +119,7 @@ const Courses = ({
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm transition ${
+                className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm transition cursor-pointer ${
                   activeCategory === cat.id
                     ? "bg-secondary text-white"
                     : "text-gray-700"
@@ -116,12 +132,7 @@ const Courses = ({
         </div>
 
         {/* Right button */}
-        <button
-          onClick={() => scroll("right")}
-          className="flex h-6 w-6 lg:h-9 lg:w-9 shrink-0 items-center justify-center rounded-full border"
-        >
-          <ChevronRight className="h-6 w-6 lg:h-4 lg:w-4" />
-        </button>
+        <LeftRightButton direction="right" scroll={scroll} />
       </div>
 
       {/* Course Cards */}

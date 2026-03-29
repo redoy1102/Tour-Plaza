@@ -233,7 +233,7 @@ const VideoClass = () => {
         </div>
       </div>
 
-      {/* Sidebar - Course Content */}
+      {/* Left Sidebar - Course Content */}
       <div className="w-full lg:w-112.5 border-l border-gray-300 bg-white flex flex-col shrink-0 overflow-hidden">
         {/* Module List */}
         <div className="flex-1 overflow-y-auto custom-scrollbar">
@@ -251,7 +251,7 @@ const VideoClass = () => {
                   value={weekKey}
                   className="border-gray-300 px-4"
                 >
-                  <AccordionTrigger className="hover:no-underline py-5 px-2 rounded-xl hover:bg-gray-100 transition-all group">
+                  <AccordionTrigger className="hover:no-underline py-5 px-2 rounded-xl hover:bg-gray-100 transition-all group cursor-pointer">
                     <div className="text-left space-y-1.5">
                       <p className="font-bold text-sm tracking-tight group-hover:text-sky-400 transition-colors">
                         {getWeekTitle(weekKey)}
@@ -361,7 +361,7 @@ const VideoClass = () => {
                                       : undefined,
                                   );
                                 }}
-                                className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item ${
+                                className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left relative overflow-hidden group/item cursor-pointer ${
                                   selectedVideo.title === lesson.title
                                     ? "bg-[#007cc2] text-white shadow-lg shadow-sky-500/20"
                                     : "hover:bg-gray-100 text-gray-600 hover:text-gray-800"

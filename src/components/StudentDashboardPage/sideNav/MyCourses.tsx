@@ -1,6 +1,6 @@
 import { BookOpen, Calendar, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/Redux/hooks";
 import type { Course as CourseType } from "@/Redux/slices/courseSlice";
 import type {
@@ -126,64 +126,77 @@ const MyCourses = () => {
       </div>
 
       <div className="grid gap-6">
-        {enrolledCourses.map((course) => (
-          <div
-            key={course.id}
-            className="bg-white border border-gray-300 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row gap-6 hover:border-gray-400 transition-colors group"
-          >
-            <div className="w-full md:w-48 h-32 rounded-xl overflow-hidden bg-gray-200 shrink-0">
-              <img
-                src={course.bannerImage}
-                alt={course.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-
-            <div className="flex-1 space-y-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 text-[10px] font-bold rounded uppercase tracking-wider border border-emerald-500/20">
-                    {course.status}
-                  </span>
-                  <span className="text-gray-600 text-xs flex items-center gap-1">
-                    <Clock className="w-3 h-3" /> সময় ৮ মাস
-                  </span>
-                </div>
-                <h2 className="text-xl font-bold text-black leading-tight">
-                  {course.title}
-                </h2>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-sky-500" />
-                  <span>ব্যাচ {course.batchNumber}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-sky-500" />
-                  <span>
-                    শুরু:{" "}
-                    {course.startDate
-                      ? new Date(course.startDate).toLocaleDateString()
-                      : "-"}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center">
-              <Button
+        {enrolledCourses.map((course) => {
+          const courseSlug = createSlug(course.title);
+          const videoPlayerUrl = `/student/video-player/${courseSlug}`;
+          return (
+            <div
+              key={course.id}
+              className="bg-white border border-gray-300 rounded-2xl p-2 shadow-xl flex flex-col md:flex-row items-center gap-6 hover:border-gray-400 transition-colors group"
+            >
+              <button
                 onClick={() => {
-                  const courseSlug = createSlug(course.title);
-                  navigate(`/student/video-player/${courseSlug}`);
+                  navigate(videoPlayerUrl);
                 }}
-                className="w-full md:w-auto bg-primary hover:bg-red-500 text-white font-bold px-8 cursor-pointer"
+                className="cursor-pointer"
               >
-                কোর্স শুরু করুন
-              </Button>
+                <div className="w-full md:w-48 h-32 rounded-xl overflow-hidden bg-gray-200 shrink-0">
+                  <img
+                    src={course.bannerImage}
+                    alt={course.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              </button>
+
+              <div className="flex-1 space-y-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 text-[10px] font-bold rounded uppercase tracking-wider border border-emerald-500/20">
+                      {course.status}
+                    </span>
+                    <span className="text-gray-600 text-xs flex items-center gap-1">
+                      <Clock className="w-3 h-3" /> সময় ৮ মাস
+                    </span>
+                  </div>
+                  <Link
+                    to={videoPlayerUrl}
+                    className="text-xl font-bold text-black leading-tight"
+                  >
+                    {course.title}
+                  </Link>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="w-4 h-4 text-sky-500" />
+                    <span>ব্যাচ {course.batchNumber}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-sky-500" />
+                    <span>
+                      শুরু:{" "}
+                      {course.startDate
+                        ? new Date(course.startDate).toLocaleDateString()
+                        : "-"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center">
+                <Button
+                  onClick={() => {
+                    navigate(videoPlayerUrl);
+                  }}
+                  className="w-full md:w-auto bg-primary hover:bg-red-500 text-white font-bold px-8 cursor-pointer"
+                >
+                  কোর্স শুরু করুন
+                </Button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {enrolledCourses.length === 0 && (
           <div className="p-20 text-center bg-white rounded-3xl border border-dashed border-gray-300">
