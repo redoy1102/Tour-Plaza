@@ -85,24 +85,24 @@ const CoursesList = () => {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleView(course.id)}
-                        className="text-blue-600 hover:text-blue-800 cursor-pointer"
+                        className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition cursor-pointer"
                         title="View Details"
                       >
-                        <Eye className="w-5 h-5" />
+                        <Eye className="w-3 h-3" />
                       </button>
                       <button
                         onClick={() => handleEdit(course.id)}
-                        className="text-gray-600 hover:text-gray-800 cursor-pointer"
+                        className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition cursor-pointer"
                         title="Edit Course"
                       >
-                        <SquarePen className="w-5 h-5" />
+                        <SquarePen className="w-3 h-3" />
                       </button>
                       <button
                         onClick={() => handleDelete(course.id)}
-                        className="text-red-500 hover:text-red-700 cursor-pointer"
+                        className="p-1 bg-red-500 hover:bg-red-600 text-white rounded-md transition cursor-pointer"
                         title="Delete Course"
                       >
-                        <Trash className="w-5 h-5" />
+                        <Trash className="w-3 h-3" />
                       </button>
                     </div>
                   </TableCell>

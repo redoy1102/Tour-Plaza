@@ -10,7 +10,7 @@ const EditButton = ({ onEdit, index }: EditButtonProps) => {
     <button
       onClick={() => onEdit && index !== null && onEdit(index)}
       className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition cursor-pointer"
-      aria-label="Edit tool"
+      aria-label="Edit"
     >
       <SquarePen className="w-3 h-3" />
     </button>

@@ -95,15 +95,15 @@ const AnnouncementsList = ({
                   <TableCell className="text-right flex items-center justify-end gap-2">
                     <button
                       onClick={() => handleEditAnnouncement(index)}
-                      className="cursor-pointer"
+                      className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition cursor-pointer"
                     >
-                      <SquarePen />
+                      <SquarePen className="h-3 w-3"/>
                     </button>
                     <button
                       onClick={() => handleDelete(index)}
-                      className="text-red-500 hover:text-red-700 cursor-pointer"
+                      className="p-1 bg-red-500 hover:bg-red-600 text-white rounded-md transition cursor-pointer"
                     >
-                      <Trash />
+                      <Trash className="h-3 w-3"/>
                     </button>
                   </TableCell>
                 </TableRow>
