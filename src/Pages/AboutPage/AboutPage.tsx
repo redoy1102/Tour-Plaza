@@ -7,7 +7,7 @@ import StoryAbout from "@/components/AboutPage/StoryAbout";
 
 const AboutPage = () => {
   return (
-    <div className="container mx-auto px-4 md:px-12 xl:px-4 pb-20">
+    <div className="container mx-auto px-4 md:px-12 xl:px-4 pb-20 mt-20">
       <HeaderAbout />
 
       <section className="mb-20">

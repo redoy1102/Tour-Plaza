@@ -4,6 +4,11 @@ export const descriptionSchema = z
   .string()
   .min(10, "Description must be at least 10 characters");
 
+export const messageSchema = z
+  .string()
+  .min(10, "Message must be at least 10 characters")
+  .max(1000, "Message cannot exceed 1000 characters");
+
 export const titleSchema = z
   .string()
   .min(3, "Title must be at least 3 characters")

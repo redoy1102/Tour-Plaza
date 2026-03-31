@@ -27,7 +27,7 @@ const PurchasePage = () => {
 
   if (!course) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center mt-20">
         <h1 className="text-2xl font-bold text-slate-800">
           কোর্স পাওয়া যায়নি
         </h1>
@@ -68,7 +68,7 @@ const PurchasePage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 md:px-12 xl:px-4 py-16">
+    <div className="container mx-auto px-4 md:px-12 xl:px-4 py-16 mt-20">
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
         <div className="p-6 md:p-8">
           <h1 className="text-2xl font-bold text-slate-900 mb-4">

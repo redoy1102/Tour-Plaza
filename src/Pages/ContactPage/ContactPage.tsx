@@ -1,59 +1,59 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { toast } from "react-hot-toast";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { useState } from "react";
+// import { toast } from "react-hot-toast";
 import Map from "@/components/contactPage/Map";
 import Header from "@/components/contactPage/Header";
-import { Send } from "lucide-react";
+// import { Send } from "lucide-react";
 import Contacts from "@/components/contactPage/Contacts";
 import BranchLocations from "@/components/contactPage/BranchLocations";
 
 const ContactPage = () => {
-  const [contactFormData, setContactFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+  // const [contactFormData, setContactFormData] = useState({
+  //   name: "",
+  //   email: "",
+  //   subject: "",
+  //   message: "",
+  // });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setContactFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // const handleInputChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  // ) => {
+  //   const { name, value } = e.target;
+  //   setContactFormData((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!contactFormData.name) {
-      toast.error("Please enter your name.");
-      return;
-    }
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!contactFormData.name) {
+  //     toast.error("Please enter your name.");
+  //     return;
+  //   }
 
-    if (!contactFormData.email) {
-      toast.error("Please enter your email.");
-      return;
-    }
+  //   if (!contactFormData.email) {
+  //     toast.error("Please enter your email.");
+  //     return;
+  //   }
 
-    if (!contactFormData.subject) {
-      toast.error("Please enter the subject.");
-      return;
-    }
+  //   if (!contactFormData.subject) {
+  //     toast.error("Please enter the subject.");
+  //     return;
+  //   }
 
-    if (!contactFormData.message) {
-      toast.error("Please enter your message.");
-      return;
-    }
+  //   if (!contactFormData.message) {
+  //     toast.error("Please enter your message.");
+  //     return;
+  //   }
 
-    // Handle form submission logic here
-    console.log("Form Data Submitted: ", contactFormData);
-  };
+  //   // Handle form submission logic here
+  //   console.log("Form Data Submitted: ", contactFormData);
+  // };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] py-16 md:py-24">
+    <div className="min-h-screen bg-[#f8fafc] py-16 md:py-24 mt-20">
       <div className="container mx-auto px-4 md:px-12 xl:px-4">
         {/* Header */}
         <Header />
@@ -65,7 +65,7 @@ const ContactPage = () => {
             <Contacts />
 
             {/* Quick Message Form */}
-            <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+            {/* <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
               <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                 <Send className="h-6 w-6 text-secondary" />
                 দ্রুত বার্তা পাঠান
@@ -102,7 +102,7 @@ const ContactPage = () => {
                   বার্তা পাঠান
                 </Button>
               </form>
-            </div>
+            </div> */}
           </div>
 
           {/* Right Side: Map */}

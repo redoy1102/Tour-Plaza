@@ -1,8 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #EC384B;
-  --color-secondary: #0C4677;
+  /* bg Primary */
+  --color-background: #F8FAFC;
+  /* text Primary */
+  /* --color-foreground: #0F172A; */
+  --color-foreground: #054CF5;
+  /* text-secondary */
+  --color-muted-foreground: #64748B;
+
+  /* brand Primary */
+  --color-primary: #801B1B;
+  --color-primaryWhiteShade: #a02424;
+  /* brand Secondary */
+  --color-secondary: #1E40AF;
+  --color-accent: #38BDF8;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Playfair Display", serif;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  padding: 5px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes sheet-fade-in {

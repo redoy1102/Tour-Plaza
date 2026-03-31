@@ -10,7 +10,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Menu } from "lucide-react";
-import SearchBar from "./SearchBar";
 import { navBarMenus } from "@/data/landingPage/navBarData";
 import { Link } from "react-router-dom";
 import { AuthSheet } from "./Auth/AuthSection";
@@ -29,9 +28,6 @@ const MobileNavbar = () => {
       {/* Drawer */}
       <SheetContent side="right" className="w-[85%] p-5">
         {/* Search */}
-        <div className="mb-1 mt-10">
-          <SearchBar />
-        </div>
 
         {/* Menu */}
         <nav className="space-y-4">

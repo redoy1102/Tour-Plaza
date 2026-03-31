@@ -4,6 +4,9 @@ export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        playfair: ["Playfair Display", "serif"],
+      },
       animation: {
         "fade-in": "fadeIn 0.7s ease-out forwards",
         "slide-in-bottom": "slideInBottom 0.7s ease-out forwards",

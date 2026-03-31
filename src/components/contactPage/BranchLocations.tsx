@@ -1,50 +1,77 @@
-import { MapPin } from "lucide-react";
+import { MapPin, Navigation, Compass } from "lucide-react";
 import { branchOffices } from "@/data/landingPage/contactData";
 
 const BranchLocations = () => {
-    return (
-        <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
-          <div className="flex items-center gap-3 mb-10">
-            <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center">
-              <MapPin className="h-6 w-6 text-blue-600" />
-            </div>
-            <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-              Our Locations
-            </h2>
+  return (
+    <div className="py-20 animate-in fade-in slide-in-from-bottom-12 duration-1000 ease-out">
+      {/* 1. Elegant Header */}
+      <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 mb-16">
+        <div className="text-center md:text-left">
+          <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
+            <Compass className="text-accent animate-spin-slow" size={20} />
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary">
+              Our Destinations
+            </span>
           </div>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#0F172A] leading-tight">
+            Visit Our{" "}
+            <span className="italic text-muted-foreground">Sanctuaries</span>
+          </h2>
+        </div>
+        <p className="max-w-xs text-slate-500 text-sm md:text-right">
+          Find us across the region, from coastal retreats to urban concierge
+          hubs.
+        </p>
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {branchOffices.map((office, index) => (
-              <div
-                key={index}
-                className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-500 group relative flex flex-col justify-between overflow-hidden"
-              >
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div>
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1">
-                      {office.title}
-                    </h3>
-                    <a
-                      href={office.mapLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title="View on Google Maps"
-                      className="relative p-2 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 shrink-0 group/map"
-                    >
-                      <span className="absolute inset-0 rounded-xl bg-blue-400 opacity-20 animate-ping group-hover/map:hidden"></span>
-                      <MapPin className="h-4 w-4 relative z-10" />
-                    </a>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed text-[14px]">
-                    {office.address}
-                  </p>
+      {/* 2. Redesigned Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {branchOffices.map((office, index) => (
+          <div
+            key={index}
+            className="group relative bg-white p-8 rounded-4xl border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between min-h-55"
+          >
+            {/* Hover Accent: Brand Primary Color */}
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+
+            <div className="relative z-10">
+              <div className="flex items-start justify-between gap-4 mb-6">
+                <div className="space-y-1">
+                  <h3 className="text-xl font-serif font-bold text-[#0F172A] group-hover:text-primary transition-colors">
+                    {office.title}
+                  </h3>
+                  <div className="h-0.5 w-8 bg-accent rounded-full transition-all group-hover:w-16" />
+                </div>
+
+                {/* Map Pin with custom brand color */}
+                <div className="p-3 rounded-xl bg-slate-50 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-all duration-300">
+                  <MapPin size={20} />
                 </div>
               </div>
-            ))}
+
+              <p className="text-slate-500 leading-relaxed text-sm font-medium mb-8">
+                {office.address}
+              </p>
+            </div>
+
+            {/* Action Link: More engaging than a button */}
+            <a
+              href={office.mapLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#0F172A] hover:text-accent transition-colors group/link w-fit"
+            >
+              <span>Get Directions</span>
+              <Navigation
+                size={14}
+                className="transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1"
+              />
+            </a>
           </div>
-        </div>
-    );
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default BranchLocations;

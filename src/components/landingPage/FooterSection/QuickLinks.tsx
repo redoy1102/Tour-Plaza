@@ -1,4 +1,4 @@
-import { quickLinksData } from "@/data/landingPage/footerData";
+import { navBarMenus } from "@/data/landingPage/navBarData";
 import { Link } from "react-router-dom";
 
 interface itemType {
@@ -11,7 +11,7 @@ const QuickLinks = () => {
     <div>
       <h4 className="mb-4 font-semibold text-gray-900">কুইক লিংক</h4>
       <ul className="space-y-2 text-sm text-gray-600">
-        {quickLinksData
+        {navBarMenus
           .filter((item) => item !== undefined)
           .map((item: itemType, i) => (
             <li key={i}>

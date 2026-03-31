@@ -26,7 +26,9 @@ const AboutSection = ({
   bgColor = false,
 }: AboutSectionProps) => {
   return (
-    <div className={`${bgColor && "bg-linear-to-r from-[#eef3f8] via-white to-[#fdecef]"}`}>
+    <div
+      className={`${bgColor && "bg-linear-to-r from-[#eef3f8] via-white to-[#fdecef]"}`}
+    >
       <div className="container mx-auto px-4 md:px-12 xl:px-4 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <AboutContent
