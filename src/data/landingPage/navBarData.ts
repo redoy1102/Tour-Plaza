@@ -24,24 +24,24 @@ export const navBarMenus = [
   //   ],
   // },
   {
-    label: "Gallery",
-    link: "/gallery",
+    label: "Packages", // New: Drives bookings and sales
+    link: "/packages",
   },
   {
     label: "Rooms & Villas",
     link: "/rooms-villas",
   },
   {
-    label: "Experiences", // New: Showcases the resort lifestyle
-    link: "/experiences",
-  },
-  {
-    label: "Special Offers", // New: Drives bookings and sales
-    link: "/special-offers",
+    label: "Gallery",
+    link: "/gallery",
   },
   {
     label: "About",
     link: "/about",
+  },
+  {
+    label: "Experiences", // New: Showcases the resort lifestyle
+    link: "/experiences",
   },
   {
     label: "Contact",
