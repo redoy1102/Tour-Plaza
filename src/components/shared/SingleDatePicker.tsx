@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Popover,
   PopoverTrigger,
@@ -16,9 +17,11 @@ interface SingleDatePickerProps {
 }
 
 const SingleDatePicker = ({ field }: SingleDatePickerProps) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <div>
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
@@ -37,7 +40,10 @@ const SingleDatePicker = ({ field }: SingleDatePickerProps) => {
           <Calendar
             mode="single"
             selected={field.value}
-            onSelect={field.onChange}
+            onSelect={(date) => {
+              field.onChange(date);
+              setOpen(false);
+            }}
             initialFocus
             className="w-full"
           />

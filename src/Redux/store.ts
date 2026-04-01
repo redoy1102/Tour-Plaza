@@ -1,5 +1,4 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { searchApi } from "./api/searchApi";
 import prerequisitesReducer from "./slices/prerequisitesSlice";
 import toolsReducer from "./slices/toolsSlice";
 import categoriesReducer from "./slices/categorySlice";
@@ -44,7 +43,6 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  [searchApi.reducerPath]: searchApi.reducer,
   prerequisites: prerequisitesReducer,
   tools: toolsReducer,
   categories: categoriesReducer,
@@ -67,7 +65,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(searchApi.middleware),
+    }),
 });
 
 export const persistor = persistStore(store);

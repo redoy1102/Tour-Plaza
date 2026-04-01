@@ -25,7 +25,7 @@ import { Search, Users, BookOpen, SquarePen } from "lucide-react";
 import toast from "react-hot-toast";
 import PageHeader from "../shared/PageHeader";
 import { formatDateShort } from "@/lib/utils";
-import CopyButton from "@/components/shared/CopyButton";
+import CopyButton from "@/components/shared/buttons/CopyButton";
 
 const Students = () => {
   const dispatch = useAppDispatch();

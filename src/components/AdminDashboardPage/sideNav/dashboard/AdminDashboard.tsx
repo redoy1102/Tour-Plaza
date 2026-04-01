@@ -24,7 +24,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
-import LandingPageButton from "@/components/shared/LandingPageButton";
+import LandingPageButton from "@/components/shared/buttons/LandingPageButton";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
