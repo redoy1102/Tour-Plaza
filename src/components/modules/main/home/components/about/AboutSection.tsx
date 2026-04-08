@@ -1,5 +1,5 @@
-import AboutLeft from "./AboutLeft";
-import AboutRight from "./AboutRight";
+import AboutLeft from "./components/AboutLeft";
+import AboutRight from "./components/AboutRight";
 
 const AboutSection = () => {
   return (
