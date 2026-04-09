@@ -14,8 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
-import { updateCategory, addCategory } from "@/Redux/slices/categorySlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { updateCategory, addCategory } from "@/redux/slices/categorySlice";
 import { useEffect } from "react";
 
 interface CourseCategoryFormProps {
@@ -107,8 +107,8 @@ const CourseCategoryForm = ({
                   ? "Updating..."
                   : "Update Category"
                 : isSubmitting
-                ? "Adding..."
-                : "Add Category"}
+                  ? "Adding..."
+                  : "Add Category"}
             </Button>
           </div>
         </form>

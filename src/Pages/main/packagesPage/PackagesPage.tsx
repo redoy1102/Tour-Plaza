@@ -1,4 +1,4 @@
-import PackagesSection from '@/components/modules/main/packages/PackagesSection';
+import PackagesSection from "@/modules/main/packages/PackagesSection";
 
 const PackagesPage = () => {
     return (

@@ -1,10 +1,10 @@
 import { useState, useMemo } from "react";
-import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
-import { removeEnrollment, toggleAccess } from "@/Redux/slices/enrollmentSlice";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { removeEnrollment, toggleAccess } from "@/redux/slices/enrollmentSlice";
 import type {
   Enrollment,
   EnrollmentStatus,
-} from "@/Redux/slices/enrollmentSlice";
+} from "@/redux/slices/enrollmentSlice";
 import {
   Table,
   TableBody,

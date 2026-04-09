@@ -1,5 +1,5 @@
-import type { Enrollment } from "@/Redux/slices/enrollmentSlice";
-import { useAppSelector } from "@/Redux/hooks";
+import type { Enrollment } from "@/redux/slices/enrollmentSlice";
+import { useAppSelector } from "@/redux/hooks";
 import {
   DialogHeader,
   DialogTitle,
@@ -99,7 +99,7 @@ const ViewEnrollmentDialog = ({ enrollmentId }: ViewEnrollmentDialogProps) => {
             <BookOpen className="w-3.5 h-3.5" />
             {course?.title ?? "—"}
           </div>
-          
+
           <p className="text-xs text-slate-400">{category?.name ?? "—"}</p>
         </div>
       </div>

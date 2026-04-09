@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAppDispatch } from "@/Redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import {
   gradeAssignment,
   type AssignmentMark,
-} from "@/Redux/slices/enrollmentSlice";
+} from "@/redux/slices/enrollmentSlice";
 import {
   Github,
   ExternalLink,

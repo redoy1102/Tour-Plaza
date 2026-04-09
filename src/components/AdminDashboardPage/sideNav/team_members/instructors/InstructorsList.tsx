@@ -10,8 +10,8 @@ import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { instructorsTableHeader } from "@/data/admin/AdminDashboardMenuData";
 import ImagePreviewHolder from "../../shared/ImagePreviewHolder";
-import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
-import { removeInstructor } from "@/Redux/slices/instructorSlice";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { removeInstructor } from "@/redux/slices/instructorSlice";
 
 interface InstructorsListProps {
   handleEditInstructor: (instructorId: string | null) => void;
@@ -89,13 +89,13 @@ const InstructorsList = ({ handleEditInstructor }: InstructorsListProps) => {
                       onClick={() => handleEditInstructor(instructor.id)}
                       className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition cursor-pointer"
                     >
-                      <SquarePen className="h-3 w-3"/>
+                      <SquarePen className="h-3 w-3" />
                     </button>
                     <button
                       onClick={() => handleDelete(instructor.id)}
                       className="p-1 bg-red-500 hover:bg-red-600 text-white rounded-md transition cursor-pointer"
                     >
-                      <Trash className="h-3 w-3"/>
+                      <Trash className="h-3 w-3" />
                     </button>
                   </TableCell>
                 </TableRow>

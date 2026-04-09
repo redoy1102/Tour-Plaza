@@ -16,8 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
-import { addFaq, updateFaq } from "@/Redux/slices/faqSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addFaq, updateFaq } from "@/redux/slices/faqSlice";
 
 interface FaqsFormProps {
   editFaqId?: string | null;

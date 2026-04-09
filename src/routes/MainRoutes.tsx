@@ -1,26 +1,27 @@
 import { Routes, Route } from "react-router-dom";
-import Layout from "@/components/Layouts/Layout";
-import Home from "@/Pages/main/HomePage";
-import ContactPage from "@/components/modules/contact/ContactSection";
+import Home from "@/pages/main/HomePage";
 import NotFound from "@/components/NotFound";
-import AboutSection from "@/components/modules/about/AboutSection";
-import ExperiencesSection from "@/components/modules/experiences/ExperiencesSection";
-import GallerySection from "@/components/modules/main/home/components/gallery/GallerySection";
-import BookNowSection from "@/components/modules/bookNow/BookNowSection";
-import RoomsVillasPage from "@/Pages/main/roomsVillasPage/RoomsVillasPage";
-import PackagesPage from "@/Pages/main/packagesPage/PackagesPage";
+
+import RoomsVillasPage from "@/pages/main/roomsVillasPage/RoomsVillasPage";
+import PackagesPage from "@/pages/main/packagesPage/PackagesPage";
+import ExperiencesPage from "@/pages/main/experiencesPage/ExperiencesPage";
+import ContactPage from "@/pages/main/contactPage/ContactPage";
+import AboutPage from "@/pages/main/aboutPage/AboutPage";
+import GalleryPage from "@/pages/main/galleryPage/GalleryPage";
+import BookNowPage from "@/pages/main/bookNow/BookNowPage";
+import Layout from "@/layouts/Layout";
 
 const MainRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="about" element={<AboutSection />} />
+        <Route path="about" element={<AboutPage />} />
         <Route path="contact" element={<ContactPage />} />
-        <Route path="experiences" element={<ExperiencesSection />} />
-        <Route path="gallery" element={<GallerySection />} />
+        <Route path="experiences" element={<ExperiencesPage />} />
+        <Route path="gallery" element={<GalleryPage />} />
         <Route path="packages" element={<PackagesPage />} />
-        <Route path="book-now" element={<BookNowSection />} />
+        <Route path="book-now" element={<BookNowPage />} />
         {/* <Route path="packages/:packageId" element={<OfferPage />} /> */}
         <Route path="rooms-villas" element={<RoomsVillasPage />} />
         {/* <Route path="rooms-villas/:roomId" element={<Room />} /> */}

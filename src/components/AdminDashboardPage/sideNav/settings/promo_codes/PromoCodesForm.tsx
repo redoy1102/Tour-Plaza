@@ -16,8 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SingleDatePicker from "@/components/shared/SingleDatePicker";
-import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
-import { addPromoCode, updatePromoCode } from "@/Redux/slices/promoCodeSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addPromoCode, updatePromoCode } from "@/redux/slices/promoCodeSlice";
 
 interface PromoCodesFormProps {
   editPromoCodeId?: string | null;

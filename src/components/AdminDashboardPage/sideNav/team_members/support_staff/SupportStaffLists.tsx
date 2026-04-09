@@ -10,8 +10,8 @@ import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { supportStaffTableHeader } from "@/data/admin/AdminDashboardMenuData";
 import ImagePreviewHolder from "../../shared/ImagePreviewHolder";
-import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
-import { removeSupportStaff } from "@/Redux/slices/supportStaffSlice";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { removeSupportStaff } from "@/redux/slices/supportStaffSlice";
 
 interface SupportStaffListsProps {
   handleEditSupportStaff: (supportStaffId: string | null) => void;
@@ -87,13 +87,13 @@ const SupportStaffLists = ({
                       onClick={() => handleEditSupportStaff(staff.id)}
                       className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition cursor-pointer"
                     >
-                      <SquarePen className="h-3 w-3"/>
+                      <SquarePen className="h-3 w-3" />
                     </button>
                     <button
                       onClick={() => handleDelete(staff.id)}
                       className="p-1 bg-red-500 hover:bg-red-600 text-white rounded-md transition cursor-pointer"
                     >
-                      <Trash className="h-3 w-3"/>
+                      <Trash className="h-3 w-3" />
                     </button>
                   </TableCell>
                 </TableRow>

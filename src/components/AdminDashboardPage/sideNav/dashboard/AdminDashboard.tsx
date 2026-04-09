@@ -1,6 +1,6 @@
-import { useAppSelector } from "@/Redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { useMemo } from "react";
-import type { Enrollment } from "@/Redux/slices/enrollmentSlice";
+import type { Enrollment } from "@/redux/slices/enrollmentSlice";
 import {
   Users,
   BookOpen,

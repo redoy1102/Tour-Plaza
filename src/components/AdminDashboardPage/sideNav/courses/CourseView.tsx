@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useAppSelector } from "@/Redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import {
@@ -40,7 +40,7 @@ const CourseViewPage = () => {
   const navigate = useNavigate();
 
   const course = useAppSelector((state) =>
-    state.courses.items.find((c) => c.id === courseId)
+    state.courses.items.find((c) => c.id === courseId),
   );
 
   console.log(course);
@@ -438,9 +438,9 @@ const CourseViewPage = () => {
                                       {module.assignment[0].dueDate
                                         ? format(
                                             new Date(
-                                              module.assignment[0].dueDate
+                                              module.assignment[0].dueDate,
                                             ),
-                                            "PPP"
+                                            "PPP",
                                           )
                                         : "No Deadline"}
                                     </p>

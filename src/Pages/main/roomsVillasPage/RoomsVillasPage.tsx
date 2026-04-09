@@ -1,4 +1,4 @@
-import RoomsVillasSection from "@/components/modules/main/roomsVillas/RoomsVillasSection";
+import RoomsVillasSection from "@/modules/main/roomsVillas/RoomsVillasSection";
 
 const RoomsVillasPage = () => {
   return (

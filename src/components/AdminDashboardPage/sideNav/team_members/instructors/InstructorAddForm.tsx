@@ -17,11 +17,11 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import ImageUploader from "../../shared/ImageUploader";
-import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   addInstructor,
   updateInstructor,
-} from "@/Redux/slices/instructorSlice";
+} from "@/redux/slices/instructorSlice";
 
 interface InstructorAddFormProps {
   editInstructorId?: string | null;

@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
-import { updateEnrollment } from "@/Redux/slices/enrollmentSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { updateEnrollment } from "@/redux/slices/enrollmentSlice";
 import {
   Form,
   FormControl,

@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
-import { removeCourse } from "@/Redux/slices/courseSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { removeCourse } from "@/redux/slices/courseSlice";
 import {
   Table,
   TableBody,

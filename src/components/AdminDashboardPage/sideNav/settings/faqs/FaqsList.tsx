@@ -10,8 +10,8 @@ import toast from "react-hot-toast";
 import { faqTableHeader } from "@/data/admin/AdminDashboardMenuData";
 import EditButton from "../../shared/EditButton";
 import DeleteButton from "../../shared/DeleteButton";
-import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
-import { removeFaq } from "@/Redux/slices/faqSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { removeFaq } from "@/redux/slices/faqSlice";
 
 interface FaqsListProps {
   handleEditFaq: (faqId: string | null) => void;

@@ -9,9 +9,9 @@ import {
 import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { paymentMethodsTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import { useAppSelector } from "@/Redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { useDispatch } from "react-redux";
-import { removePayment } from "@/Redux/slices/paymentSlice";
+import { removePayment } from "@/redux/slices/paymentSlice";
 // import ImagePreviewHolder from "../../../shared/ImagePreviewHolder";
 
 interface ManualPaymentListsProps {
@@ -96,13 +96,13 @@ const ManualPaymentLists = ({
                       onClick={() => handleEditPaymentMethod(paymentMethod.id)}
                       className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition cursor-pointer"
                     >
-                      <SquarePen className="h-3 w-3"/>
+                      <SquarePen className="h-3 w-3" />
                     </button>
                     <button
                       onClick={() => handleDelete(paymentMethod.id)}
                       className="p-1 bg-red-500 hover:bg-red-600 text-white rounded-md transition cursor-pointer"
                     >
-                      <Trash className="h-3 w-3"/>
+                      <Trash className="h-3 w-3" />
                     </button>
                   </TableCell>
                 </TableRow>

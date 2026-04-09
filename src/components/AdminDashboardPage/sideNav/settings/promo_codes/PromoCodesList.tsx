@@ -11,8 +11,8 @@ import { promoCodesTableHeader } from "@/data/admin/AdminDashboardMenuData";
 import { formatDateShort } from "@/lib/utils";
 import EditButton from "../../shared/EditButton";
 import DeleteButton from "../../shared/DeleteButton";
-import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
-import { removePromoCode } from "@/Redux/slices/promoCodeSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { removePromoCode } from "@/redux/slices/promoCodeSlice";
 
 interface PromoCodesListProps {
   handleEditPromoCode: (promoCodeId: string | null) => void;

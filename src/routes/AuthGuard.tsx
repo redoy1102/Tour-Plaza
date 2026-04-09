@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAppSelector } from "@/Redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 

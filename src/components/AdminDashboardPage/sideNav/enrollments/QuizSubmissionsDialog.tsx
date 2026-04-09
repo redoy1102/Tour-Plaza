@@ -22,9 +22,9 @@ import {
   Calendar,
   Send,
 } from "lucide-react";
-import { useAppDispatch } from "@/Redux/hooks";
-import { gradeQuiz } from "@/Redux/slices/enrollmentSlice";
-import type { QuizMark } from "@/Redux/slices/enrollmentSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { gradeQuiz } from "@/redux/slices/enrollmentSlice";
+import type { QuizMark } from "@/redux/slices/enrollmentSlice";
 import toast from "react-hot-toast";
 
 interface QuizSubmissionsDialogProps {

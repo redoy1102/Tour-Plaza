@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
-import { useAppSelector, useAppDispatch } from "@/Redux/hooks";
-import { updateStudentInList } from "@/Redux/slices/studentSlice";
-import type { Student } from "@/Redux/slices/studentSlice";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { updateStudentInList } from "@/redux/slices/studentSlice";
+import type { Student } from "@/redux/slices/studentSlice";
 import {
   Table,
   TableBody,

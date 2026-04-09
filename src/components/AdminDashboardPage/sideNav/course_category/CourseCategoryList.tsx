@@ -9,8 +9,8 @@ import {
 import { SquarePen, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { courseCategoryTableHeader } from "@/data/admin/AdminDashboardMenuData";
-import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
-import { removeCategory } from "@/Redux/slices/categorySlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { removeCategory } from "@/redux/slices/categorySlice";
 
 interface CourseCategoryListProps {
   handleEditCategory: (categoryId: string | null) => void;
@@ -22,7 +22,6 @@ const CourseCategoryList = ({
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.categories.items);
   console.log(categories);
-  
 
   const handleDelete = (id: string) => {
     toast((t) => (
@@ -84,13 +83,13 @@ const CourseCategoryList = ({
                       onClick={() => handleEditCategory(category.id)}
                       className="p-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition cursor-pointer"
                     >
-                      <SquarePen className="h-3 w-3"/>
+                      <SquarePen className="h-3 w-3" />
                     </button>
                     <button
                       onClick={() => handleDelete(category.id)}
                       className="p-1 bg-red-500 hover:bg-red-600 text-white rounded-md transition cursor-pointer"
                     >
-                      <Trash className="h-3 w-3"/>
+                      <Trash className="h-3 w-3" />
                     </button>
                   </TableCell>
                 </TableRow>

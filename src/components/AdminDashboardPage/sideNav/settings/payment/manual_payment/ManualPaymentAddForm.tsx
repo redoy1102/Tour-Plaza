@@ -17,8 +17,8 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import RichTextEditor from "@/components/ui/RichTextEditor";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "@/Redux/hooks";
-import { addPayment, updatePayment } from "@/Redux/slices/paymentSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { addPayment, updatePayment } from "@/redux/slices/paymentSlice";
 
 interface ManualPaymentAddFormProps {
   editPaymentMethodId?: string | null;
@@ -33,10 +33,10 @@ const ManualPaymentAddForm = ({
 }: ManualPaymentAddFormProps) => {
   const dispatch = useDispatch();
   const existingPaymentMethods = useAppSelector(
-    (state) => state.paymentMethods.items
+    (state) => state.paymentMethods.items,
   );
   const existingPaymentMethod = existingPaymentMethods.find(
-    (c) => c.id === editPaymentMethodId
+    (c) => c.id === editPaymentMethodId,
   );
 
   const form = useForm<PaymentMethodFormValue>({
@@ -195,8 +195,8 @@ const ManualPaymentAddForm = ({
                   ? "Updating..."
                   : "Update Payment Method"
                 : isSubmitting
-                ? "Adding..."
-                : "Add Payment Method"}
+                  ? "Adding..."
+                  : "Add Payment Method"}
             </Button>
           </div>
         </form>

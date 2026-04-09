@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { ChevronDownIcon } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   Select,
   SelectContent,
@@ -38,7 +38,7 @@ import {
 import { useWatch } from "react-hook-form";
 import ImageUploader from "../shared/ImageUploader";
 import MultiSelect from "@/components/ui/multi-select";
-import { addCourse, updateCourse } from "@/Redux/slices/courseSlice";
+import { addCourse, updateCourse } from "@/redux/slices/courseSlice";
 import { useParams, useNavigate } from "react-router-dom";
 import CourseOutlinePage from "./CourseOutlinePage";
 
@@ -55,7 +55,7 @@ const AddCourseForm = () => {
 
   const editCourse = useMemo(
     () => courses.find((c) => c.id === courseId),
-    [courses, courseId]
+    [courses, courseId],
   );
   console.log(editCourse);
 
@@ -105,7 +105,7 @@ const AddCourseForm = () => {
         ? transformCourseOutline(editCourse.courseOutline)
         : [],
     }),
-    [editCourse]
+    [editCourse],
   );
 
   const form = useForm<AddCourseFormValue>({
@@ -715,8 +715,8 @@ const AddCourseForm = () => {
                     ? "Updating..."
                     : "Update Course"
                   : isSubmitting
-                  ? "Saving..."
-                  : "Add Course"}
+                    ? "Saving..."
+                    : "Add Course"}
               </Button>
             </div>
 
