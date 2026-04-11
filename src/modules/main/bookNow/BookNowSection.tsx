@@ -72,7 +72,7 @@ const BookNowSection = () => {
   today.setHours(0, 0, 0, 0);
 
   return (
-    <>
+    <div className="py-15">
       <PageHeader
         imgLink="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1200&auto=format&fit=crop"
         title="Book Your Stay"
@@ -406,7 +406,7 @@ const BookNowSection = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

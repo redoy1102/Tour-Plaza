@@ -30,7 +30,7 @@ const GallerySection = ({
   const navigate = useNavigate();
 
   return (
-    <section className="py-15 bg-background overflow-hidden w-full">
+    <section className="pt-32 pb-12 bg-background overflow-hidden w-full">
       <div className="container mx-auto">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -47,7 +47,7 @@ const GallerySection = ({
           </p>
         </div>
 
-        {/* Masonry-style Grid */}
+        {/* Grid */}
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
           {galleryData.slice(0, imageItems).map((item) => (
             <GalleryCard

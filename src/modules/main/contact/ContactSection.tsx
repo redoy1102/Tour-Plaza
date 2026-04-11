@@ -53,7 +53,7 @@ const ContactSection = () => {
   // };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] py-16 md:py-24 mt-20">
+    <div className="pt-32 pb-12 min-h-screen bg-[#f8fafc]">
       <div className="container mx-auto">
         {/* Header */}
         <Header />
