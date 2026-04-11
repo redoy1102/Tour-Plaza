@@ -9,7 +9,7 @@ import FloatingButtons from "./components/FloatingButtons";
 
 const HomeSection = () => {
   return (
-    <div>
+    <div className="">
       <HeroSection />
       <AboutSection />
       <FacilitiesSection />

@@ -11,7 +11,7 @@ const FacilitiesSection = () => {
 
       <div className="container mx-auto relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center mx-auto mb-16">
           <p className="text-sm uppercase tracking-widest text-primary font-semibold mb-4">
             Unmatched Comfort
           </p>

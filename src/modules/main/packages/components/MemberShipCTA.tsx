@@ -5,7 +5,7 @@ const MemberShipCTA = () => {
   return (
     <div>
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto">
           <div className="bg-accent/10 rounded-[3rem] p-3 lg:p-20 flex flex-col lg:flex-row items-center gap-12 border border-accent/20">
             <div className="flex-1 text-center lg:text-left">
               <div className="inline-flex p-4 bg-accent rounded-2xl text-white mb-6 shadow-lg">

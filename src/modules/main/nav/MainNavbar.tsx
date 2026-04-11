@@ -47,22 +47,22 @@ const MainNavbar = () => {
 
   return (
     <header
-      className={`w-full fixed top-0 z-50 transition-all duration-300 max-w-[100vw] overflow-x-hidden ${
+      className={`w-full fixed top-0 z-50 transition-all duration-300 overflow-x-hidden ${
         isTransparent
           ? "bg-transparent shadow-none"
           : "bg-background/90 backdrop-blur-md shadow-sm"
       }`}
     >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4">
+      <div className="container mx-auto flex h-20 items-center justify-between ">
         {/* Left: Logo */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
           <Link
             to="/"
             className="flex items-center"
             onClick={() => window.scrollTo(0, 0)}
           >
             <img
-              src="/tourPlazaLogo.webp"
+              src="/tourPlazaLogo.png"
               alt="Tour Plaza Logo"
               className="h-14 md:h-16 w-auto object-contain"
             />

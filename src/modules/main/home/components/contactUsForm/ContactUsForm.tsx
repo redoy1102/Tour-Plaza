@@ -76,7 +76,7 @@ const ContactSection = () => {
 
   return (
     <section className="py-16 bg-background">
-      <div className="container mx-auto px-6 lg:px-20">
+      <div className="container mx-auto">
         <div className="max-w-xl mx-auto text-center mb-16">
           <span className="text-primary font-bold uppercase tracking-[0.2em] text-xs">
             Begin Your Retreat

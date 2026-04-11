@@ -3,8 +3,8 @@ import AboutRight from "./components/AboutRight";
 
 const AboutSection = () => {
   return (
-    <section className="py-15 bg-background overflow-hidden w-full">
-      <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center px-4">
+    <section className="container mx-auto py-15 bg-background overflow-hidden w-full">
+      <div className="grid md:grid-cols-2 gap-12 items-center">
         <AboutLeft />
         <AboutRight />
       </div>

@@ -8,7 +8,7 @@ const MapSection = () => {
 
   return (
     <section className="relative bg-background overflow-hidden w-full">
-      <div className="container mx-auto px-4 lg:px-20">
+      <div className="container mx-auto">
         {/* Section Heading */}
         <div className="mb-12 text-center">
           <span className="text-primary font-bold uppercase tracking-widest text-xs">

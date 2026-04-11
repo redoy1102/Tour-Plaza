@@ -63,7 +63,7 @@ const RoomsVillasSection = () => {
     <div className=" bg-[#FBFBFE]">
       {/* 1. Header & Shadcn Filter Bar */}
       <section className="pt-32 pb-12 bg-white border-b border-slate-100">
-        <div className=" px-4 lg:px-20">
+        <div className="container mx-auto">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
             <div className="">
               <Badge
@@ -135,7 +135,7 @@ const RoomsVillasSection = () => {
       </section>
 
       <section className="py-16">
-        <div className="container mx-auto px-4 lg:px-20">
+        <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredRooms.map((room) => (
               <RoomsVillasCard room={room} />

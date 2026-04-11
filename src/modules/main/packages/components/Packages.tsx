@@ -1,13 +1,13 @@
-import PrimaryButton from '@/components/shared/buttons/PrimaryButton';
-import { Button } from '@/components/ui/button';
-import { specialOffersData } from '@/data/offersData';
-import { Badge, Sparkles } from 'lucide-react';
+import PrimaryButton from "@/components/shared/buttons/PrimaryButton";
+import { Button } from "@/components/ui/button";
+import { specialOffersData } from "@/data/offersData";
+import { Badge, Sparkles } from "lucide-react";
 
 const Packages = () => {
-    return (
-        <div>
-            <section className="py-20 bg-background">
-        <div className="container mx-auto px-6 lg:px-20">
+  return (
+    <div>
+      <section className="py-20 bg-background">
+        <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-12">
             {specialOffersData.map((offer) => (
               <div
@@ -97,8 +97,8 @@ const Packages = () => {
           </div>
         </div>
       </section>
-        </div>
-    );
+    </div>
+  );
 };
 
 export default Packages;
