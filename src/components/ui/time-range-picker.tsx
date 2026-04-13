@@ -46,12 +46,12 @@ function TimeRangePicker({
     } else {
       onChange("");
     }
-  }, [start, end]);
+  }, [start, end, onChange]);
 
   const renderPicker = (
-    label: string,
+    // label: string,
     current: string,
-    setter: (v: string) => void
+    setter: (v: string) => void,
   ) => (
     <div className="flex flex-col">
       {/* <span className="text-xs text-neutral-500 mb-1">{label}</span> */}
@@ -62,7 +62,7 @@ function TimeRangePicker({
             disabled={disabled}
             className={cn(
               "justify-between w-28 text-left",
-              !current && "text-neutral-400"
+              !current && "text-neutral-400",
             )}
           >
             {current || "Select"}
@@ -77,7 +77,7 @@ function TimeRangePicker({
                 type="button"
                 className={cn(
                   "w-full px-2 py-1 text-left text-sm hover:bg-neutral-100",
-                  t === current && "bg-neutral-200"
+                  t === current && "bg-neutral-200",
                 )}
                 onClick={() => {
                   setter(t);
@@ -94,9 +94,9 @@ function TimeRangePicker({
 
   return (
     <div className="flex items-center gap-2">
-      {renderPicker("From", start, setStart)}
+      {renderPicker(start, setStart)}
       <span className="select-none">-</span>
-      {renderPicker("To", end, setEnd)}
+      {renderPicker(end, setEnd)}
     </div>
   );
 }
