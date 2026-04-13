@@ -76,7 +76,7 @@ const ContactSection = () => {
 
   return (
     <section className="py-16 bg-background">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-xl mx-auto text-center mb-16">
           <span className="text-primary font-bold uppercase tracking-[0.2em] text-xs">
             Begin Your Retreat
@@ -170,7 +170,7 @@ const ContactSection = () => {
                 alt="Resort"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-linear-to-t from-[#0F172A]/90 via-[#0F172A]/40 to-transparent flex flex-col justify-end p-12 text-white">
+              <div className="absolute inset-0 bg-linear-to-t from-[#0F172A]/90 via-[#0F172A]/40 to-transparent flex flex-col justify-end p-4 md:p-12 text-white">
                 <div className="space-y-8 mb-2">
                   <div className="flex items-center gap-5">
                     <div className="p-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">

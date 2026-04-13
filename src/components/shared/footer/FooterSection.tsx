@@ -6,7 +6,7 @@ import Contact from "./Contact";
 const FooterSection = () => {
   return (
     <footer className="bg-linear-to-r from-[#f3f7fb] via-white to-[#fdecef]">
-      <div className="container mx-auto pt-16">
+      <div className="container mx-auto px-4 md:px-6 pt-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
           <Logo />
           <QuickLinks />

@@ -53,7 +53,7 @@ const MainNavbar = () => {
           : "bg-background/90 backdrop-blur-md shadow-sm"
       }`}
     >
-      <div className="container mx-auto flex h-20 items-center justify-between ">
+      <div className="container mx-auto px-4 md:px-6 flex h-20 items-center justify-between ">
         {/* Left: Logo */}
         <div className="flex items-center">
           <Link

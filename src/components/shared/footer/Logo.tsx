@@ -5,7 +5,7 @@ const Logo = () => {
     <div className="flex flex-col gap-4">
       <Link to="/" onClick={() => window.scrollTo(0, 0)} className="block">
         <img
-          src="/tourPlazaLogo.webp"
+          src="/tourPlazaLogo.png"
           alt="Tour Plaza Logo"
           className="w-36 transition-opacity hover:opacity-90"
         />

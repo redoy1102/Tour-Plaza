@@ -31,7 +31,7 @@ const GallerySection = ({
 
   return (
     <section className="pt-32 pb-12 bg-background overflow-hidden w-full">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <p className="text-sm uppercase tracking-widest text-primary font-semibold mb-4">

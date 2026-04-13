@@ -28,7 +28,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-linear-to-tr from-black/90 via-black/30 to-transparent" />
 
       {/* Main Content Area */}
-      <div className="container mx-auto relative z-10 flex h-full flex-col justify-center">
+      <div className="container mx-auto px-4 md:px-6 relative z-10 flex h-full flex-col justify-center">
         <div className="max-w-3xl">
           {/* Small Badge */}
           <div className="md:mt-20 lg:mt-0 mb-2 flex items-center gap-2 w-fit rounded-full bg-sky-400/20 px-4 py-1.5 border border-sky-400/30 backdrop-blur-md">
@@ -64,7 +64,7 @@ const HeroSection = () => {
       </div>
 
       {/* Floating Booking Bar (Desktop Only) */}
-      <div className="container mx-auto absolute mt-12 bottom-6 left-1/2 z-20 hidden w-[90%] -translate-x-1/2 transform rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-2xl lg:flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+      <div className="container mx-auto px-4 md:px-6 absolute mt-12 bottom-6 left-1/2 z-20 hidden w-[90%] -translate-x-1/2 transform rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-2xl lg:flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
         <div className="flex items-center gap-4 border-r border-white/20 px-6 flex-1">
           <MapPin className="text-sky-400" />
           <div className="flex flex-col">

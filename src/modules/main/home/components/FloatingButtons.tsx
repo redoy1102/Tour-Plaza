@@ -28,7 +28,7 @@ const FloatingButtons = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-5 right-3 z-50 flex flex-col items-center space-y-4">
+    <div className="fixed bottom-5 right-4 md:right-6 z-50 flex flex-col items-center space-y-4">
       {/* WhatsApp Icon */}
       <a
         href="https://wa.me/YOUR_WHATSAPP_NUMBER" // Replace with your WhatsApp number
