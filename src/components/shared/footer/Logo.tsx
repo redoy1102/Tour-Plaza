@@ -10,7 +10,7 @@ const Logo = () => {
           className="w-36 transition-opacity hover:opacity-90"
         />
       </Link>
-      <p className="max-w-xs text-sm leading-relaxed text-[#64748B]">
+      <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
         Redefining luxury through nature and tranquility. We provide a sanctuary
         where world-class hospitality meets modern elegance, ensuring every stay
         is an unforgettable journey.

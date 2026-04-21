@@ -63,8 +63,9 @@ const RoomsVillasSection = () => {
     <div className=" bg-[#FBFBFE]">
       {/* 1. Header & Shadcn Filter Bar */}
       <section className="pt-32 pb-12 bg-white border-b border-slate-100">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            {/* Tag and title */}
             <div className="">
               <Badge
                 variant="outline"
@@ -77,13 +78,14 @@ const RoomsVillasSection = () => {
               </h1>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4">
+            {/* Filter buttons */}
+            <div className="grid grid-cols-2 md:grid-cols-4 items-center gap-4 md:gap-10">
               {/* Filter by Category */}
               <Select
                 value={selectedType}
                 onValueChange={(value) => setSelectedType(value)}
               >
-                <SelectTrigger className="w-40 h-12 rounded-xl bg-white border-slate-200">
+                <SelectTrigger className="w-34 md:w-42 lg:w-35 xl:w-45 h-12 rounded-xl bg-white border-slate-200">
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
                 <SelectContent>
@@ -98,7 +100,7 @@ const RoomsVillasSection = () => {
                 value={selectedGuests}
                 onValueChange={(value) => setSelectedGuests(value)}
               >
-                <SelectTrigger className="w-40 h-12 rounded-xl bg-white border-slate-200">
+                <SelectTrigger className="h-12 w-34 md:w-42 lg:w-35 xl:w-45 rounded-xl bg-white border-slate-200">
                   <SelectValue placeholder="Guest Capacity" />
                 </SelectTrigger>
                 <SelectContent>
@@ -113,7 +115,7 @@ const RoomsVillasSection = () => {
                 value={selectedPrice}
                 onValueChange={(value) => setSelectedPrice(value)}
               >
-                <SelectTrigger className="w-40 h-12 rounded-xl bg-white border-slate-200">
+                <SelectTrigger className="w-34 md:w-42 lg:w-35 xl:w-45 h-12 rounded-xl bg-white border-slate-200">
                   <SelectValue placeholder="Sort by Price" />
                 </SelectTrigger>
                 <SelectContent>
@@ -122,6 +124,7 @@ const RoomsVillasSection = () => {
                   <SelectItem value="high">Price: High to Low</SelectItem>
                 </SelectContent>
               </Select>
+              
               <ResetFilters
                 onReset={() => {
                   setSelectedType("all");
@@ -135,7 +138,7 @@ const RoomsVillasSection = () => {
       </section>
 
       <section className="py-16">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredRooms.map((room) => (
               <RoomsVillasCard room={room} />

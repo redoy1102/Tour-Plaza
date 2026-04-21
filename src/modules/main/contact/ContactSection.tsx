@@ -54,7 +54,7 @@ const ContactSection = () => {
 
   return (
     <div className="pt-32 pb-12 min-h-screen bg-[#f8fafc]">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4 md:px-6">
         {/* Header */}
         <Header />
 

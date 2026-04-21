@@ -27,7 +27,7 @@ const ExperiencesSection = () => {
       />
 
       <section className="py-20">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {filteredExperiences && filteredExperiences.length > 0 ? (
               filteredExperiences.map((exp) => (

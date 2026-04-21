@@ -1,4 +1,4 @@
-import { CalendarDays, MapPin, Users } from "lucide-react";
+// import { CalendarDays, MapPin, Users } from "lucide-react";
 import PrimaryButton from "@/components/shared/buttons/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 
@@ -64,7 +64,7 @@ const HeroSection = () => {
       </div>
 
       {/* Floating Booking Bar (Desktop Only) */}
-      <div className="container mx-auto px-4 md:px-6 absolute mt-12 bottom-6 left-1/2 z-20 hidden w-[90%] -translate-x-1/2 transform rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-2xl lg:flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+      {/* <div className="container mx-auto absolute mt-12 bottom-6 left-1/2 z-20 hidden -translate-x-1/2 transform rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-2xl lg:flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
         <div className="flex items-center gap-4 border-r border-white/20 px-6 flex-1">
           <MapPin className="text-sky-400" />
           <div className="flex flex-col">
@@ -102,7 +102,7 @@ const HeroSection = () => {
         </div>
 
         <PrimaryButton height="14" px="10" title="Check Availability" />
-      </div>
+      </div> */}
 
       {/* Bottom Visual Gradient */}
       <div className="absolute bottom-0 h-40 w-full bg-linear-to-t from-background to-transparent" />
