@@ -1,11 +1,15 @@
-import GallerySection from '@/modules/main/home/components/gallery/GallerySection';
+import { Helmet } from "react-helmet-async";
+import GallerySection from "@/modules/main/home/components/gallery/GallerySection";
 
 const GalleryPage = () => {
-    return (
-        <div>
-            <GallerySection isFullGalleryButtonOff={false} imageItems={12} />
-        </div>
-    );
+  return (
+    <div>
+      <Helmet>
+        <title>Gallery | Tour Plaza</title>
+      </Helmet>
+      <GallerySection isFullGalleryButtonOff={false} />
+    </div>
+  );
 };
 
 export default GalleryPage;

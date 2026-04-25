@@ -1,7 +1,7 @@
-import FooterBottomBar from "./FooterBottomBar";
-import Logo from "./Logo";
-import QuickLinks from "./QuickLinks";
-import Contact from "./Contact";
+import FooterBottomBar from "./components/FooterBottomBar";
+import Logo from "./components/Logo";
+import QuickLinks from "./components/QuickLinks";
+import Contact from "./components/Contact";
 
 const FooterSection = () => {
   return (
@@ -10,7 +10,6 @@ const FooterSection = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
           <Logo />
           <QuickLinks />
-          {/* <Courses /> */}
           <Contact />
         </div>
         <FooterBottomBar />

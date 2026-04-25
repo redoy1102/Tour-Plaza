@@ -2,121 +2,141 @@ export const galleryData = [
   {
     id: 1,
     title: "Oceanfront Serenity",
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop",
     rating: 4.8,
   },
   {
     id: 2,
     title: "Lush Garden Pathways",
-    image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1925&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1925&auto=format&fit=crop",
     rating: 4.6,
   },
   {
     id: 3,
     title: "Sunset Over the Water",
-    image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=1974&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=1974&auto=format&fit=crop",
     rating: 4.9,
   },
   {
     id: 4,
     title: "Private Villa Pool",
-    image: "https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?q=80&w=2070&auto=format&fit=crop",
     rating: 4.7,
   },
   {
     id: 5,
     title: "Gourmet Dining Experience",
-    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop",
     rating: 4.8,
   },
   {
     id: 6,
     title: "Cozy Fireside Evenings",
-    image: "https://plus.unsplash.com/premium_photo-1687960116497-0dc41e1808a2?q=80&w=2071&auto=format&fit=crop",
+    image:
+      "https://plus.unsplash.com/premium_photo-1687960116497-0dc41e1808a2?q=80&w=2071&auto=format&fit=crop",
     rating: 4.5,
   },
   {
     id: 7,
     title: "Infinity Horizon Edge",
-    image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=2070&auto=format&fit=crop",
     rating: 4.9,
   },
   {
     id: 8,
     title: "Morning Yoga Deck",
-    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=2070&auto=format&fit=crop",
     rating: 4.7,
   },
   {
     id: 9,
     title: "Tropical Breakfast Spread",
-    image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?q=80&w=2070&auto=format&fit=crop",
     rating: 4.8,
   },
   {
     id: 10,
     title: "Secluded Jungle Cabin",
-    image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?q=80&w=2070&auto=format&fit=crop",
     rating: 4.6,
   },
   {
     id: 11,
     title: "Evening Spa Sanctuary",
-    image: "https://images.unsplash.com/photo-1544161515-436cefb65794?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2070&auto=format&fit=crop",
     rating: 4.9,
   },
   {
     id: 12,
     title: "Outdoor Cinema Night",
-    image: "https://images.unsplash.com/photo-1521950109705-186ca29117ee?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2070&auto=format&fit=crop",
     rating: 4.5,
   },
   {
     id: 13,
     title: "Aronno Café Vibes",
-    image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2070&auto=format&fit=crop",
     rating: 4.7,
   },
   {
     id: 14,
     title: "Kayaking Adventures",
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070&auto=format&fit=crop",
     rating: 4.8,
   },
   {
     id: 15,
     title: "Honeymoon Suite View",
-    image: "https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=2070&auto=format&fit=crop",
     rating: 5.0,
   },
   {
     id: 16,
     title: "Lobby Grand Entrance",
-    image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=2070&auto=format&fit=crop",
     rating: 4.7,
   },
   {
     id: 17,
     title: "Coastal Biking Trails",
-    image: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2070&auto=format&fit=crop",
     rating: 4.6,
   },
   {
     id: 18,
     title: "Starry Night Campfire",
-    image: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=2070&auto=format&fit=crop",
     rating: 4.9,
   },
   {
     id: 19,
     title: "Modern Conference Hall",
-    image: "https://images.unsplash.com/photo-1431540015161-0bf868a2d407?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1431540015161-0bf868a2d407?q=80&w=2070&auto=format&fit=crop",
     rating: 4.4,
   },
   {
     id: 20,
     title: "Zen Meditation Space",
-    image: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2070&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=2070&auto=format&fit=crop",
     rating: 4.8,
   },
 ];

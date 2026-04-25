@@ -9,7 +9,7 @@ interface itemType {
 const QuickLinks = () => {
   return (
     <div>
-      <h4 className="mb-4 font-semibold text-gray-900">কুইক লিংক</h4>
+      <h4 className="mb-4 font-semibold text-gray-900">Quick Links</h4>
       <ul className="space-y-2 text-sm text-gray-600">
         {navBarMenus
           .filter((item) => item !== undefined)
